@@ -107,7 +107,7 @@ catkin_package(
   CATKIN_DEPENDS message_runtime
   LIBRARIES elikos_roomba
   CATKIN_DEPENDS roscpp rospy std_msgs
-#  DEPENDS system_lib
+ # DEPENDS wiringPi
 )
 
 ###########
@@ -148,9 +148,11 @@ add_executable(topswitch_node src/topswitch_node.cpp)
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
- target_link_libraries(topswitch_node
-   ${catkin_LIBRARIES}
- )
+#set(wiringPi_LIBRARIES /usr/local/lib)
+target_link_libraries(topswitch_node wiringPi
+    ${catkin_LIBRARIES}
+    ${wiringPi_LIBRARIES}
+)
 
 #############
 ## Install ##

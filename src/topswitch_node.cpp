@@ -1,12 +1,9 @@
 #include "ros/ros.h"
-#include "std_msgs/String.h"
+#include "std_msgs/Bool.h"
 #include <sstream>
-#include <stdio.h>
+#include <wiringPi.h> // Make sure the wiringPi library is installed
 
-/**
- * Make sure the wiringPi library is installed: http://wiringpi.com/download-and-install/
- */
-//#include <wiringPi.h>
+#define TOPSWITCH_PIN   17
 
 int main(int argc, char **argv)
 {
@@ -17,33 +14,31 @@ int main(int argc, char **argv)
     * TOPIC:
     *    - topswitch_state
     */
-    
-    ros::Publisher chatter_pub = n.advertise<std_msgs::String>("topswitch_state", 1000);
+    ros::Publisher chatter_pub = n.advertise<std_msgs::Bool>("topswitch_state", 1000);
     
     ros::Rate loop_rate(10);
     
-    /**
-    * Initialize interrupt for switch
-    */
-    //wiringPiSetup();
-    //bool ts_state
+    // Initialize interrupt for switch
+    wiringPiSetupGpio(); //broadcom pin numbers
+    pinMode(TOPSWITCH_PIN, INPUT);
+    pullUpDnControl(TOPSWITCH_PIN, PUD_UP);
     
+    bool isTopSwitchTouched;
     while (ros::ok())
     {
-        /**
-        * message
-        */
-        std_msgs::String msg;
+        // get topswitch state
+        isTopSwitchTouched = !digitalRead(TOPSWITCH_PIN);
+        if (isTopSwitchTouched) {
+            ROS_INFO("SIGNAL");
+        } else {
+            ROS_INFO("NO SIGNAL");
+        }
         
-        std::stringstream ss;
-        ss << "hello world tessstttt";
-        msg.data = ss.str();
+        // message
+        std_msgs::Bool msg;
+        msg.data = isTopSwitchTouched;
         
-        ROS_INFO("%s", msg.data.c_str());
-        
-        /**
-        * publish()
-        */
+        // publish()
         chatter_pub.publish(msg);
         
         ros::spinOnce();
