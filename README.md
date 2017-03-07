@@ -39,7 +39,7 @@ Custom software for ground &amp; osbtacle robots with on-board Raspberry Pi
    catkin_init_workspace
    ````
 
-2. Fork the [`elikos/elikos_roomba`](https://github.com/elikos/elikos_ros) repo  
+2. Fork the [`elikos/elikos_roomba`](https://github.com/elikos/elikos_roomba) repo  
    Clone your own fork in the `~/roomba_ws/src` folder
    ````
    git clone git@github.com:USERNAME/elikos_roomba.git
