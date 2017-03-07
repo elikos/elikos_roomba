@@ -32,6 +32,7 @@ Custom software for ground &amp; osbtacle robots with on-board Raspberry Pi
 3. Clone [`create_autonomy`](https://github.com/AutonomyLab/create_autonomy) package repo in the `~/roomba_ws/src` folder
    ````
    git clone git@github.com:AutonomyLab/create_autonomy.git
+   sudo usermod -a -G dialout $USER
    ````
 
 4. Compile
