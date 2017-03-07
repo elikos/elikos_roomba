@@ -29,7 +29,7 @@ Custom software for ground &amp; osbtacle robots with on-board Raspberry Pi
    git clone git@github.com:christophebedard/elikos_roomba.git
    ````
 
-3. Clone `create_autonomy` package repo in the `~/roomba_ws/src` folder
+3. Clone [`create_autonomy`](https://github.com/AutonomyLab/create_autonomy) package repo in the `~/roomba_ws/src` folder
    ````
    git clone git@github.com:AutonomyLab/create_autonomy.git
    ````
