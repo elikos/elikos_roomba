@@ -1,9 +1,12 @@
-#include "ros/ros.h"
-#include "std_msgs/Bool.h"
-#include <sstream>
+#include <ros/ros.h>
+#include <std_msgs/Bool.h>
 #include <wiringPi.h> // Make sure the wiringPi library is installed
 
-#define TOPSWITCH_PIN   17
+//broadcom pin number
+#define TOPSWITCH_PIN 17
+
+bool isTopSwitchActivated = false;
+bool wasTopSwitchActivated = false;
 
 int main(int argc, char **argv)
 {
@@ -12,37 +15,40 @@ int main(int argc, char **argv)
     
     /**
     * TOPIC:
-    *    - topswitch_state
+    *    - /topswitch_state
     */
-    ros::Publisher chatter_pub = n.advertise<std_msgs::Bool>("topswitch_state", 1000);
+    ros::Publisher topswitch_pub = n.advertise<std_msgs::Bool>("topswitch_state", 1000);
     
-    ros::Rate loop_rate(10);
+    ros::Rate loop_rate(25);
     
-    // Initialize interrupt for switch
-    wiringPiSetupGpio(); //broadcom pin numbers
+    // setup wiringPi
+    if (wiringPiSetupGpio() < 0) {
+        ROS_ERROR("wiringPi: cannot setup wiringPi GPIO");
+        return -1;
+    }
+    // setup pin (input with pull-up resistor)
     pinMode(TOPSWITCH_PIN, INPUT);
     pullUpDnControl(TOPSWITCH_PIN, PUD_UP);
     
-    bool isTopSwitchTouched;
     while (ros::ok())
     {
         // get topswitch state
-        isTopSwitchTouched = !digitalRead(TOPSWITCH_PIN);
-        if (isTopSwitchTouched) {
-            ROS_INFO("SIGNAL");
-        } else {
-            ROS_INFO("NO SIGNAL");
+        isTopSwitchActivated = !digitalRead(TOPSWITCH_PIN);
+        // compare state to previous state
+        if (isTopSwitchActivated && !wasTopSwitchActivated) {
+            // rising edge (ghetto style)
+            ROS_INFO_STREAM("Rising edge");
         }
+        wasTopSwitchActivated = isTopSwitchActivated;
         
         // message
         std_msgs::Bool msg;
-        msg.data = isTopSwitchTouched;
+        msg.data = isTopSwitchActivated;
         
-        // publish()
-        chatter_pub.publish(msg);
+        // publish
+        topswitch_pub.publish(msg);
         
         ros::spinOnce();
-        
         loop_rate.sleep();
     }
     return 0;
