@@ -11,6 +11,8 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  std_srvs
+  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -106,7 +108,7 @@ catkin_package(
   INCLUDE_DIRS include
   CATKIN_DEPENDS message_runtime
   LIBRARIES elikos_roomba
-  CATKIN_DEPENDS roscpp rospy std_msgs
+  CATKIN_DEPENDS roscpp rospy std_msgs std_srvs
  # DEPENDS wiringPi
 )
 
@@ -136,6 +138,7 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/elikos_roomba_node.cpp)
 add_executable(topswitch_node src/topswitch_node.cpp)
+add_executable(groundrobot_node src/groundrobot_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -148,10 +151,12 @@ add_executable(topswitch_node src/topswitch_node.cpp)
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-#set(wiringPi_LIBRARIES /usr/local/lib)
 target_link_libraries(topswitch_node wiringPi
     ${catkin_LIBRARIES}
     ${wiringPi_LIBRARIES}
+)
+target_link_libraries(groundrobot_node
+    ${catkin_LIBRARIES}
 )
 
 #############

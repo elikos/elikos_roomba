@@ -1,6 +1,7 @@
 #include <ros/ros.h>
 #include <std_msgs/Bool.h>
 #include <wiringPi.h> // Make sure the wiringPi library is installed
+#include <std_srvs/Empty.h>
 
 //broadcom pin number
 #define TOPSWITCH_PIN 17
@@ -13,11 +14,12 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "topswitch");
     ros::NodeHandle n;
     
-    /**
-    * TOPIC:
-    *    - /topswitch_state
-    */
+    // TOPIC: /topswitch_state
     ros::Publisher topswitch_pub = n.advertise<std_msgs::Bool>("topswitch_state", 1000);
+    
+    // SERVICE
+    ros::ServiceClient topswitch_srv_client = n.serviceClient<std_srvs::Empty>("topswitch_trigger");
+    std_srvs::Empty srv;
     
     ros::Rate loop_rate(25);
     
@@ -32,12 +34,13 @@ int main(int argc, char **argv)
     
     while (ros::ok())
     {
-        // get topswitch state
+        // get topswitch state and compare with previous state
         isTopSwitchActivated = !digitalRead(TOPSWITCH_PIN);
-        // compare state to previous state
         if (isTopSwitchActivated && !wasTopSwitchActivated) {
             // rising edge (ghetto style)
             ROS_INFO_STREAM("Rising edge");
+            // call topswitch service
+            topswitch_srv_client.call(srv.request, srv.response);
         }
         wasTopSwitchActivated = isTopSwitchActivated;
         
