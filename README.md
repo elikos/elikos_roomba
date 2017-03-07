@@ -1,6 +1,8 @@
 # elikos_roomba
 Custom software for ground &amp; osbtacle robots with on-board Raspberry Pi
 
+**Status**: WIP
+
 ## Prerequisites
 
 1. Raspberry Pi with [Ubuntu MATE 16.04](https://ubuntu-mate.org/raspberry-pi/) and [ROS kinetic (Ubuntu/armhf)](http://wiki.ros.org/kinetic/Installation/Ubuntu)
