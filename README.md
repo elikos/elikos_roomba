@@ -3,6 +3,19 @@ Custom software for ground &amp; osbtacle robots with on-board Raspberry Pi
 
 **Status**: WIP
 
+
+## How to
+
+1. Fork this repo and work on that (clone your own fork)
+
+   1. Set `upstream` as  
+      ````
+      git remote add upstream git@github.com:elikos/elikos_roomba.git
+      ````  
+
+2. Create a pull request
+
+
 ## Prerequisites
 
 1. Raspberry Pi with [Ubuntu MATE 16.04](https://ubuntu-mate.org/raspberry-pi/) and [ROS kinetic (Ubuntu/armhf)](http://wiki.ros.org/kinetic/Installation/Ubuntu)
@@ -26,12 +39,14 @@ Custom software for ground &amp; osbtacle robots with on-board Raspberry Pi
    catkin_init_workspace
    ````
 
-2. Clone repo in the `~/roomba_ws/src` folder
+2. Fork the [`elikos/elikos_roomba`](https://github.com/elikos/elikos_roomba) repo  
+   Clone your own fork in the `~/roomba_ws/src` folder
    ````
-   git clone git@github.com:christophebedard/elikos_roomba.git
-   ````
+   git clone git@github.com:USERNAME/elikos_roomba.git
+   ````  
+   with `USERNAME` being your GitHub username
 
-3. Clone [`create_autonomy`](https://github.com/AutonomyLab/create_autonomy) package repo in the `~/roomba_ws/src` folder
+3. Clone the [`create_autonomy`](https://github.com/AutonomyLab/create_autonomy) package repo in the `~/roomba_ws/src` folder
    ````
    git clone git@github.com:AutonomyLab/create_autonomy.git
    sudo usermod -a -G dialout $USER
