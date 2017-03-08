@@ -111,3 +111,14 @@ Mostly because Christophe is dumb and often forgets.
       export ROS_IP=192.168.x.y
       ````  
       find the `192.168.x.y` address with `hostname -I`
+
+## Robot behaviour
+
+Behaviour description of the ground robot and obstacle robot according to the [official rules](http://www.aerialroboticscompetition.org/rules.php).
+
+| Info                 | Ground robot                                  | Obstacle robot                                       |
+| :------------------- |:--------------------------------------------- | :--------------------------------------------------- |
+| Initial position     | 1 m radius, equally spaced and facing outward | 5 m radius, equally spaced and oriented clockwise    |
+| Normal trajectory    | foward @ 0.33 m/s                             | 10 m diameter CW circle centered on arena @ 0.33 m/s |
+| Interactions         | - Bumper: 180° CW<br>  - Top switch: 45° CW   | None                                                 |
+| Noise/random         | - Every 20 seconds: 180° CW<br>  - Every 5 seconds, while moving: 0° ≤ angle ≤ 20° CCW  | None       |
