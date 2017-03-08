@@ -139,6 +139,7 @@ include_directories(
 # add_executable(${PROJECT_NAME}_node src/elikos_roomba_node.cpp)
 add_executable(topswitch_node src/topswitch_node.cpp)
 add_executable(groundrobot_node src/groundrobot_node.cpp)
+add_executable(robot_node src/robot.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -156,6 +157,9 @@ target_link_libraries(topswitch_node wiringPi
     ${wiringPi_LIBRARIES}
 )
 target_link_libraries(groundrobot_node
+    ${catkin_LIBRARIES}
+)
+target_link_libraries(robot_node
     ${catkin_LIBRARIES}
 )
 
