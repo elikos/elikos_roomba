@@ -83,6 +83,17 @@ Mostly because Christophe is dumb and often forgets.
       sudo apt-get install ros-kinetic-joy
       ````
 
+   3. Serial error, with a message like  
+      ````
+      [create::Serial] failed to receive data from Create. Check if robot is powered!
+      ````  
+      and no serial communication *from* the robot:  
+         1. no blue light on the USB connector of the USB-to-serial cable; or  
+         2. no response when doing `cat /dev/ttyUSB0 115200`
+
+      Remove the 4 screws and then remove the battery. Wait a couple seconds, then put it back in along with the screws. You should hear a little happy tune and serial communication should now work.
+
+
 * Can't run ROS or `roslaunch` `ca_tools joy_teleop` from another computer  
    See [ROS/Tutorials/MultipleMachines](http://wiki.ros.org/ROS/Tutorials/MultipleMachines)
 
