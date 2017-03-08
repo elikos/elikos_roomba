@@ -83,6 +83,17 @@ Mostly because Christophe is dumb and often forgets.
       sudo apt-get install ros-kinetic-joy
       ````
 
+   3. Serial error, with a message like  
+      ````
+      [create::Serial] failed to receive data from Create. Check if robot is powered!
+      ````  
+      and no serial communication *from* the robot:  
+         1. no blue light on the USB connector of the USB-to-serial cable; or  
+         2. no response when doing `cat /dev/ttyUSB0 115200`
+
+      Remove the 4 screws and then remove the battery. Wait a couple seconds, then put it back in along with the screws. You should hear a little happy tune and serial communication should now work.
+
+
 * Can't run ROS or `roslaunch` `ca_tools joy_teleop` from another computer  
    See [ROS/Tutorials/MultipleMachines](http://wiki.ros.org/ROS/Tutorials/MultipleMachines)
 
@@ -100,3 +111,14 @@ Mostly because Christophe is dumb and often forgets.
       export ROS_IP=192.168.x.y
       ````  
       find the `192.168.x.y` address with `hostname -I`
+
+## Robot behaviour
+
+Behaviour description of the ground robot and obstacle robot according to the [official rules](http://www.aerialroboticscompetition.org/rules.php).
+
+| Info                 | Ground robot                                  | Obstacle robot                                       |
+| :------------------- |:--------------------------------------------- | :--------------------------------------------------- |
+| Initial position     | 1 m radius, equally spaced and facing outward | 5 m radius, equally spaced and oriented clockwise    |
+| Normal trajectory    | foward @ 0.33 m/s                             | 10 m diameter CW circle centered on arena @ 0.33 m/s |
+| Interactions         | - Bumper: 180° CW<br>  - Top switch: 45° CW   | None                                                 |
+| Noise/random         | - Every 20 seconds: 180° CW<br>  - Every 5 seconds, while moving: 0° ≤ angle ≤ 20° CCW  | None       |
