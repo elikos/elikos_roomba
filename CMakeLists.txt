@@ -140,9 +140,9 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/elikos_roomba_node.cpp)
-add_executable(topswitch_node src/topswitch_node.cpp)
-add_executable(groundrobot_node src/groundrobot_node.cpp)
-add_executable(robot_node src/robot.cpp)
+#add_executable(topswitch_node src/topswitch_node.cpp)
+add_executable(groundrobot_node src/groundrobot.cpp src/robot.cpp)
+#add_executable(robot_node src/robot.cpp) #shouldn't be run
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -155,16 +155,16 @@ add_executable(robot_node src/robot.cpp)
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(topswitch_node wiringPi
-    ${catkin_LIBRARIES}
-    ${wiringPi_LIBRARIES}
-)
+#target_link_libraries(topswitch_node wiringPi
+#    ${catkin_LIBRARIES}
+#    ${wiringPi_LIBRARIES}
+#)
 target_link_libraries(groundrobot_node
     ${catkin_LIBRARIES}
 )
-target_link_libraries(robot_node
-    ${catkin_LIBRARIES}
-)
+#target_link_libraries(robot_node
+#    ${catkin_LIBRARIES}
+#)
 
 #############
 ## Install ##
