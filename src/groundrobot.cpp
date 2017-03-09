@@ -4,7 +4,7 @@ GroundRobot::GroundRobot(ros::NodeHandle& n)
     : Robot(n)
 {
     // Setup services
-    ros::ServiceServer topSwitch_srv_ = n.advertiseService(TOPSWITCH_SERVICE_NAME, &GroundRobot::topSwitchCallback, this);
+    topSwitch_srv_ = n.advertiseService(TOPSWITCH_SERVICE_NAME, &GroundRobot::topSwitchCallback, this);
 }
 
 GroundRobot::~GroundRobot() {
