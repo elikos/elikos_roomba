@@ -2,7 +2,7 @@
 #define GROUNDROBOT_H
 
 #include <ros/ros.h>
-#include <std_srvs/Empty.h>
+#include <ros/timer.h>
 #include "elikos_roomba/robot.h"
 #include "ca_msgs/Bumper.h"
 
@@ -21,6 +21,10 @@ class GroundRobot : public Robot
         void bumperCallback(const ca_msgs::Bumper::ConstPtr& msg);
 
         // timers
+        ros::Timer twentySec_tim_;
+        ros::Timer fiveSec_tim_;
+        void twentySecCallback(const ros::TimerEvent& event);
+        void fiveSecCallback(const ros::TimerEvent& event);
 
         // state
 
