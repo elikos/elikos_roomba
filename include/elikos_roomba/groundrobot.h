@@ -4,8 +4,10 @@
 #include <ros/ros.h>
 #include <std_srvs/Empty.h>
 #include "elikos_roomba/robot.h"
+#include "ca_msgs/Bumper.h"
 
 static const std::string TOPSWITCH_SERVICE_NAME = "topswitch_trigger";
+static const std::string BUMPER_TOPIC_NAME = "bumper";
 
 class GroundRobot : public Robot
 {
@@ -13,6 +15,10 @@ class GroundRobot : public Robot
         // service
         ros::ServiceServer topSwitch_srv_;
         bool topSwitchCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
+
+        // subscriber
+        ros::Subscriber bumper_sub_;
+        void bumperCallback(const ca_msgs::Bumper::ConstPtr& msg);
 
         // timers
 
@@ -25,7 +31,7 @@ class GroundRobot : public Robot
             TURN_TOPSWITCH,
             TURN_TIMEOUT
         };*/
-        
+
     protected:
         void update();
         void updateCmbVel();

@@ -17,14 +17,13 @@ static const int CMDVEL_TOPIC_QUEUESIZE = 50;
 class Robot
 {
     private:
-
+        ros::Publisher cmdVel_pub_;
     
     protected:
         ros::NodeHandle& n_;
         double loop_hz_;
         bool is_running_slowly_;
 
-        ros::Publisher cmdVel_pub_;
         geometry_msgs::Twist cmdVel_msg_;
 
         void update();
@@ -41,7 +40,7 @@ class Robot
         ~Robot();
         virtual void spin() =0;
         virtual void spinOnce() =0;
-        
+
 };
 
 #endif  // ELIKOS_ROOMBA_ROBOT_H

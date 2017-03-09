@@ -3,7 +3,10 @@
 GroundRobot::GroundRobot(ros::NodeHandle& n)
     : Robot(n)
 {
-    // Setup services
+    // setup subscribers
+    bumper_sub_ = n.subscribe(BUMPER_TOPIC_NAME, 10, &GroundRobot::bumperCallback, this);
+
+    // setup services
     topSwitch_srv_ = n.advertiseService(TOPSWITCH_SERVICE_NAME, &GroundRobot::topSwitchCallback, this);
 }
 
@@ -12,14 +15,23 @@ GroundRobot::~GroundRobot() {
   // add other relevant stuff
 }
 
+void GroundRobot::bumperCallback(const ca_msgs::Bumper::ConstPtr& msg) {
+    // collision if either bumper is pressed
+    if (msg->is_left_pressed || msg->is_right_pressed) {
+        ROS_INFO_STREAM("[GROUND ROBOT] Bumper collision");
+    }
+}
+
 bool GroundRobot::topSwitchCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
+    ROS_INFO_STREAM("[GROUND ROBOT] Top switch pressed");
     ROS_INFO_STREAM("[GROUND ROBOT] Roomba does a 45-deg turn");
     return true;
 }
 
 void GroundRobot::updateCmbVel() {
     // simple cmdvel message for the moment
-    cmdVel_msg_ = Robot::getCmdVelMsg(0.0f, 2.5f);
+    //cmdVel_msg_ = Robot::getCmdVelMsg(0.0f, -2.5f);
+    cmdVel_msg_ = Robot::getCmdVelMsg(0.0f, 1.0f);
 }
 
 void GroundRobot::update() {

@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   nav_msgs
   std_srvs
+  ca_msgs
   message_generation
 )
 
@@ -72,10 +73,11 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-# )
+ generate_messages(
+   DEPENDENCIES
+   std_msgs
+   ca_msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -110,7 +112,7 @@ catkin_package(
   INCLUDE_DIRS include
   CATKIN_DEPENDS message_runtime
   LIBRARIES elikos_roomba
-  CATKIN_DEPENDS roscpp rospy std_msgs std_srvs geometry_msgs nav_msgs
+  CATKIN_DEPENDS roscpp rospy std_msgs std_srvs geometry_msgs nav_msgs ca_msgs
  # DEPENDS wiringPi
 )
 
