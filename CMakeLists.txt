@@ -11,7 +11,10 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  geometry_msgs
+  nav_msgs
   std_srvs
+  ca_msgs
   message_generation
 )
 
@@ -70,10 +73,11 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-# )
+ generate_messages(
+   DEPENDENCIES
+   std_msgs
+   ca_msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -108,7 +112,7 @@ catkin_package(
   INCLUDE_DIRS include
   CATKIN_DEPENDS message_runtime
   LIBRARIES elikos_roomba
-  CATKIN_DEPENDS roscpp rospy std_msgs std_srvs
+  CATKIN_DEPENDS roscpp rospy std_msgs std_srvs geometry_msgs nav_msgs ca_msgs
  # DEPENDS wiringPi
 )
 
@@ -121,6 +125,7 @@ catkin_package(
 # include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
+  include
 )
 
 ## Declare a C++ library
@@ -138,7 +143,8 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/elikos_roomba_node.cpp)
 add_executable(topswitch_node src/topswitch_node.cpp)
-add_executable(groundrobot_node src/groundrobot_node.cpp)
+add_executable(groundrobot_node src/groundrobot.cpp src/robot.cpp)
+#add_executable(robot_node src/robot.cpp) #shouldn't be run
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -158,6 +164,9 @@ target_link_libraries(topswitch_node wiringPi
 target_link_libraries(groundrobot_node
     ${catkin_LIBRARIES}
 )
+#target_link_libraries(robot_node
+#    ${catkin_LIBRARIES}
+#)
 
 #############
 ## Install ##

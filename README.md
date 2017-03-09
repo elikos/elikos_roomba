@@ -1,5 +1,5 @@
 # elikos_roomba
-Custom software for ground &amp; osbtacle robots with on-board Raspberry Pi
+ROS package for ground &amp; osbtacle robots with on-board Raspberry Pi
 
 **Status**: WIP
 
@@ -97,16 +97,16 @@ Mostly because Christophe is dumb and often forgets.
 * Can't run ROS or `roslaunch` `ca_tools joy_teleop` from another computer  
    See [ROS/Tutorials/MultipleMachines](http://wiki.ros.org/ROS/Tutorials/MultipleMachines)
 
-   1. Configure `ROS_MASTER_URI` for every terminal on the remote machine  
+   1. Configure `ROS_MASTER_URI` variable pointing to the `roscore` host for every terminal on both the host and remote computers  
       ````
       export ROS_MASTER_URI=http://192.168.x.y:11311
       ````  
-      with `192.168.x.y` being the actual address of the host machine (Raspberry Pi); check with `hostname -I`
+      with `192.168.x.y` being the actual address of the host computer; check with `hostname -I`
 
-* No communication between the host and remote machines  
+* No communication between the host and remote computer  
    Symptom: `Couldn't find an AF_INET address for [HOSTNAME]` message on the `roscore` of the host
 
-   1. Configure `ROS_IP` for (every terminal?) on the remote computer  
+   1. Configure `ROS_IP` variable pointing to the local computer for every terminal on both the host and remote computers  
       ````
       export ROS_IP=192.168.x.y
       ````  
