@@ -1,11 +1,12 @@
 #include "elikos_roomba/robot.h"
 
-Robot::Robot(ros::NodeHandle& n, RobotType botType) {
-    _n = n;
-    _robotType = botType;
+Robot::Robot(ros::NodeHandle& n)
+    : n_(n)
+{
+    //_robotType = botType;
 
     // Setup publishers
-    _cmd_vel_pub = n.advertise<geometry_msgs::Twist>("cmd_vel", 50)
+    cmd_vel_pub_ = n.advertise<geometry_msgs::Twist>("cmd_vel", 50);
 }
 
 Robot::~Robot() {
@@ -19,7 +20,7 @@ void Robot::update() {
     // check timers
 }
 
-geometry_msgs::Twist Robot::getCmdVel(float lin_x, float ang_z) {
+geometry_msgs::Twist Robot::getCmdVelMsg(float lin_x, float ang_z) {
     geometry_msgs::Twist cmdVel_msg;
     cmdVel_msg.linear.x = lin_x;
     cmdVel_msg.angular.z = ang_z;
@@ -27,8 +28,8 @@ geometry_msgs::Twist Robot::getCmdVel(float lin_x, float ang_z) {
     return cmdVel_msg;
 }
 
-Robot::publishCmdVel(geometry_msgs::Twist cmdVel_msg) {
-    _cmd_vel_pub.publish(cmdVel_msg);
+void Robot::publishCmdVel(geometry_msgs::Twist cmdVel_msg) {
+    cmd_vel_pub_.publish(cmdVel_msg);
 }
 
 
@@ -41,14 +42,15 @@ int main(int argc, char **argv)
     
     ros::Rate loop_rate(10);
 
-    Robot _robot(n);
+    Robot robot_(n);
 
-    _robot.publishCmdVel(_robot.getCmdVelMsg(float 0.2, float 0.1));
+    geometry_msgs::Twist ms = robot_.getCmdVelMsg(0.0f, 2.5f);
     
     while (ros::ok())
     {
         // do stuff
-
+        robot_.publishCmdVel(ms);
+        
         ros::spinOnce();
         loop_rate.sleep();
     }
