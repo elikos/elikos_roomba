@@ -71,7 +71,10 @@ void GroundRobot::bumperCallback(const ca_msgs::Bumper::ConstPtr& msg) {
 }
 bool GroundRobot::topSwitchCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
     Robot::ROS_INFO_STREAM_ROBOT("Top switch pressed");
-    startTopSwitchTurn();
+    // if robot isn't already turning after a top switch activation
+    if (!isRobotState(TURN_TOPSWITCH)) {
+        startTopSwitchTurn();
+    }
     return true;
 }
 void GroundRobot::timeoutCallback(const ros::TimerEvent& event) {
