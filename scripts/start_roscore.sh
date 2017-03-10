@@ -1,8 +1,12 @@
 #!/bin/bash
-# arg1 : ROS_MASTER_URI
-# arg2 : ROS_IP
+# start local roscore
+echo Enter ROS_MASTER_URI (http://192.168.x.y:11311)
+read varmasteruri
+echo Enter ROS_IP (192.168.x.y)
+read varrosip
+
 source /opt/ros/kinetic/setup.bash
 source ~/roomba_ws/devel/setup.bash
-export ROS_MASTER_URI=$1
-export ROS_IP=$2
+export ROS_MASTER_URI=$varmasteruri
+export ROS_IP=$varrosip
 roscore

@@ -1,9 +1,8 @@
 #!/bin/bash
-# arg1 : ROS_MASTER_URI
-# arg2 : ROS_IP
-echo Enter ROS_MASTER_URI
+# launch locally
+echo Enter ROS_MASTER_URI (http://192.168.x.y:11311)
 read varmasteruri
-echo Enter ROS_IP
+echo Enter ROS_IP (192.168.x.y)
 read varrosip
 
 source /opt/ros/kinetic/setup.bash
