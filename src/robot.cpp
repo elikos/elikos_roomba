@@ -5,10 +5,11 @@ Robot::Robot(ros::NodeHandle& n, std::string botType)
       is_running_slowly_(false),
       robotType_(botType)
 {
-    loop_hz_ = 10.0;
+    loop_hz_ = LOOP_RATE;
 
-    // Setup publishers
+    // setup publishers
     cmdVel_pub_ = n.advertise<geometry_msgs::Twist>(CMDVEL_TOPIC_NAME, CMDVEL_TOPIC_QUEUESIZE);
+    robotState_pub_ = n.advertise<std_msgs::String>(ROBOTSTATE_TOPIC_NAME, ROBOTSTATE_TOPIC_QUEUESIZE);
 
     // setup services
     activate_srv_ = n.advertiseService(ACTIVATE_SERVICE_NAME, &Robot::activateCallback, this);
@@ -16,8 +17,7 @@ Robot::Robot(ros::NodeHandle& n, std::string botType)
     toglActivate_srv_ = n.advertiseService(TOGGLEACT_SERVICE_NAME, &Robot::toglActivateCallback, this);
 
     // initial active/inactive state
-    isActive_ = false;
-    isReactivated_ = false;
+    //deactivateRobot();
 
     ROS_INFO_STREAM_ROBOT("Base initialization done");
 }
@@ -32,12 +32,12 @@ void Robot::ROS_INFO_STREAM_ROBOT(std::string message) {
 }
 
 void Robot::activateRobot() {
-    ROS_INFO_STREAM_ROBOT("Robot activated");
+    ROS_INFO_STREAM_ROBOT("Base robot activated");
     isActive_ = true;
-    isReactivated_ = true;
+    //setReactivatedFlag();
 }
 void Robot::deactivateRobot() {
-    ROS_INFO_STREAM_ROBOT("Robot deactivated");
+    ROS_INFO_STREAM_ROBOT("Base robot deactivated");
     isActive_ = false;
 }
 
@@ -70,10 +70,16 @@ geometry_msgs::Twist Robot::getCmdVelMsg(float lin_x, float ang_z) {
     return cmdVel_msg;
 }
 
+void Robot::publishRobotState() {
+    robotState_pub_.publish(robotState_msg_);
+}
+
 void Robot::update() {
     //ROS_INFO_STREAM_ROBOT("base update");
-    // GHETTO way to only publish is base robot is active
+    // GHETTO way to only publish cmdvel if robot is active
     if (isActive_) { publishCmdVel(); }
+
+    publishRobotState();
 }
 
 /*void Robot::spinOnce()

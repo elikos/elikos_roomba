@@ -9,33 +9,54 @@ GroundRobot::GroundRobot(ros::NodeHandle& n)
     // setup services
     topSwitch_srv_ = n.advertiseService(TOPSWITCH_SERVICE_NAME, &GroundRobot::topSwitchCallback, this);
 
-    // setup timers
-    //   oneshot FALSE, autostart TRUE
-    twentySec_tim_ = n.createTimer(ros::Duration(20.0), &GroundRobot::twentySecCallback, this);
-    fiveSec_tim_ = n.createTimer(ros::Duration(5.0), &GroundRobot::fiveSecCallback, this);
-    //   oneshot TRUE, autostart FALSE
-    bumperTurn_tim_ = n.createTimer(ros::Duration(1.0), &GroundRobot::bumperTurnTimCallback, this, true, false);
-    topSwitchTurn_tim_ = n.createTimer(ros::Duration(0.25), &GroundRobot::topSwitchTurnTimCallback, this, true, false);
-    timeoutTurn_tim_  = n.createTimer(ros::Duration(1.0), &GroundRobot::timeoutTurnTimCallback, this, true, false);
+    // setup timers (oneshot TRUE, autostart FALSE)
+    timeout_tim_ = n.createTimer(ros::Duration(TIMEOUT_DURATION), &GroundRobot::timeoutCallback, this, true, false);
+    noise_tim_ = n.createTimer(ros::Duration(NOISE_DURATION), &GroundRobot::noiseCallback, this, true, false);
+    bumperTurn_tim_ = n.createTimer(ros::Duration(BUMPER_TURN_DURATION), &GroundRobot::bumperTurnTimCallback, this, true, false);
+    topSwitchTurn_tim_ = n.createTimer(ros::Duration(TOPSWITCH_TURN_DURATION), &GroundRobot::topSwitchTurnTimCallback, this, true, false);
+    timeoutTurn_tim_  = n.createTimer(ros::Duration(TIMEOUT_TURN_DURATION), &GroundRobot::timeoutTurnTimCallback, this, true, false);
 
     // initial state
-    changeRobotStateTo(INACTIVE);
-    //changeRobotStateTo(FORWARD);
+    deactivateRobot();
     forward_noise_ = 0.0;
 
     ROS_INFO_STREAM_ROBOT("Parent initialization done");
 }
 
 GroundRobot::~GroundRobot() {
-  Robot::ROS_INFO_STREAM_ROBOT("Destruct ground robot sequence initiated.");
-  // add other relevant stuff
+    Robot::ROS_INFO_STREAM_ROBOT("Destruct ground robot sequence initiated.");
+    // add other relevant stuff
 }
 
 void GroundRobot::changeRobotStateTo(GroundRobotState newRobotState) {
     robotState_ = newRobotState;
+
 }
 bool GroundRobot::isRobotState(GroundRobotState cmpRobotState) {
     return robotState_ == cmpRobotState;
+}
+
+void GroundRobot::activateRobot() {
+    ROS_INFO_STREAM_ROBOT("Parent robot activated");
+    changeRobotStateTo(FORWARD);
+    // reactivate timers (timeout and noise)
+    timerRestart(timeout_tim_, TIMEOUT_DURATION);
+    timerRestart(noise_tim_, NOISE_DURATION);
+    Robot::activateRobot();
+}
+void GroundRobot::deactivateRobot() {
+    ROS_INFO_STREAM_ROBOT("Parent robot deactivated");
+    changeRobotStateTo(INACTIVE);
+    // deactivate timers (timeout and noise)
+    timeout_tim_.stop();
+    noise_tim_.stop();
+    Robot::deactivateRobot();
+}
+
+void GroundRobot::timerRestart(ros::Timer tim, double dur) {
+    tim.stop();
+    tim.setPeriod(ros::Duration(dur));
+    tim.start();
 }
 
 void GroundRobot::bumperCallback(const ca_msgs::Bumper::ConstPtr& msg) {
@@ -53,16 +74,17 @@ bool GroundRobot::topSwitchCallback(std_srvs::Empty::Request& request, std_srvs:
     startTopSwitchTurn();
     return true;
 }
-void GroundRobot::twentySecCallback(const ros::TimerEvent& event) {
+void GroundRobot::timeoutCallback(const ros::TimerEvent& event) {
     Robot::ROS_INFO_STREAM_ROBOT("20 seconds timeout");
     startTimeoutTurn();
+    timerRestart(timeout_tim_, TIMEOUT_DURATION);
 }
-void GroundRobot::fiveSecCallback(const ros::TimerEvent& event) {
+void GroundRobot::noiseCallback(const ros::TimerEvent& event) {
     Robot::ROS_INFO_STREAM_ROBOT("5 seconds noise timeout");
     if (isRobotState(FORWARD)) {
-        // send angle noise if robot is going forward
-        Robot::publishCmdVel(Robot::getCmdVelMsg(0.0f, 1.0f));
-        forward_noise_ = FORWARD_NOISE;
+        // add angle noise if robot is going forward
+        forward_noise_ = FORWARD_NOISE; // TODO: add random noise according to 0<=angle<=20 degrees interval
+        timerRestart(noise_tim_, NOISE_DURATION);
     }
 }
 
@@ -82,74 +104,54 @@ void GroundRobot::timeoutTurnTimCallback(const ros::TimerEvent& event) {
 void GroundRobot::startBumperTurn() {
     Robot::ROS_INFO_STREAM_ROBOT("180 degrees turn (bumper) init");
     changeRobotStateTo(TURN_BUMPER);
-    bumperTurn_tim_.stop();
-    bumperTurn_tim_.setPeriod(ros::Duration(1.0));
-    bumperTurn_tim_.start();
+    timerRestart(bumperTurn_tim_, BUMPER_TURN_DURATION);
 }
 void GroundRobot::startTopSwitchTurn() {
     Robot::ROS_INFO_STREAM_ROBOT("45 degrees turn (top switch) init");
     changeRobotStateTo(TURN_TOPSWITCH);
-    topSwitchTurn_tim_.stop();
-    topSwitchTurn_tim_.setPeriod(ros::Duration(0.25));
-    topSwitchTurn_tim_.start();
+    timerRestart(topSwitchTurn_tim_, TOPSWITCH_TURN_DURATION);
 }
 void GroundRobot::startTimeoutTurn() {
     Robot::ROS_INFO_STREAM_ROBOT("180 degrees turn (timeout) init");
     changeRobotStateTo(TURN_TIMEOUT);
-    timeoutTurn_tim_.stop();
-    timeoutTurn_tim_.setPeriod(ros::Duration(1.0));
-    timeoutTurn_tim_.start();
+    timerRestart(timeoutTurn_tim_, TIMEOUT_TURN_DURATION);
 }
 
-void GroundRobot::updateCmbVel() {
+void GroundRobot::updateState() {
     switch ( robotState_ ) {
         case INACTIVE:
             // nothing
             cmdVel_msg_ = Robot::getCmdVelMsg(0.0f, 0.0f);
+            robotState_msg_.data = "INACTIVE";
             break;
         case FORWARD:
-            //cmdVel_msg_ = Robot::getCmdVelMsg(FORWARD_SPEED, 0.0f);
             cmdVel_msg_ = Robot::getCmdVelMsg(FORWARD_SPEED, forward_noise_);
             forward_noise_ = 0.0;
+            robotState_msg_.data = "FORWARD";
             break;
-        case TURN_BUMPER: // 180 deg
+        case TURN_BUMPER:
             cmdVel_msg_ = Robot::getCmdVelMsg(0.0f, TURN_SPEED);
+            robotState_msg_.data = "TURN_BUMPER";
             break;
-        case TURN_TOPSWITCH: // 45 deg
+        case TURN_TOPSWITCH:
             cmdVel_msg_ = Robot::getCmdVelMsg(0.0f, TURN_SPEED);
+            robotState_msg_.data = "TURN_TOPSWITCH";
             break;
-        case TURN_TIMEOUT: // 180 deg
+        case TURN_TIMEOUT:
             cmdVel_msg_ = Robot::getCmdVelMsg(0.0f, TURN_SPEED);
+            robotState_msg_.data = "TURN_TIMEOUT";
             break;
         default:
             // default behaviour
             cmdVel_msg_ = Robot::getCmdVelMsg(0.0f, 0.0f);
+            robotState_msg_.data = "INACTIVE";
             break;
-    }
-}
-
-void GroundRobot::updateState() {
-    // check global active/inactive status
-    if (isReactivated_) {
-        changeRobotStateTo(FORWARD);
-    }
-    else { // check global active/inactive status
-        if (!isActive_) {
-            changeRobotStateTo(INACTIVE);
-        }
-        // check if state is INACTIVE
-        if (robotState_ == INACTIVE) {
-            Robot::ROS_INFO_STREAM_ROBOT("Robot is inactive");
-        }
     }
 }
 
 void GroundRobot::update() {
     //Robot::ROS_INFO_STREAM_ROBOT("update");
-
     updateState();
-    updateCmbVel();
-
     Robot::update();
 }
 
