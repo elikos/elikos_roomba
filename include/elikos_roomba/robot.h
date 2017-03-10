@@ -36,12 +36,15 @@ class Robot
         double loop_hz_;
         bool is_running_slowly_;
         bool isActive_;
+        bool isReactivated_;
 
         geometry_msgs::Twist cmdVel_msg_;
 
         void update();
         void publishCmdVel();
         void publishCmdVel(geometry_msgs::Twist cmdVel_msg);
+        void activateRobot();
+        void deactivateRobot();
 
         geometry_msgs::Twist getCmdVelMsg(float lin_x, float ang_z);
 
