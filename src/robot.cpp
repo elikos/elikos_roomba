@@ -1,21 +1,57 @@
 #include "elikos_roomba/robot.h"
 
-Robot::Robot(ros::NodeHandle& n)
+Robot::Robot(ros::NodeHandle& n, std::string botType)
     : n_(n),
-      is_running_slowly_(false)
+      is_running_slowly_(false),
+      robotType_(botType)
 {
     loop_hz_ = 10.0;
 
-    //_robotType = botType;
-
     // Setup publishers
-    ROS_INFO_STREAM("Setting up cmd_vel publisher..");
     cmdVel_pub_ = n.advertise<geometry_msgs::Twist>(CMDVEL_TOPIC_NAME, CMDVEL_TOPIC_QUEUESIZE);
+
+    // setup services
+    activate_srv_ = n.advertiseService(ACTIVATE_SERVICE_NAME, &Robot::activateCallback, this);
+    deactivate_srv_ = n.advertiseService(DEACTIVATE_SERVICE_NAME, &Robot::deactivateCallback, this);
+    toglActivate_srv_ = n.advertiseService(TOGGLEACT_SERVICE_NAME, &Robot::toglActivateCallback, this);
+
+    // initial active/inactive state
+    isActive_ = false;
+    isReactivated_ = false;
+
+    ROS_INFO_STREAM_ROBOT("Base initialization done");
 }
 
 Robot::~Robot() {
-  ROS_INFO_STREAM("[ROBOT] Destruct robot sequence initiated.");
+  ROS_INFO_STREAM_ROBOT("Robot base destruct robot sequence initiated");
   // add other relevant stuff
+}
+
+void Robot::ROS_INFO_STREAM_ROBOT(std::string message) {
+    ROS_INFO_STREAM("[" << robotType_ << "] " << message);
+}
+
+void Robot::activateRobot() {
+    ROS_INFO_STREAM_ROBOT("Robot activated");
+    isActive_ = true;
+    isReactivated_ = true;
+}
+void Robot::deactivateRobot() {
+    ROS_INFO_STREAM_ROBOT("Robot deactivated");
+    isActive_ = false;
+}
+
+bool Robot::activateCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
+    activateRobot();
+    return true;
+}
+bool Robot::deactivateCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
+    deactivateRobot();
+    return true;
+}
+bool Robot::toglActivateCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
+    isActive_ ? deactivateRobot() : activateRobot();
+    return true;
 }
 
 void Robot::publishCmdVel() {
@@ -35,9 +71,9 @@ geometry_msgs::Twist Robot::getCmdVelMsg(float lin_x, float ang_z) {
 }
 
 void Robot::update() {
-    ROS_INFO_STREAM("[ROBOT] update");
-
-    publishCmdVel();
+    //ROS_INFO_STREAM_ROBOT("base update");
+    // GHETTO way to only publish is base robot is active
+    if (isActive_) { publishCmdVel(); }
 }
 
 /*void Robot::spinOnce()
