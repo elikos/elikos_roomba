@@ -12,6 +12,7 @@ GroundRobot::GroundRobot(ros::NodeHandle& n)
     // setup timers (oneshot TRUE, autostart FALSE)
     timeout_tim_ = n.createTimer(ros::Duration(TIMEOUT_DURATION), &GroundRobot::timeoutCallback, this, true, false);
     noise_tim_ = n.createTimer(ros::Duration(NOISE_DURATION), &GroundRobot::noiseCallback, this, true, false);
+    noiseTurn_tim_ = n.createTimer(ros::Duration(getTurnDurationFromAngleAndSpeed(0.0,NOISE_TURN_SPEED)), &GroundRobot::noiseTurnCallback, this, true, false);
     bumperTurn_tim_ = n.createTimer(ros::Duration(BUMPER_TURN_DURATION), &GroundRobot::bumperTurnTimCallback, this, true, false);
     topSwitchTurn_tim_ = n.createTimer(ros::Duration(TOPSWITCH_TURN_DURATION), &GroundRobot::topSwitchTurnTimCallback, this, true, false);
     timeoutTurn_tim_  = n.createTimer(ros::Duration(TIMEOUT_TURN_DURATION), &GroundRobot::timeoutTurnTimCallback, this, true, false);
@@ -47,10 +48,18 @@ void GroundRobot::activateRobot() {
 void GroundRobot::deactivateRobot() {
     ROS_INFO_STREAM_ROBOT("Parent robot deactivated");
     changeRobotStateTo(INACTIVE);
-    // deactivate timers (timeout and noise)
+    // deactivate timers (timeout and noise/noise turn)
     timeout_tim_.stop();
     noise_tim_.stop();
+    noiseTurn_tim_.stop();
     Robot::deactivateRobot();
+}
+
+double GroundRobot::getRandomNoiseAngle() {
+    return NOISE_ANGLE_MIN + ((double)std::rand() / RAND_MAX) * (NOISE_ANGLE_MAX - NOISE_ANGLE_MIN);
+}
+double GroundRobot::getTurnDurationFromAngleAndSpeed(double angl, double speed) {
+    return angl/speed;
 }
 
 void GroundRobot::timerRestart(ros::Timer tim, double dur) {
@@ -63,8 +72,8 @@ void GroundRobot::bumperCallback(const ca_msgs::Bumper::ConstPtr& msg) {
     // collision if either bumper is pressed
     if (msg->is_left_pressed || msg->is_right_pressed) {
         Robot::ROS_INFO_STREAM_ROBOT("Bumper collision");
-        // if robot isn't already turning after a bumper collision
-        if (!isRobotState(TURN_BUMPER)) {
+        // if robot isn't already turning (timeout or topswitch) after a bumper collision AND if it's not inactive
+        if (!isRobotState(TURN_TIMEOUT) && !isRobotState(TURN_TOPSWITCH) && !isRobotState(INACTIVE)) {
             startBumperTurn();
         }
     }
@@ -84,13 +93,25 @@ void GroundRobot::timeoutCallback(const ros::TimerEvent& event) {
 }
 void GroundRobot::noiseCallback(const ros::TimerEvent& event) {
     Robot::ROS_INFO_STREAM_ROBOT("5 seconds noise timeout");
-    if (isRobotState(FORWARD)) {
-        // add angle noise if robot is going forward
-        forward_noise_ = FORWARD_NOISE; // TODO: add random noise according to 0<=angle<=20 degrees interval
+    if (isRobotState(FORWARD)) { // if robot is going forward
+        // start to turn (as noise)
+        double randAngle = getRandomNoiseAngle();
+        std::ostringstream strs;
+        strs << (randAngle/DEG_TO_RAD);
+        Robot::ROS_INFO_STREAM_ROBOT("Starting to add noise (" + strs.str() + " degrees)");
+        forward_noise_ = NOISE_TURN_SPEED;
+        timerRestart(noiseTurn_tim_, getTurnDurationFromAngleAndSpeed(randAngle,NOISE_TURN_SPEED));;
+    }
+    else { // or else restart the timer
         timerRestart(noise_tim_, NOISE_DURATION);
     }
 }
 
+void GroundRobot::noiseTurnCallback(const ros::TimerEvent& event) {
+    Robot::ROS_INFO_STREAM_ROBOT("Noise done");
+    forward_noise_ = 0.0f; // set to 0
+    timerRestart(noise_tim_, NOISE_DURATION);
+}
 void GroundRobot::bumperTurnTimCallback(const ros::TimerEvent& event) {
     Robot::ROS_INFO_STREAM_ROBOT("180 degrees turn (bumper) done");
     changeRobotStateTo(FORWARD);
@@ -129,7 +150,6 @@ void GroundRobot::updateState() {
             break;
         case FORWARD:
             cmdVel_msg_ = Robot::getCmdVelMsg(FORWARD_SPEED, forward_noise_);
-            forward_noise_ = 0.0;
             robotState_msg_.data = "FORWARD";
             break;
         case TURN_BUMPER:

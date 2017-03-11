@@ -12,6 +12,7 @@
 #include <nav_msgs/Odometry.h>
 #include <std_srvs/Empty.h>
 #include <string>
+#include <sstream>
 
 static const double LOOP_RATE = 10.0;
 // names (topics and services)
@@ -21,7 +22,7 @@ static const std::string ACTIVATE_SERVICE_NAME = "robot_activate";
 static const std::string DEACTIVATE_SERVICE_NAME = "robot_deactivate";
 static const std::string TOGGLEACT_SERVICE_NAME = "robot_activate_toggle";
 // number parameters
-static const int CMDVEL_TOPIC_QUEUESIZE = 50;
+static const int CMDVEL_TOPIC_QUEUESIZE = 30;
 static const int ROBOTSTATE_TOPIC_QUEUESIZE = 10;
 //static const char* robotTypeText[] = { "GROUND ROBOT", "OBSTACLE ROBOT" };
 
