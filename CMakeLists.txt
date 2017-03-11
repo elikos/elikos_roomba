@@ -144,6 +144,7 @@ include_directories(
 # add_executable(${PROJECT_NAME}_node src/elikos_roomba_node.cpp)
 add_executable(topswitch_node src/topswitch_node.cpp)
 add_executable(groundrobot_node src/groundrobot.cpp src/robot.cpp)
+add_executable(obstaclerobot_node src/obstaclerobot.cpp src/robot.cpp)
 #add_executable(robot_node src/robot.cpp) #shouldn't be run
 
 ## Rename C++ executable without prefix
@@ -162,6 +163,9 @@ target_link_libraries(topswitch_node wiringPi
     ${wiringPi_LIBRARIES}
 )
 target_link_libraries(groundrobot_node
+    ${catkin_LIBRARIES}
+)
+target_link_libraries(obstaclerobot_node
     ${catkin_LIBRARIES}
 )
 #target_link_libraries(robot_node
