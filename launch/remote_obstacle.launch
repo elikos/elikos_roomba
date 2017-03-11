@@ -1,0 +1,4 @@
+<launch>
+    <!-- elikos_roomba -->
+    <node name="obstaclerobot_node" pkg="elikos_roomba" type="obstaclerobot_node" output="screen" />
+</launch>
