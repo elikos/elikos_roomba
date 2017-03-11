@@ -67,11 +67,9 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate added messages and services with any dependencies listed here
- generate_messages(
-   DEPENDENCIES
-   std_msgs
-   ca_msgs
-)
+#generate_messages(
+#   DEPENDENCIES
+#)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -112,14 +110,14 @@ include_directories(
 ## Declare a C++ executable && libraries
 # add_executable(${PROJECT_NAME}_node src/elikos_roomba_node.cpp)
 
-add_executable(topswitch_node src/topswitch_node.cpp)
+#add_executable(topswitch_node src/topswitch_node.cpp)
 add_executable(groundrobot_node src/groundrobot.cpp src/robot.cpp)
 add_executable(obstaclerobot_node src/obstaclerobot.cpp src/robot.cpp)
 
-target_link_libraries(topswitch_node wiringPi
-  ${catkin_LIBRARIES}
-  ${wiringPi_LIBRARIES}
-)
+#target_link_libraries(topswitch_node wiringPi
+#  ${catkin_LIBRARIES}
+#  ${wiringPi_LIBRARIES}
+#)
 target_link_libraries(groundrobot_node
     ${catkin_LIBRARIES}
 )
