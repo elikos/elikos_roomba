@@ -96,4 +96,4 @@ class GroundRobot : public Robot
         void spinOnce();
 };
 
-#endif  // ELIKOS_ROOMBA_GROUNDROBOT_H reset
+#endif  // ELIKOS_ROOMBA_GROUNDROBOT_H
