@@ -11,7 +11,6 @@ static const std::string TOPSWITCH_SERVICE_NAME = "topswitch_trigger";          
 static const std::string BUMPER_TOPIC_NAME = "bumper";                          // published by create_autonomy
 static const std::string GROUNDROBOT_TYPE = "GROUND ROBOT";
 // speeds
-static const float FORWARD_SPEED = 0.33f;                                       //[m/s]
 static const float TURN_SPEED = 90.0f*DEG_TO_RAD;                               //[deg/s]*[rad/deg]=[rad/s]
 static const float NOISE_TURN_SPEED = 90.0f*DEG_TO_RAD;                         //[deg/s]*[rad/deg]=[rad/s]
 // angles (direction of rotation is applied in updateState())

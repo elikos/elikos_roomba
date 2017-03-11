@@ -16,11 +16,11 @@
 
 static const double LOOP_RATE = 10.0;
 // names (topics and services)
-static const std::string CMDVEL_TOPIC_NAME = "cmd_vel";
-static const std::string ROBOTSTATE_TOPIC_NAME = "robot_state";
-static const std::string ACTIVATE_SERVICE_NAME = "robot_activate";
-static const std::string DEACTIVATE_SERVICE_NAME = "robot_deactivate";
-static const std::string TOGGLEACT_SERVICE_NAME = "robot_activate_toggle";
+static const std::string CMDVEL_TOPIC_NAME = "cmd_vel";                     // publishes cmd_vel
+static const std::string ROBOTSTATE_TOPIC_NAME = "robot_state";             // publishes current robot state
+static const std::string ACTIVATE_SERVICE_NAME = "robot_activate";          // service, activate robot
+static const std::string DEACTIVATE_SERVICE_NAME = "robot_deactivate";      // service, deactivate robot
+static const std::string TOGGLEACT_SERVICE_NAME = "robot_activate_toggle";  // service, toggle robot activation
 // number parameters
 static const int CMDVEL_TOPIC_QUEUESIZE = 30;
 static const int ROBOTSTATE_TOPIC_QUEUESIZE = 10;
@@ -28,6 +28,9 @@ static const int ROBOTSTATE_TOPIC_QUEUESIZE = 10;
 static const double DEG_TO_RAD = 3.1415/180.0;  //[rad/deg]
 static const double ROTATE_CCW = 1.0;           // counterclockwise (positive angular.z)
 static const double ROTATE_CW = -1.0;           // clockwise (negative angular.z)
+// speeds
+static const float FORWARD_SPEED = 0.33f;       //[m/s]
+
 
 class Robot
 {
