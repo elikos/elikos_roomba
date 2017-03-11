@@ -111,16 +111,16 @@ include_directories(
 
 ## Declare a C++ executable && libraries
 # add_executable(${PROJECT_NAME}_node src/elikos_roomba_node.cpp)
-if(x86_64)
-  MESSAGE(STATUS "Compile topswitch and wiringPi")
+#if(x86_64)
+#  MESSAGE(STATUS "Compile topswitch and wiringPi")
   add_executable(topswitch_node src/topswitch_node.cpp)
   target_link_libraries(topswitch_node wiringPi
       ${catkin_LIBRARIES}
       ${wiringPi_LIBRARIES}
   )
-else(x86_64)
-  MESSAGE(STATUS "Do NOT compile topswitch and wiringPi")
-endif(x86_64)
+#else(x86_64)
+#  MESSAGE(STATUS "Do NOT compile topswitch and wiringPi")
+#endif(x86_64)
 
 add_executable(groundrobot_node src/groundrobot.cpp src/robot.cpp)
 target_link_libraries(groundrobot_node
