@@ -48,10 +48,13 @@ void GroundRobot::activateRobot() {
 void GroundRobot::deactivateRobot() {
     ROS_INFO_STREAM_ROBOT("Parent robot deactivated");
     changeRobotStateTo(INACTIVE);
-    // deactivate timers (timeout and noise/noise turn)
+    // deactivate timers (all)
     timeout_tim_.stop();
     noise_tim_.stop();
     noiseTurn_tim_.stop();
+    bumperTurn_tim_.stop();
+    topSwitchTurn_tim_.stop();
+    timeoutTurn_tim_.stop();
     Robot::deactivateRobot();
 }
 
@@ -72,16 +75,16 @@ void GroundRobot::bumperCallback(const ca_msgs::Bumper::ConstPtr& msg) {
     // collision if either bumper is pressed
     if (msg->is_left_pressed || msg->is_right_pressed) {
         Robot::ROS_INFO_STREAM_ROBOT("Bumper collision");
-        // if robot isn't already turning (timeout or topswitch) after a bumper collision AND if it's not inactive
-        if (!isRobotState(TURN_TIMEOUT) && !isRobotState(TURN_TOPSWITCH) && !isRobotState(INACTIVE)) {
+        // if robot is going forward
+        if (isRobotState(FORWARD)) {
             startBumperTurn();
         }
     }
 }
 bool GroundRobot::topSwitchCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
     Robot::ROS_INFO_STREAM_ROBOT("Top switch pressed");
-    // if robot isn't already turning after a top switch activation
-    if (!isRobotState(TURN_TOPSWITCH)) {
+    // if is going forward
+    if (isRobotState(FORWARD)) {
         startTopSwitchTurn();
     }
     return true;
@@ -93,7 +96,8 @@ void GroundRobot::timeoutCallback(const ros::TimerEvent& event) {
 }
 void GroundRobot::noiseCallback(const ros::TimerEvent& event) {
     Robot::ROS_INFO_STREAM_ROBOT("5 seconds noise timeout");
-    if (isRobotState(FORWARD)) { // if robot is going forward
+    // if robot is going forward
+    if (isRobotState(FORWARD)) {
         // start to turn (as noise)
         double randAngle = getRandomNoiseAngle();
         std::ostringstream strs;
@@ -209,9 +213,6 @@ int main(int argc, char **argv)
     ros::NodeHandle n;
 
     GroundRobot groundrobot_(n);
-
-    //geometry_msgs::Twist ms = robot_.getCmdVelMsg(0.0f, 2.5f);
-    //robot_.publishCmdVel(ms);
     
     try
     {
