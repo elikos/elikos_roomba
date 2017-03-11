@@ -111,26 +111,27 @@ include_directories(
 
 ## Declare a C++ executable && libraries
 # add_executable(${PROJECT_NAME}_node src/elikos_roomba_node.cpp)
-#if(x86_64)
-#  MESSAGE(STATUS "Compile topswitch and wiringPi")
-  add_executable(topswitch_node src/topswitch_node.cpp)
-  target_link_libraries(topswitch_node wiringPi
-      ${catkin_LIBRARIES}
-      ${wiringPi_LIBRARIES}
-  )
-#else(x86_64)
-#  MESSAGE(STATUS "Do NOT compile topswitch and wiringPi")
-#endif(x86_64)
 
+add_executable(topswitch_node src/topswitch_node.cpp)
 add_executable(groundrobot_node src/groundrobot.cpp src/robot.cpp)
+add_executable(obstaclerobot_node src/obstaclerobot.cpp src/robot.cpp)
+
+target_link_libraries(topswitch_node wiringPi
+  ${catkin_LIBRARIES}
+  ${wiringPi_LIBRARIES}
+)
 target_link_libraries(groundrobot_node
     ${catkin_LIBRARIES}
 )
-
-add_executable(obstaclerobot_node src/obstaclerobot.cpp src/robot.cpp)
 target_link_libraries(obstaclerobot_node
     ${catkin_LIBRARIES}
 )
+
+#if(x86_64)
+#  MESSAGE(STATUS "Compile topswitch and wiringPi")
+#else(x86_64)
+#  MESSAGE(STATUS "Do NOT compile topswitch and wiringPi")
+#endif(x86_64)
 
 #add_executable(robot_node src/robot.cpp) #shouldn't be run
 #target_link_libraries(robot_node
