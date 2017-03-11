@@ -24,7 +24,10 @@ static const std::string TOGGLEACT_SERVICE_NAME = "robot_activate_toggle";
 // number parameters
 static const int CMDVEL_TOPIC_QUEUESIZE = 30;
 static const int ROBOTSTATE_TOPIC_QUEUESIZE = 10;
-//static const char* robotTypeText[] = { "GROUND ROBOT", "OBSTACLE ROBOT" };
+// convention
+static const double DEG_TO_RAD = 3.1415/180.0;  //[rad/deg]
+static const double ROTATE_CCW = 1.0;           // counterclockwise (positive angular.z)
+static const double ROTATE_CW = -1.0;           // clockwise (negative angular.z)
 
 class Robot
 {

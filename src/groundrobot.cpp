@@ -153,19 +153,19 @@ void GroundRobot::updateState() {
             robotState_msg_.data = "INACTIVE";
             break;
         case FORWARD:
-            cmdVel_msg_ = Robot::getCmdVelMsg(FORWARD_SPEED, forward_noise_);
+            cmdVel_msg_ = Robot::getCmdVelMsg(FORWARD_SPEED, forward_noise_*ROTATE_CCW);
             robotState_msg_.data = "FORWARD";
             break;
         case TURN_BUMPER:
-            cmdVel_msg_ = Robot::getCmdVelMsg(0.0f, TURN_SPEED);
+            cmdVel_msg_ = Robot::getCmdVelMsg(0.0f, TURN_SPEED*ROTATE_CW);
             robotState_msg_.data = "TURN_BUMPER";
             break;
         case TURN_TOPSWITCH:
-            cmdVel_msg_ = Robot::getCmdVelMsg(0.0f, TURN_SPEED);
+            cmdVel_msg_ = Robot::getCmdVelMsg(0.0f, TURN_SPEED*ROTATE_CW);
             robotState_msg_.data = "TURN_TOPSWITCH";
             break;
         case TURN_TIMEOUT:
-            cmdVel_msg_ = Robot::getCmdVelMsg(0.0f, TURN_SPEED);
+            cmdVel_msg_ = Robot::getCmdVelMsg(0.0f, TURN_SPEED*ROTATE_CW);
             robotState_msg_.data = "TURN_TIMEOUT";
             break;
         default:
