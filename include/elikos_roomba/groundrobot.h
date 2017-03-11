@@ -6,21 +6,19 @@
 #include "elikos_roomba/robot.h"
 #include "ca_msgs/Bumper.h"
 
-static const double DEG_TO_RAD = 3.1415/180.0;                          //[rad/deg]
 // names
-static const std::string TOPSWITCH_SERVICE_NAME = "topswitch_trigger";
-static const std::string BUMPER_TOPIC_NAME = "bumper";
+static const std::string TOPSWITCH_SERVICE_NAME = "topswitch_trigger";          // called by topswitch_node
+static const std::string BUMPER_TOPIC_NAME = "bumper";                          // published by create_autonomy
 static const std::string GROUNDROBOT_TYPE = "GROUND ROBOT";
 // speeds
-static const float FORWARD_SPEED = 0.33f;                                 //[m/s]
-static const float TURN_SPEED = 90.0f*DEG_TO_RAD;                         //[deg/s]*[rad/deg]=[rad/s]
-static const float NOISE_TURN_SPEED = 90.0f*DEG_TO_RAD;                   //[deg/s]*[rad/deg]=[rad/s]
-// angles
-static const double BUMPER_TURN_ANGLE = 180.0*DEG_TO_RAD;                 //[deg]*[rad/deg]=[rad]
-static const double TOPSWITCH_TURN_ANGLE = 45.0*DEG_TO_RAD;               //[deg]*[rad/deg]=[rad]
-static const double TIMEOUT_TURN_ANGLE = 180.0*DEG_TO_RAD;                //[deg]*[rad/deg]=[rad]
-static const double NOISE_ANGLE_MIN = 0.0*DEG_TO_RAD;                     //[deg]*[rad/deg]=[rad]
-static const double NOISE_ANGLE_MAX = 20.0*DEG_TO_RAD;                    //[deg]*[rad/deg]=[rad]
+static const float TURN_SPEED = 90.0f*DEG_TO_RAD;                               //[deg/s]*[rad/deg]=[rad/s]
+static const float NOISE_TURN_SPEED = 90.0f*DEG_TO_RAD;                         //[deg/s]*[rad/deg]=[rad/s]
+// angles (direction of rotation is applied in updateState())
+static const double BUMPER_TURN_ANGLE = 180.0*DEG_TO_RAD;                       //[deg]*[rad/deg]=[rad]
+static const double TOPSWITCH_TURN_ANGLE = 45.0*DEG_TO_RAD;                     //[deg]*[rad/deg]=[rad]
+static const double TIMEOUT_TURN_ANGLE = 180.0*DEG_TO_RAD;                      //[deg]*[rad/deg]=[rad]
+static const double NOISE_ANGLE_MIN = 0.0*DEG_TO_RAD;                           //[deg]*[rad/deg]=[rad]
+static const double NOISE_ANGLE_MAX = 20.0*DEG_TO_RAD;                          //[deg]*[rad/deg]=[rad]
 // durations
 static const double BUMPER_TURN_DURATION = BUMPER_TURN_ANGLE/TURN_SPEED;        //[rad]/[rad/s]=[s]
 static const double TOPSWITCH_TURN_DURATION = TOPSWITCH_TURN_ANGLE/TURN_SPEED;  //[rad]/[rad/s]=[s]
@@ -43,7 +41,7 @@ class GroundRobot : public Robot
         // timers
         ros::Timer timeout_tim_;        // every 20 seconds, turn around
         ros::Timer noise_tim_;          // every 5 seconds, start to add angle noise to forward path
-        ros::Timer noiseTurn_tim_;      // for noise
+        ros::Timer noiseTurn_tim_;      // for noise turn
         ros::Timer bumperTurn_tim_;     // for turn after bumper collision
         ros::Timer topSwitchTurn_tim_;  // for turn after top switch activation
         ros::Timer timeoutTurn_tim_;    // for turn after timeout
