@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # start local roscore
 echo Enter ROS_MASTER_URI (http://192.168.x.y:11311)
 read varmasteruri
