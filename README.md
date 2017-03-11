@@ -1,7 +1,36 @@
 # elikos_roomba
 ROS package for ground &amp; osbtacle robots with on-board Raspberry Pi
 
-**Status**: WIP
+**Status**: WIP (~working groud robot)
+
+
+-----
+
+
+## Launch files
+
+* `rpi_local.launch`  
+   * launches `create_autonomy/ca_driver` with the `topswitch_node`  
+   * to be launched locally on the Raspberry Pi
+
+* `remote.launch`
+   * launches `groundrobot_node` (for the moment)  
+   * to be launched on a remote computer or on the Raspberry Pi itself
+
+* `joy_teleop.launch`
+   * launches a `joy_teleop` node
+   * to be launched on a remote computer with an Xbox 360/Xbox One controller
+
+## Nodes
+
+* `topswitch_node`  
+   * manages the top switch on the Raspberry Pi through GPIO
+
+* `groundrobot_node`  
+   * behaviour implementation of the ground robot (aka ghetto-style FSM)
+
+
+-----
 
 
 ## How to
