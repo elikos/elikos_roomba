@@ -38,7 +38,7 @@ int main(int argc, char **argv)
         isTopSwitchActivated = !digitalRead(TOPSWITCH_PIN);
         if (isTopSwitchActivated && !wasTopSwitchActivated) {
             // rising edge (ghetto style)
-            ROS_INFO_STREAM("Rising edge");
+            ROS_INFO_STREAM("[TOPSWITCH] Rising edge");
             // call topswitch service
             topswitch_srv_client.call(srv.request, srv.response);
         }

@@ -1,7 +1,36 @@
 # elikos_roomba
 ROS package for ground &amp; osbtacle robots with on-board Raspberry Pi
 
-**Status**: WIP
+**Status**: WIP (~working groud robot)
+
+
+-----
+
+
+## Launch files
+
+* `rpi_local.launch`  
+   * launches `create_autonomy/ca_driver` with the `topswitch_node`  
+   * to be launched locally on the Raspberry Pi
+
+* `remote.launch`
+   * launches `groundrobot_node` (for the moment)  
+   * to be launched on a remote computer or on the Raspberry Pi itself
+
+* `joy_teleop.launch`
+   * launches a `joy_teleop` node
+   * to be launched on a remote computer with an Xbox 360/Xbox One controller
+
+## Nodes
+
+* `topswitch_node`  
+   * manages the top switch on the Raspberry Pi through GPIO
+
+* `groundrobot_node`  
+   * behaviour implementation of the ground robot (aka ghetto-style FSM)
+
+
+-----
 
 
 ## How to
@@ -90,8 +119,10 @@ Mostly because Christophe is dumb and often forgets.
       and no serial communication *from* the robot:  
          1. no blue light on the USB connector of the USB-to-serial cable; or  
          2. no response when doing `cat /dev/ttyUSB0 115200`
-
-      Remove the 4 screws and then remove the battery. Wait a couple seconds, then put it back in along with the screws. You should hear a little happy tune and serial communication should now work.
+      
+      Try:  
+      1. Press the power button once. It should immediately connect.  
+      2. If that still doesn't work, force the roomba to reset. Remove the 4 screws and then remove the battery. Wait a couple seconds, then put it back in along with the screws. You should hear a little happy tune and serial communication should now work.
 
 
 * Can't run ROS or `roslaunch` `ca_tools joy_teleop` from another computer  

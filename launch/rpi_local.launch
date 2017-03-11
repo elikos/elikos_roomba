@@ -1,0 +1,7 @@
+<launch>
+    <!-- launch create_autonomy ca_driver -->
+    <include file="$(find ca_driver)/launch/create_2.launch" />
+    
+    <!-- elikos_roomba -->
+    <node name="topswitch_node" pkg="elikos_roomba" type="topswitch_node" output="screen" />
+</launch>
