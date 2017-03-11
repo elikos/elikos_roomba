@@ -159,10 +159,10 @@ add_executable(obstaclerobot_node src/obstaclerobot.cpp src/robot.cpp)
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-#target_link_libraries(topswitch_node wiringPi
-#    ${catkin_LIBRARIES}
-#    ${wiringPi_LIBRARIES}
-#)
+target_link_libraries(topswitch_node wiringPi
+    ${catkin_LIBRARIES}
+    ${wiringPi_LIBRARIES}
+)
 target_link_libraries(groundrobot_node
     ${catkin_LIBRARIES}
 )
