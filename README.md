@@ -36,6 +36,10 @@ ROS package for ground &amp; osbtacle robots with on-board Raspberry Pi
 * `obstaclerobot_node`  
    * obstacle robot behaviour
 
+## Services
+
+* `/robot_activate_toggle`  
+   * activate/deactivate current robot
 
 -----
 
