@@ -136,15 +136,17 @@ include_directories(
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+#add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# try to make sure messages are generated before code that depends on them
+# see: http://answers.ros.org/question/73048/first-compile-with-messages-messages-not-found/
+#add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/elikos_roomba_node.cpp)
 add_executable(topswitch_node src/topswitch_node.cpp)
 add_executable(groundrobot_node src/groundrobot.cpp src/robot.cpp)
-#add_executable(robot_node src/robot.cpp) #shouldn't be run
+add_executable(obstaclerobot_node src/obstaclerobot.cpp src/robot.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -162,6 +164,9 @@ target_link_libraries(topswitch_node wiringPi
     ${wiringPi_LIBRARIES}
 )
 target_link_libraries(groundrobot_node
+    ${catkin_LIBRARIES}
+)
+target_link_libraries(obstaclerobot_node
     ${catkin_LIBRARIES}
 )
 #target_link_libraries(robot_node

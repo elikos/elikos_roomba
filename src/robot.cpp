@@ -34,7 +34,6 @@ void Robot::ROS_INFO_STREAM_ROBOT(std::string message) {
 void Robot::activateRobot() {
     ROS_INFO_STREAM_ROBOT("Base robot activated");
     isActive_ = true;
-    //setReactivatedFlag();
 }
 void Robot::deactivateRobot() {
     ROS_INFO_STREAM_ROBOT("Base robot deactivated");
