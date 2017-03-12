@@ -31,7 +31,10 @@ ROS package for ground &amp; osbtacle robots with on-board Raspberry Pi
    * manages the top switch on the Raspberry Pi through GPIO
 
 * `groundrobot_node`  
-   * behaviour implementation of the ground robot (aka ghetto-style FSM)
+   * ground robot behaviour
+
+* `obstaclerobot_node`  
+   * obstacle robot behaviour
 
 
 -----
