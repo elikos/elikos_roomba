@@ -1,7 +1,7 @@
 #include "elikos_roomba/obstaclerobot.h"
 
 ObstacleRobot::ObstacleRobot(ros::NodeHandle& n)
-    : Robot(n, OBSTACLEDROBOT_TYPE)
+    : Robot(n, OBSTACLEROBOT_TYPE)
 {
     // initial state
     deactivateRobot();

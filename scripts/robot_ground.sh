@@ -9,4 +9,4 @@ source /opt/ros/kinetic/setup.bash
 source ~/roomba_ws/devel/setup.bash
 export ROS_MASTER_URI=$varmasteruri
 export ROS_IP=$varrosip
-roslaunch elikos_roomba remote.launch
+roslaunch elikos_roomba robot_ground.launch

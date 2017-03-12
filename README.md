@@ -1,7 +1,7 @@
 # elikos_roomba
 ROS package for ground &amp; osbtacle robots with on-board Raspberry Pi
 
-**Status**: WIP (~working groud robot)
+**Status**: working ground robot and obstacle robot
 
 
 -----
@@ -13,13 +13,17 @@ ROS package for ground &amp; osbtacle robots with on-board Raspberry Pi
    * launches `create_autonomy/ca_driver` with the `topswitch_node`  
    * to be launched locally on the Raspberry Pi
 
-* `remote.launch`
-   * launches `groundrobot_node` (for the moment)  
+* `robot_ground.launch`  
+   * launches `groundrobot_node`  
    * to be launched on a remote computer or on the Raspberry Pi itself
 
-* `joy_teleop.launch`
-   * launches a `joy_teleop` node
-   * to be launched on a remote computer with an Xbox 360/Xbox One controller
+* `robot_obstacle.launch`  
+   * launches `obstaclerobot_node`  
+   * to be launched on a remote computer or on the Raspberry Pi itself
+
+* `joy_teleop.launch`  
+   * launches a `joy_teleop` node  
+   * to be launched on a computer with an Xbox 360/Xbox One controller
 
 ## Nodes
 
@@ -27,8 +31,15 @@ ROS package for ground &amp; osbtacle robots with on-board Raspberry Pi
    * manages the top switch on the Raspberry Pi through GPIO
 
 * `groundrobot_node`  
-   * behaviour implementation of the ground robot (aka ghetto-style FSM)
+   * ground robot behaviour
 
+* `obstaclerobot_node`  
+   * obstacle robot behaviour
+
+## Services
+
+* `/robot_activate_toggle`  
+   * activate/deactivate current robot
 
 -----
 
@@ -72,6 +83,8 @@ ROS package for ground &amp; osbtacle robots with on-board Raspberry Pi
    Clone your own fork in the `~/roomba_ws/src` folder
    ````
    git clone git@github.com:USERNAME/elikos_roomba.git
+   cd elikos_roomba/
+   git remote add upstream git@github.com:elikos/elikos_roomba.git
    ````  
    with `USERNAME` being your GitHub username
 
@@ -79,7 +92,8 @@ ROS package for ground &amp; osbtacle robots with on-board Raspberry Pi
    ````
    git clone git@github.com:AutonomyLab/create_autonomy.git
    sudo usermod -a -G dialout $USER
-   ````
+   ````  
+   Log out and log back in.
 
 4. Compile
    ````

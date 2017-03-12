@@ -5,7 +5,7 @@
 #include "elikos_roomba/robot.h"
 
 // names
-static const std::string OBSTACLEDROBOT_TYPE = "OBSTACLE ROBOT";
+static const std::string OBSTACLEROBOT_TYPE = "OBSTACLE ROBOT";
 // trajectory
 static const double CIRC_TRAJECTORY_DIAMETER = 10.0;                                    //[m]
 // find angular velocity
