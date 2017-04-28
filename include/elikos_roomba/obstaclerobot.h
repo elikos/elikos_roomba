@@ -11,12 +11,14 @@ static const double CIRC_TRAJECTORY_DIAMETER = 10.0;                            
 // find angular velocity
 static const double CIRC_TRAJECTORY_CIRCUMFERENCE = CIRC_TRAJECTORY_DIAMETER*3.1415;    //[m]
 static const double CIRC_TRAJECTORY_DURATION = CIRC_TRAJECTORY_DIAMETER/FORWARD_SPEED;  //[m]/[m/s]=[s]
-static const float CIRC_TURN_SPEED = 360.0f*DEG_TO_RAD/CIRC_TRAJECTORY_DURATION;         //[deg]*[rad/deg]/[s]=[rad/s]
+static const float CIRC_TURN_SPEED = 360.0f*DEG_TO_RAD/CIRC_TRAJECTORY_DURATION;        //[deg]*[rad/deg]/[s]=[rad/s]
 
 class ObstacleRobot : public Robot
 {
     private:
-        // obstacle robot states
+        /*===========================
+         * Obstacle robot state
+         *===========================*/
         enum ObstacleRobotState {
             INACTIVE,
             CIRCULAR
@@ -24,22 +26,58 @@ class ObstacleRobot : public Robot
         ObstacleRobotState robotState_;
 
     protected:
+        /*===========================
+         * Update
+         *===========================*/
+        /*
+         * Update robot state; called every spinOnce()
+         */
         void update();
+
+        /*
+         * Update ground robot message based on current state
+         */
         void updateState();
 
-        // obstacle robot state changes
-        void changeRobotStateTo(ObstacleRobotState newRobotState);
-        bool isRobotState(ObstacleRobotState cmpRobotState);
+        /*
+         * ROS spin once, called on every loop
+         */
+        void spinOnce();
 
-        // global state changes
+        /*===========================
+         * Global state
+         *===========================*/
+        /*
+         * Activate global robot state
+         */
         void activateRobot();
+
+        /*
+         * Deactivate global robot state
+         */
         void deactivateRobot();
+
+        /*===========================
+         * Obstacle robot state changes
+         *===========================*/
+        /*
+         * Change robot state to new given state
+         */
+        void changeRobotStateTo(ObstacleRobotState newRobotState);
+
+        /*
+         * Compare current robot state to given state
+         */
+        bool isRobotState(ObstacleRobotState cmpRobotState);
     
     public:
         ObstacleRobot(ros::NodeHandle& n);
         ~ObstacleRobot();
+
+        /*
+         * ROS spin. Called only once (by node); contains ROS while loop
+         */
         void spin();
-        void spinOnce();
 };
 
 #endif  // ELIKOS_ROOMBA_OBSTACLEROBOT_H

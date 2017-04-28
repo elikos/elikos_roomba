@@ -25,17 +25,26 @@ GroundRobot::GroundRobot(ros::NodeHandle& n)
 }
 
 GroundRobot::~GroundRobot() {
-    Robot::ROS_INFO_STREAM_ROBOT("Destruct ground robot sequence initiated.");
+    Robot::ROS_INFO_STREAM_ROBOT("Destruct ground robot sequence initiated");
     // add other relevant stuff
 }
+
+/*===========================
+ * Ground robot state changes
+ *===========================*/
 
 void GroundRobot::changeRobotStateTo(GroundRobotState newRobotState) {
     robotState_ = newRobotState;
 
 }
+
 bool GroundRobot::isRobotState(GroundRobotState cmpRobotState) {
     return robotState_ == cmpRobotState;
 }
+
+/*===========================
+ * Global state
+ *===========================*/
 
 void GroundRobot::activateRobot() {
     ROS_INFO_STREAM_ROBOT("Parent robot activated");
@@ -45,6 +54,7 @@ void GroundRobot::activateRobot() {
     timerRestart(noise_tim_, NOISE_DURATION);
     Robot::activateRobot();
 }
+
 void GroundRobot::deactivateRobot() {
     ROS_INFO_STREAM_ROBOT("Parent robot deactivated");
     changeRobotStateTo(INACTIVE);
@@ -58,9 +68,14 @@ void GroundRobot::deactivateRobot() {
     Robot::deactivateRobot();
 }
 
+/*===========================
+ * Other utilities
+ *===========================*/
+
 double GroundRobot::getRandomNoiseAngle() {
     return NOISE_ANGLE_MIN + ((double)std::rand() / RAND_MAX) * (NOISE_ANGLE_MAX - NOISE_ANGLE_MIN);
 }
+
 double GroundRobot::getTurnDurationFromAngleAndSpeed(double angl, double speed) {
     return angl/speed;
 }
@@ -70,6 +85,10 @@ void GroundRobot::timerRestart(ros::Timer tim, double dur) {
     tim.setPeriod(ros::Duration(dur));
     tim.start();
 }
+
+/*===========================
+ * Callbacks
+ *===========================*/
 
 void GroundRobot::bumperCallback(const ca_msgs::Bumper::ConstPtr& msg) {
     // collision if either bumper is pressed
@@ -81,6 +100,7 @@ void GroundRobot::bumperCallback(const ca_msgs::Bumper::ConstPtr& msg) {
         }
     }
 }
+
 bool GroundRobot::topSwitchCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
     Robot::ROS_INFO_STREAM_ROBOT("Top switch pressed");
     // if is going forward
@@ -89,11 +109,13 @@ bool GroundRobot::topSwitchCallback(std_srvs::Empty::Request& request, std_srvs:
     }
     return true;
 }
+
 void GroundRobot::timeoutCallback(const ros::TimerEvent& event) {
     Robot::ROS_INFO_STREAM_ROBOT("20 seconds timeout");
     startTimeoutTurn();
     timerRestart(timeout_tim_, TIMEOUT_DURATION);
 }
+
 void GroundRobot::noiseCallback(const ros::TimerEvent& event) {
     Robot::ROS_INFO_STREAM_ROBOT("5 seconds noise timeout");
     // if robot is going forward
@@ -116,34 +138,47 @@ void GroundRobot::noiseTurnCallback(const ros::TimerEvent& event) {
     forward_noise_ = 0.0f; // set to 0
     timerRestart(noise_tim_, NOISE_DURATION);
 }
+
 void GroundRobot::bumperTurnTimCallback(const ros::TimerEvent& event) {
     Robot::ROS_INFO_STREAM_ROBOT("180 degrees turn (bumper) done");
     changeRobotStateTo(FORWARD);
 }
+
 void GroundRobot::topSwitchTurnTimCallback(const ros::TimerEvent& event) {
     Robot::ROS_INFO_STREAM_ROBOT("45 degrees turn (top switch) done");
     changeRobotStateTo(FORWARD);
 }
+
 void GroundRobot::timeoutTurnTimCallback(const ros::TimerEvent& event) {
     Robot::ROS_INFO_STREAM_ROBOT("180 degrees turn (timeout) done");
     changeRobotStateTo(FORWARD);
 }
+
+/*===========================
+ * Actions
+ *===========================*/
 
 void GroundRobot::startBumperTurn() {
     Robot::ROS_INFO_STREAM_ROBOT("180 degrees turn (bumper) init");
     changeRobotStateTo(TURN_BUMPER);
     timerRestart(bumperTurn_tim_, BUMPER_TURN_DURATION);
 }
+
 void GroundRobot::startTopSwitchTurn() {
     Robot::ROS_INFO_STREAM_ROBOT("45 degrees turn (top switch) init");
     changeRobotStateTo(TURN_TOPSWITCH);
     timerRestart(topSwitchTurn_tim_, TOPSWITCH_TURN_DURATION);
 }
+
 void GroundRobot::startTimeoutTurn() {
     Robot::ROS_INFO_STREAM_ROBOT("180 degrees turn (timeout) init");
     changeRobotStateTo(TURN_TIMEOUT);
     timerRestart(timeoutTurn_tim_, TIMEOUT_TURN_DURATION);
 }
+
+/*===========================
+ * Update
+ *===========================*/
 
 void GroundRobot::updateState() {
     switch ( robotState_ ) {
@@ -203,7 +238,6 @@ void GroundRobot::spin()
     }
   }
 }
-
 
 // ---------------------------
 
