@@ -30,34 +30,79 @@ static const double NOISE_DURATION = 5.0;                                       
 class GroundRobot : public Robot
 {
     private:
-        // service
+        /*===========================
+         * Services
+         *===========================*/
+        /* Top switch service */
         ros::ServiceServer topSwitch_srv_;
-        bool topSwitchCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
 
-        // subscriber
+        /*===========================
+         * Subscribers
+         *===========================*/
+        /* Bumper state subscriber */
         ros::Subscriber bumper_sub_;
-        void bumperCallback(const ca_msgs::Bumper::ConstPtr& msg);
 
-        // timers
+        /*===========================
+         * Timers
+         *===========================*/
         ros::Timer timeout_tim_;        // every 20 seconds, turn around
         ros::Timer noise_tim_;          // every 5 seconds, start to add angle noise to forward path
         ros::Timer noiseTurn_tim_;      // for noise turn
         ros::Timer bumperTurn_tim_;     // for turn after bumper collision
         ros::Timer topSwitchTurn_tim_;  // for turn after top switch activation
         ros::Timer timeoutTurn_tim_;    // for turn after timeout
-        // timer callbacks
+
+        /*
+         * Restart timer with duration
+         */
+        void timerRestart(ros::Timer tim, double dur);
+
+        /*===========================
+         * Callbacks
+         *===========================*/
+        /*
+         * Callback class method for top switch activation
+         */
+        bool topSwitchCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
+
+        /*
+         * Callback class method for bumper contact
+         */
+        void bumperCallback(const ca_msgs::Bumper::ConstPtr& msg);
+
+        /*
+         * Callback class method for timeout timer
+         */
         void timeoutCallback(const ros::TimerEvent& event);
+
+        /*
+         * Callback class method for noise timer timer
+         */
         void noiseCallback(const ros::TimerEvent& event);
+
+        /*
+         * Callback class method for noise turn timer timer
+         */
         void noiseTurnCallback(const ros::TimerEvent& event);
+
+        /*
+         * Callback class method for bumper turn end timer
+         */
         void bumperTurnTimCallback(const ros::TimerEvent& event);
+
+        /*
+         * Callback class method for top switch turn end timer
+         */
         void topSwitchTurnTimCallback(const ros::TimerEvent& event);
+
+        /*
+         * Callback class method for timeout turn end timer
+         */
         void timeoutTurnTimCallback(const ros::TimerEvent& event);
 
-        // noise generation
-        double getRandomNoiseAngle();
-        double getTurnDurationFromAngleAndSpeed(double angl, double speed);
-
-        // ground robot states
+        /*===========================
+         * Ground robot state
+         *===========================*/
         enum GroundRobotState {
             INACTIVE,
             FORWARD,
@@ -67,33 +112,93 @@ class GroundRobot : public Robot
         };
         GroundRobotState robotState_;
 
-        // actions
+        /*===========================
+         * Actions
+         *===========================*/
+        /*
+         * Setup and start turn after bumper contact
+         */
         void startBumperTurn();
+
+        /*
+         * Setup and start turn after top switch activation
+         */
         void startTopSwitchTurn();
+
+        /*
+         * Setup and start turn after forward trajectory timeout
+         */
         void startTimeoutTurn();
 
+        /*===========================
+         * Other utilities
+         *===========================*/
+        /*
+         * Get new random noise angle according to NOISE_ANGLE_MIN, NOISE_ANGLE_MAX, and NOISE_ANGLE_MIN
+         */
+        double getRandomNoiseAngle();
+
+        /* Angular noise to add to forward trajectory */
         float forward_noise_;
 
+        /*
+         * Get turn duration from angular velocity and total angle of turn
+         */
+        double getTurnDurationFromAngleAndSpeed(double angl, double speed);
+
     protected:
+        /*===========================
+         * Update
+         *===========================*/
+        /*
+         * Update robot state; called every spinOnce()
+         */
         void update();
+
+        /*
+         * Update ground robot message based on current state
+         */
         void updateState();
 
-        // ground robot state changes
-        void changeRobotStateTo(GroundRobotState newRobotState);
-        bool isRobotState(GroundRobotState cmpRobotState);
+        /*
+         * ROS spin once, called on every loop
+         */
+        void spinOnce();
 
-        // global state changes
+        /*===========================
+         * Global state
+         *===========================*/
+        /*
+         * Activate global robot state
+         */
         void activateRobot();
+
+        /*
+         * Deactivate global robot state
+         */
         void deactivateRobot();
 
-        // timer reset
-        void timerRestart(ros::Timer tim, double dur);
+        /*===========================
+         * Ground robot state changes
+         *===========================*/
+        /*
+         * Change robot state to new given state
+         */
+        void changeRobotStateTo(GroundRobotState newRobotState);
+
+        /*
+         * Compare current robot state to given state
+         */
+        bool isRobotState(GroundRobotState cmpRobotState);
     
     public:
         GroundRobot(ros::NodeHandle& n);
         ~GroundRobot();
+
+        /*
+         * ROS spin. Called only once (by node); contains ROS while loop
+         */
         void spin();
-        void spinOnce();
 };
 
 #endif  // ELIKOS_ROOMBA_GROUNDROBOT_H

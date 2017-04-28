@@ -27,31 +27,50 @@ Robot::~Robot() {
   // add other relevant stuff
 }
 
+/*===========================
+ * Other utilities
+ *===========================*/
+
 void Robot::ROS_INFO_STREAM_ROBOT(std::string message) {
     ROS_INFO_STREAM("[" << robotType_ << "] " << message);
 }
+
+/*===========================
+ * Global state
+ *===========================*/
 
 void Robot::activateRobot() {
     ROS_INFO_STREAM_ROBOT("Base robot activated");
     isActive_ = true;
 }
+
 void Robot::deactivateRobot() {
     ROS_INFO_STREAM_ROBOT("Base robot deactivated");
     isActive_ = false;
 }
 
+/*===========================
+ * Callbacks
+ *===========================*/
+
 bool Robot::activateCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
     activateRobot();
     return true;
 }
+
 bool Robot::deactivateCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
     deactivateRobot();
     return true;
 }
+
 bool Robot::toglActivateCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
     isActive_ ? deactivateRobot() : activateRobot();
     return true;
 }
+
+/*===========================
+ * Update
+ *===========================*/
 
 void Robot::publishCmdVel() {
     cmdVel_pub_.publish(cmdVel_msg_);
@@ -75,7 +94,7 @@ void Robot::publishRobotState() {
 
 void Robot::update() {
     //ROS_INFO_STREAM_ROBOT("base update");
-    // GHETTO way to only publish cmdvel if robot is active
+    // ghetto way to only publish cmdvel if robot is active
     if (isActive_) { publishCmdVel(); }
 
     publishRobotState();

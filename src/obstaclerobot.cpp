@@ -14,24 +14,38 @@ ObstacleRobot::~ObstacleRobot() {
     // add other relevant stuff
 }
 
+/*===========================
+ * Obstacle robot state changes
+ *===========================*/
+
 void ObstacleRobot::changeRobotStateTo(ObstacleRobotState newRobotState) {
     robotState_ = newRobotState;
 
 }
+
 bool ObstacleRobot::isRobotState(ObstacleRobotState cmpRobotState) {
     return robotState_ == cmpRobotState;
 }
+
+/*===========================
+ * Global state
+ *===========================*/
 
 void ObstacleRobot::activateRobot() {
     ROS_INFO_STREAM_ROBOT("Parent robot activated");
     changeRobotStateTo(CIRCULAR);
     Robot::activateRobot();
 }
+
 void ObstacleRobot::deactivateRobot() {
     ROS_INFO_STREAM_ROBOT("Parent robot deactivated");
     changeRobotStateTo(INACTIVE);
     Robot::deactivateRobot();
 }
+
+/*===========================
+ * Update
+ *===========================*/
 
 void ObstacleRobot::updateState() {
     switch ( robotState_ ) {
@@ -79,7 +93,6 @@ void ObstacleRobot::spin()
     }
   }
 }
-
 
 // ---------------------------
 

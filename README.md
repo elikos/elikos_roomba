@@ -4,6 +4,17 @@ ROS package for ground &amp; osbtacle robots with on-board Raspberry Pi
 **Status**: working ground robot and obstacle robot
 
 
+
+`elikos_roomba` works with the [`create_autonomy`](https://github.com/AutonomyLab/create_autonomy) package to communicate with and drive the Roomba with ROS. Its purpose is to implement the IARC mission 7 ground robot and obstacle [behaviours](#robot-behaviour).
+
+It interacts with `create_autonomy` through its topics. It also has a node to manage the ground robot's top switch and call a service when activated.
+
+| `elikos_roomba`     |  Topic/service        | Description                                                                                             |
+| :------------------ | :-------------------- |:------------------------------------------------------------------------------------------------------- |
+|  subscriber         | `/bumper`             | Bumper state message (published by `create_autonomy`)                                                   |
+|  publisher          | `/cmd_vel`            | Drives the robot's wheels according to a forward and angular velocity (`create_autonomy` is subscribed) |
+|  service server     | `/topswitch_trigger`  | Top switch trigger call (`topswitch_node` is the service client) |
+
 -----
 
 
@@ -41,19 +52,11 @@ ROS package for ground &amp; osbtacle robots with on-board Raspberry Pi
 * `/robot_activate_toggle`  
    * activate/deactivate current robot
 
+* `/topswitch_trigger`  
+   * usually called by `topswitch_node` when top switch is triggered
+
+
 -----
-
-
-## How to
-
-1. Fork this repo and work on that (clone your own fork)
-
-   1. Set `upstream` as  
-      ````
-      git remote add upstream git@github.com:elikos/elikos_roomba.git
-      ````  
-
-2. Create a pull request
 
 
 ## Prerequisites
@@ -107,6 +110,8 @@ ROS package for ground &amp; osbtacle robots with on-board Raspberry Pi
    ````
 
 6. Do stuff
+
+7. Create a pull request
 
 
 ## Troubleshooting
