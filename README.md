@@ -5,7 +5,7 @@ ROS package for ground &amp; osbtacle robots with on-board Raspberry Pi
 
 
 
-`elikos_roomba` works with the [`create_autonomy`](https://github.com/AutonomyLab/create_autonomy) package to communicate with and drive the Roomba with ROS. Its purpose is to implement the IARC mission 7 ground robot and obstacle [behaviours](#Robot-behaviour).
+`elikos_roomba` works with the [`create_autonomy`](https://github.com/AutonomyLab/create_autonomy) package to communicate with and drive the Roomba with ROS. Its purpose is to implement the IARC mission 7 ground robot and obstacle [behaviours](#robot-behaviour).
 
 It interacts with `create_autonomy` through its topics. It also has a node to manage the ground robot's top switch and call a service when activated.
 
