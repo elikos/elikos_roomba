@@ -1,8 +1,5 @@
 # elikos_roomba
-ROS package for ground &amp; osbtacle robots with on-board Raspberry Pi
-
-**Status**: working ground robot and obstacle robot
-
+ROS package for IARC mission 7 ground &amp; osbtacle robots with on-board Raspberry Pi
 
 
 `elikos_roomba` works with the [`create_autonomy`](https://github.com/AutonomyLab/create_autonomy) package to communicate with and drive the Roomba with ROS. Its purpose is to implement the IARC mission 7 ground robot and obstacle [behaviours](#robot-behaviour).
@@ -61,9 +58,20 @@ It interacts with `create_autonomy` through its topics. It also has a node to ma
 
 ## Prerequisites
 
-1. Raspberry Pi with [Ubuntu MATE 16.04](https://ubuntu-mate.org/raspberry-pi/) and [ROS kinetic (Ubuntu/armhf)](http://wiki.ros.org/kinetic/Installation/Ubuntu)
+1. Raspberry Pi with [Ubuntu MATE 16.04](https://ubuntu-mate.org/raspberry-pi/)
 
-2. Install [WiringPi (library)](http://wiringpi.com/download-and-install/)
+
+2. Install [ROS kinetic (Ubuntu/armhf)](http://wiki.ros.org/kinetic/Installation/Ubuntu) (*-desktop*)
+   ````
+   sudo apt-get update
+   sudo apt-get update
+   sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+   sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116
+   sudo apt-get update
+   sudo apt-get install ros-kinetic-desktop
+   ````
+
+3. Install [WiringPi (library)](http://wiringpi.com/download-and-install/)
    ````
    sudo apt-get purge wiringpi
    hash -r
