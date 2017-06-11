@@ -111,6 +111,10 @@ It interacts with `create_autonomy` through its topics. It also has a node to ma
    cd ~/roomba_ws
    catkin_make
    ````
+   If compiling for a remote computer (not a RPi), use this option to avoid linking the wiringPi library:
+   ````
+   catkin_make -DREMOTE=TRUE
+   ````
 
 5. Source 
    ````

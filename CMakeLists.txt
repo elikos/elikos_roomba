@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(elikos_roomba)
 
+option(REMOTE "Compile remote computer (without wiringPi)" FALSE)
+
 ## Add support for C++11, supported in ROS Kinetic and newer
 # add_definitions(-std=c++11)
 
@@ -144,9 +146,19 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(topswitch_node src/topswitch_node.cpp)
 add_executable(groundrobot_node src/groundrobot.cpp src/robot.cpp)
 add_executable(obstaclerobot_node src/obstaclerobot.cpp src/robot.cpp)
+
+# Add topswitch node with wiringPi library if not remote computer
+# For remote computer compilation, use:
+#   catkin_make -DREMOTE=TRUE
+if(NOT REMOTE)
+  add_executable(topswitch_node src/topswitch_node.cpp)
+  target_link_libraries(topswitch_node wiringPi
+      ${catkin_LIBRARIES}
+      ${wiringPi_LIBRARIES}
+  )
+endif()
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -159,19 +171,12 @@ add_executable(obstaclerobot_node src/obstaclerobot.cpp src/robot.cpp)
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(topswitch_node wiringPi
-    ${catkin_LIBRARIES}
-    ${wiringPi_LIBRARIES}
-)
 target_link_libraries(groundrobot_node
     ${catkin_LIBRARIES}
 )
 target_link_libraries(obstaclerobot_node
     ${catkin_LIBRARIES}
 )
-#target_link_libraries(robot_node
-#    ${catkin_LIBRARIES}
-#)
 
 #############
 ## Install ##
