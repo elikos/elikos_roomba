@@ -18,7 +18,7 @@ GroundRobot::GroundRobot(ros::NodeHandle& n)
     timeoutTurn_tim_  = n.createTimer(ros::Duration(TIMEOUT_TURN_DURATION), &GroundRobot::timeoutTurnTimCallback, this, true, false);
 
     // initial state
-    deactivateRobot();
+    changeRobotStateTo(INACTIVE);
     forward_noise_ = 0.0;
 
     //ROS_INFO_STREAM_ROBOT("Parent initialization done");

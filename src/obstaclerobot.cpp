@@ -4,7 +4,7 @@ ObstacleRobot::ObstacleRobot(ros::NodeHandle& n)
     : Robot(n, OBSTACLEROBOT_TYPE)
 {
     // initial state
-    deactivateRobot();
+    changeRobotStateTo(INACTIVE);
 
     //ROS_INFO_STREAM_ROBOT("Parent initialization done");
 }

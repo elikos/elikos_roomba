@@ -16,10 +16,10 @@ Robot::Robot(ros::NodeHandle& n, std::string botType)
     deactivate_srv_ = n.advertiseService(DEACTIVATE_SERVICE_NAME, &Robot::deactivateCallback, this);
     toglActivate_srv_ = n.advertiseService(TOGGLEACT_SERVICE_NAME, &Robot::toglActivateCallback, this);
 
-    // initial active/inactive state
-    //deactivateRobot();
+    // initial state
+    isActive_ = false;
 
-    ROS_INFO_STREAM_ROBOT("Robot initialization done");
+    ROS_INFO_STREAM_ROBOT("Robot initialization done (inactive)");
 }
 
 Robot::~Robot() {
