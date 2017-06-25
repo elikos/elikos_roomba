@@ -19,7 +19,7 @@ Robot::Robot(ros::NodeHandle& n, std::string botType)
     // initial active/inactive state
     //deactivateRobot();
 
-    ROS_INFO_STREAM_ROBOT("Base initialization done");
+    ROS_INFO_STREAM_ROBOT("Robot initialization done");
 }
 
 Robot::~Robot() {
@@ -40,12 +40,12 @@ void Robot::ROS_INFO_STREAM_ROBOT(std::string message) {
  *===========================*/
 
 void Robot::activateRobot() {
-    ROS_INFO_STREAM_ROBOT("Base robot activated");
+    ROS_INFO_STREAM_ROBOT("Robot activated");
     isActive_ = true;
 }
 
 void Robot::deactivateRobot() {
-    ROS_INFO_STREAM_ROBOT("Base robot deactivated");
+    ROS_INFO_STREAM_ROBOT("Robot deactivated");
     isActive_ = false;
 }
 

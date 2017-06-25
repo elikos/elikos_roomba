@@ -21,7 +21,7 @@ GroundRobot::GroundRobot(ros::NodeHandle& n)
     deactivateRobot();
     forward_noise_ = 0.0;
 
-    ROS_INFO_STREAM_ROBOT("Parent initialization done");
+    //ROS_INFO_STREAM_ROBOT("Parent initialization done");
 }
 
 GroundRobot::~GroundRobot() {
@@ -47,7 +47,7 @@ bool GroundRobot::isRobotState(GroundRobotState cmpRobotState) {
  *===========================*/
 
 void GroundRobot::activateRobot() {
-    ROS_INFO_STREAM_ROBOT("Parent robot activated");
+    //ROS_INFO_STREAM_ROBOT("Parent robot activated");
     changeRobotStateTo(FORWARD);
     // reactivate timers (timeout and noise)
     timerRestart(timeout_tim_, TIMEOUT_DURATION);
@@ -56,7 +56,7 @@ void GroundRobot::activateRobot() {
 }
 
 void GroundRobot::deactivateRobot() {
-    ROS_INFO_STREAM_ROBOT("Parent robot deactivated");
+    //ROS_INFO_STREAM_ROBOT("Parent robot deactivated");
     changeRobotStateTo(INACTIVE);
     // deactivate timers (all)
     timeout_tim_.stop();
