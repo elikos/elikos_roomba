@@ -16,10 +16,10 @@ Robot::Robot(ros::NodeHandle& n, std::string botType)
     deactivate_srv_ = n.advertiseService(DEACTIVATE_SERVICE_NAME, &Robot::deactivateCallback, this);
     toglActivate_srv_ = n.advertiseService(TOGGLEACT_SERVICE_NAME, &Robot::toglActivateCallback, this);
 
-    // initial active/inactive state
-    //deactivateRobot();
+    // initial state
+    isActive_ = false;
 
-    ROS_INFO_STREAM_ROBOT("Base initialization done");
+    ROS_INFO_STREAM_ROBOT("Robot initialization done (inactive)");
 }
 
 Robot::~Robot() {
@@ -40,12 +40,12 @@ void Robot::ROS_INFO_STREAM_ROBOT(std::string message) {
  *===========================*/
 
 void Robot::activateRobot() {
-    ROS_INFO_STREAM_ROBOT("Base robot activated");
+    ROS_INFO_STREAM_ROBOT("Robot activated");
     isActive_ = true;
 }
 
 void Robot::deactivateRobot() {
-    ROS_INFO_STREAM_ROBOT("Base robot deactivated");
+    ROS_INFO_STREAM_ROBOT("Robot deactivated");
     isActive_ = false;
 }
 
@@ -54,12 +54,12 @@ void Robot::deactivateRobot() {
  *===========================*/
 
 bool Robot::activateCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
-    activateRobot();
+    if (!isActive_) { activateRobot(); }
     return true;
 }
 
 bool Robot::deactivateCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
-    deactivateRobot();
+    if (isActive_) { deactivateRobot(); }
     return true;
 }
 

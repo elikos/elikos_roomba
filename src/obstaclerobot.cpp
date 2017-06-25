@@ -4,9 +4,9 @@ ObstacleRobot::ObstacleRobot(ros::NodeHandle& n)
     : Robot(n, OBSTACLEROBOT_TYPE)
 {
     // initial state
-    deactivateRobot();
+    changeRobotStateTo(INACTIVE);
 
-    ROS_INFO_STREAM_ROBOT("Parent initialization done");
+    //ROS_INFO_STREAM_ROBOT("Parent initialization done");
 }
 
 ObstacleRobot::~ObstacleRobot() {
@@ -32,13 +32,13 @@ bool ObstacleRobot::isRobotState(ObstacleRobotState cmpRobotState) {
  *===========================*/
 
 void ObstacleRobot::activateRobot() {
-    ROS_INFO_STREAM_ROBOT("Parent robot activated");
+    //ROS_INFO_STREAM_ROBOT("Parent robot activated");
     changeRobotStateTo(CIRCULAR);
     Robot::activateRobot();
 }
 
 void ObstacleRobot::deactivateRobot() {
-    ROS_INFO_STREAM_ROBOT("Parent robot deactivated");
+    //ROS_INFO_STREAM_ROBOT("Parent robot deactivated");
     changeRobotStateTo(INACTIVE);
     Robot::deactivateRobot();
 }
