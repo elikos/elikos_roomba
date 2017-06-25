@@ -54,12 +54,12 @@ void Robot::deactivateRobot() {
  *===========================*/
 
 bool Robot::activateCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
-    activateRobot();
+    if (!isActive_) { activateRobot(); }
     return true;
 }
 
 bool Robot::deactivateCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
-    deactivateRobot();
+    if (isActive_) { deactivateRobot(); }
     return true;
 }
 
