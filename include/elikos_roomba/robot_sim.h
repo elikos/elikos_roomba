@@ -19,8 +19,14 @@
 
 static const double LOOP_RATE = 20.0;
 // names (topics and services)
+static const std::string TF_NAME_BASE = "world";                            // origin
+static const std::string TF_NAME_ROBOT = "robot_pose";                      // robot
 static const std::string CMDVEL_TOPIC_NAME = "cmd_vel";                     // subscribe to cmd_vel
+static const std::string ROBOTSTATE_TOPIC_NAME = "robot_state";             // subscribe to robot_state
 static const std::string TF_NAME = "robot";                                 // robot tf name
+static const std::string ACTIVATE_SERVICE_NAME = "robot_activate";          // service, activate robot
+static const std::string DEACTIVATE_SERVICE_NAME = "robot_deactivate";      // service, deactivate robot
+static const std::string TOGGLEACT_SERVICE_NAME = "robot_activate_toggle";  // service, toggle robot activation
 // number parameters
 static const int CMDVEL_TOPIC_QUEUESIZE = 30;
 static const int ROBOTSTATE_TOPIC_QUEUESIZE = 10;
@@ -41,17 +47,22 @@ class RobotSim
         /*===========================
          * Subscribers
          *===========================*/
-         /* CmdVel subscriber */
+        /* CmdVel subscriber */
         ros::Subscriber cmdVel_sub_;
+        /* Robot state subscriber */
+        ros::Subscriber robotState_sub_;
     
     protected:
         ros::NodeHandle& n_;
-        double loop_hz_;
-        bool is_running_slowly_;
 
         ros::Time time_last_;
         ros::Time time_new_;
         ros::Duration time_diff_;
+        
+        /*===========================
+         * Robot state
+         *===========================*/
+        bool isActive_;
 
         /*===========================
          * Position info
@@ -75,6 +86,11 @@ class RobotSim
          */
         void cmdVelCallback(const geometry_msgs::Twist::ConstPtr& msg);
 
+        /*
+         * Callback class method for robot state topic
+         */
+        void robotStateCallback(const std_msgs::String::ConstPtr& msg);
+
         /*===========================
          * Messages
          *===========================*/
@@ -84,20 +100,9 @@ class RobotSim
          * Update
          *===========================*/
         /*
-         * Update robot pose; called every spinOnce()
-         */
-        void update();
-
-        /*
-         * ROS spin once, called on every loop
-         */
-        //virtual void spinOnce() =0;
-        void spinOnce();
-
-        /*
          * Update pose
          */
-        void updatePose();
+        void updatePose(double timeDiffSecs);
 
         /*
          * Update tf
@@ -116,12 +121,6 @@ class RobotSim
          */
         RobotSim(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_bearing);
         ~RobotSim();
-
-        /*
-         * ROS spin. Called only once (by node); contains ROS while loop
-         */
-        //virtual void spin() =0;
-        void spin();
 
         /*
          * Wrapper for ROS_INFO_STREAM, includes robotType_ string in message

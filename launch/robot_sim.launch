@@ -1,0 +1,5 @@
+<launch>
+    <!-- elikos_roomba -->
+    <node name="groundrobot_node" pkg="elikos_roomba" type="groundrobot_node" output="screen" />
+    <node name="robotsim_node" pkg="elikos_roomba" type="robotsim_node" output="screen" />
+</launch>

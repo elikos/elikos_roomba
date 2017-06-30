@@ -1,21 +1,18 @@
 #include "elikos_roomba/robot_sim.h"
 
 RobotSim::RobotSim(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_bearing)
-    : n_(n),
-      is_running_slowly_(false)
+    : n_(n)
 {
-    loop_hz_ = LOOP_RATE;
-
     // setup publishers
     
 
     // setup subscribers
     cmdVel_sub_ = n.subscribe(CMDVEL_TOPIC_NAME, 10, &RobotSim::cmdVelCallback, this);
-
-    // setup services
-
+    robotState_sub_ = n.subscribe(ROBOTSTATE_TOPIC_NAME, 10, &RobotSim::robotStateCallback, this);
 
     // initial state
+    isActive_ = false;
+
     initial_pos_ = initial_pos;
     initial_bearing_ = initial_bearing;
 
@@ -27,20 +24,12 @@ RobotSim::RobotSim(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_b
     q.setRPY(0, 0, bearing_);
     tf_.setRotation(q);
 
-    time_last_ = ros::Time::now();
+    ROS_INFO_STREAM_ROBOT("Initialization done (inactive)");
 }
 
 RobotSim::~RobotSim() {
-  ROS_INFO_STREAM_ROBOT("Robot base destruct robot sequence initiated");
+  ROS_INFO_STREAM_ROBOT("Destruct sequence initiated");
   // add other relevant stuff
-}
-
-/*===========================
- * Other utilities
- *===========================*/
-
-void RobotSim::ROS_INFO_STREAM_ROBOT(std::string message) {
-    ROS_INFO_STREAM("[" << "robot_sim" << "] " << message);
 }
 
 /*===========================
@@ -48,20 +37,40 @@ void RobotSim::ROS_INFO_STREAM_ROBOT(std::string message) {
  *===========================*/
 
 void RobotSim::cmdVelCallback(const geometry_msgs::Twist::ConstPtr& msg) {
+    // time difference
+    ros::Time time_now_ = ros::Time::now();
+    time_diff_ = time_now_ - time_last_;
+    double timeDiffSecs = time_diff_.toSec();
+
     linVel_ = msg->linear.x;
     angVel_ = msg->angular.z;
+
+    updatePose(timeDiffSecs);
+    updateTf();
+    publishRobotTf();
+
+    time_last_ = time_now_;
 }
+
+void RobotSim::robotStateCallback(const std_msgs::String::ConstPtr& msg) {
+    bool isActive_now = !((msg->data) == "INACTIVE");
+
+    if (isActive_now && !isActive_) {
+        // robot reactivated; reset time
+        time_last_ = ros::Time::now();
+
+        ROS_INFO_STREAM_ROBOT("Activated");
+    }
+
+    isActive_ = isActive_now;
+}
+
+
 
 /*===========================
  * Update
  *===========================*/
-void RobotSim::updatePose() {
-    // time
-    ros::Time time_now_ = ros::Time::now();
-    time_diff_ = time_now_ - time_last_;
-    double timeDiffSecs = time_diff_.toSec();
-    //TODO use cmd vel message time difference (and stop updating if no more messages)
-
+void RobotSim::updatePose(double timeDiffSecs) {
     // deltas
     double deltaLin = timeDiffSecs*linVel_;
     double deltaAngle = timeDiffSecs*angVel_;
@@ -73,8 +82,6 @@ void RobotSim::updatePose() {
     // add to pose
     pos_ += tf::Vector3(deltaX, deltaY, 0.0);
     bearing_ += deltaAngle;
-
-    time_last_ = time_now_;
 }
 
 void RobotSim::updateTf() {
@@ -85,36 +92,15 @@ void RobotSim::updateTf() {
 }
 
 void RobotSim::publishRobotTf() {
-    tf_br_.sendTransform(tf::StampedTransform(tf_, ros::Time::now(), "world", "robot_pose"));
+    tf_br_.sendTransform(tf::StampedTransform(tf_, ros::Time::now(), TF_NAME_BASE, TF_NAME_ROBOT));
 }
 
-void RobotSim::update() {
-    //ROS_INFO_STREAM_ROBOT("update");
+/*===========================
+ * Other utilities
+ *===========================*/
 
-    updatePose();
-    updateTf();
-    publishRobotTf();
-}
-
-void RobotSim::spinOnce()
-{
-  update();
-  ros::spinOnce();
-}
-
-void RobotSim::spin()
-{
-  ros::Rate rate(loop_hz_);
-  while (ros::ok())
-  {
-    spinOnce();
-
-    is_running_slowly_ = !rate.sleep();
-    if (is_running_slowly_)
-    {
-      ROS_WARN("[ROBOT SIM] Loop running slowly.");
-    }
-  }
+void RobotSim::ROS_INFO_STREAM_ROBOT(std::string message) {
+    ROS_INFO_STREAM("[" << "ROBOT SIM" << "] " << message);
 }
 
 // ---------------------------
@@ -125,14 +111,15 @@ int main(int argc, char **argv)
     ros::NodeHandle n;
 
     RobotSim robotsim_(n, tf::Vector3(0.0, 0.0, 0.0), 0.0);
-
+    
     try
     {
-        robotsim_.spin();
+        ros::spin();
+        //robotsim_.spin();
     }
     catch (std::runtime_error& e)
     {
-        ROS_FATAL_STREAM("[ROBOT] Runtime error: " << e.what());
+        ROS_FATAL_STREAM("[ROBOT SIM] Runtime error: " << e.what());
         return 1;
     }
     return 0;
