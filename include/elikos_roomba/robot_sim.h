@@ -19,7 +19,7 @@
 
 static const double LOOP_RATE = 20.0;
 // names (topics and services)
-static const std::string TF_NAME_BASE = "world";                            // origin
+static const std::string TF_NAME_BASE = "elikos_arena_origin";              // origin
 static const std::string TF_NAME_ROBOT = "robot_pose";                      // robot
 static const std::string CMDVEL_TOPIC_NAME = "cmd_vel";                     // subscribe to cmd_vel
 static const std::string ROBOTSTATE_TOPIC_NAME = "robot_state";             // subscribe to robot_state

@@ -3,9 +3,6 @@
 RobotSim::RobotSim(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_bearing)
     : n_(n)
 {
-    // setup publishers
-    
-
     // setup subscribers
     cmdVel_sub_ = n.subscribe(CMDVEL_TOPIC_NAME, 10, &RobotSim::cmdVelCallback, this);
     robotState_sub_ = n.subscribe(ROBOTSTATE_TOPIC_NAME, 10, &RobotSim::robotStateCallback, this);
@@ -24,6 +21,9 @@ RobotSim::RobotSim(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_b
     q.setRPY(0, 0, bearing_);
     tf_.setRotation(q);
 
+    // could remove this
+    time_last_ = ros::Time::now();
+
     ROS_INFO_STREAM_ROBOT("Initialization done (inactive)");
 }
 
@@ -37,19 +37,22 @@ RobotSim::~RobotSim() {
  *===========================*/
 
 void RobotSim::cmdVelCallback(const geometry_msgs::Twist::ConstPtr& msg) {
-    // time difference
-    ros::Time time_now_ = ros::Time::now();
-    time_diff_ = time_now_ - time_last_;
-    double timeDiffSecs = time_diff_.toSec();
+    // check if robot is active (and time_last_ reset by robotStateCallback)
+    if (isActive_) {
+        // time difference
+        ros::Time time_now = ros::Time::now();
+        time_diff_ = time_now - time_last_;
+        double timeDiffSecs = time_diff_.toSec();
 
-    linVel_ = msg->linear.x;
-    angVel_ = msg->angular.z;
+        linVel_ = msg->linear.x;
+        angVel_ = msg->angular.z;
 
-    updatePose(timeDiffSecs);
-    updateTf();
-    publishRobotTf();
+        updatePose(timeDiffSecs);
+        updateTf();
+        publishRobotTf();
 
-    time_last_ = time_now_;
+        time_last_ = time_now;
+    }
 }
 
 void RobotSim::robotStateCallback(const std_msgs::String::ConstPtr& msg) {
