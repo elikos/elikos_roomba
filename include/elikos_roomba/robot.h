@@ -132,6 +132,9 @@ class Robot
         /* Robot type */
         std::string robotType_;
 
+        /* Robot id */
+        int r_id_;
+
         /*
          * Activate global robot state
          */
@@ -147,7 +150,7 @@ class Robot
          * Constructor
          * botType: std::string with type of robot ("GROUND ROBOT" or "OBSTACLE ROBOT")
          */
-        Robot(ros::NodeHandle& n, std::string botType);
+        Robot(ros::NodeHandle& n, std::string botType, int r_id);
         ~Robot();
 
         /*

@@ -1,7 +1,7 @@
 #include "elikos_roomba/groundrobot.h"
 
-GroundRobot::GroundRobot(ros::NodeHandle& n)
-    : Robot(n, GROUNDROBOT_TYPE)
+GroundRobot::GroundRobot(ros::NodeHandle& n, int r_id)
+    : Robot(n, GROUNDROBOT_TYPE, r_id)
 {
     // setup subscribers
     bumper_sub_ = n.subscribe(BUMPER_TOPIC_NAME, 10, &GroundRobot::bumperCallback, this);
@@ -246,7 +246,11 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "groundrobot");
     ros::NodeHandle n;
 
-    GroundRobot groundrobot_(n);
+    ros::NodeHandle n_p("~");
+    int robot_id;
+    n_p.getParam("robot_id", robot_id);
+
+    GroundRobot groundrobot_(n, robot_id);
     
     try
     {

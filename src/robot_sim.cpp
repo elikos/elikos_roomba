@@ -1,10 +1,9 @@
 #include "elikos_roomba/robot_sim.h"
 
 RobotSim::RobotSim(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_yaw, int r_id)
-    : n_(n)
+    : n_(n),
+      r_id_(r_id)
 {
-    r_id_ = r_id;
-
     // setup subscribers
     cmdVel_sub_ = n.subscribe(CMDVEL_TOPIC_NAME, 10, &RobotSim::cmdVelCallback, this);
     robotState_sub_ = n.subscribe(ROBOTSTATE_TOPIC_NAME, 10, &RobotSim::robotStateCallback, this);

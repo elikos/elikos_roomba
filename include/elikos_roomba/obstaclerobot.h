@@ -71,7 +71,7 @@ class ObstacleRobot : public Robot
         bool isRobotState(ObstacleRobotState cmpRobotState);
     
     public:
-        ObstacleRobot(ros::NodeHandle& n);
+        ObstacleRobot(ros::NodeHandle& n, int r_id);
         ~ObstacleRobot();
 
         /*

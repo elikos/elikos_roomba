@@ -1,9 +1,10 @@
 #include "elikos_roomba/robot.h"
 
-Robot::Robot(ros::NodeHandle& n, std::string botType)
+Robot::Robot(ros::NodeHandle& n, std::string botType, int r_id)
     : n_(n),
       is_running_slowly_(false),
-      robotType_(botType)
+      robotType_(botType),
+      r_id_(r_id)
 {
     loop_hz_ = LOOP_RATE;
 
@@ -32,7 +33,7 @@ Robot::~Robot() {
  *===========================*/
 
 void Robot::ROS_INFO_STREAM_ROBOT(std::string message) {
-    ROS_INFO_STREAM("[" << robotType_ << "] " << message);
+    ROS_INFO_STREAM("[" << robotType_ << " " << r_id_ << "] " << message);
 }
 
 /*===========================
@@ -128,7 +129,7 @@ void Robot::spin()
     ros::init(argc, argv, "robot");
     ros::NodeHandle n;
 
-    Robot robot_(n);
+    Robot robot_(n, 1);
 
     //geometry_msgs::Twist ms = robot_.getCmdVelMsg(0.0f, 2.5f);
     //robot_.publishCmdVel(ms);
