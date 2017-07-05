@@ -1,5 +1,18 @@
 <launch>
+    <node pkg="tf" type="static_transform_publisher" name="elikos_arena_origin" args="0.0 0.0 0.0 0.0 0.0 0.0 world elikos_arena_origin 100"/>
     <!-- elikos_roomba -->
-    <node name="groundrobot_node" pkg="elikos_roomba" type="groundrobot_node" output="screen" />
-    <node name="robotsim_node" pkg="elikos_roomba" type="robotsim_node" output="screen" />
+    <group ns="robot1">
+        <node name="groundrobot_node" pkg="elikos_roomba" type="groundrobot_node" output="screen" />
+        <node name="robotsim_node" pkg="elikos_roomba" type="robotsim_node" output="screen" />
+    </group>
+
+    <group ns="robot2">
+        <node name="groundrobot_node" pkg="elikos_roomba" type="groundrobot_node" output="screen" />
+        <node name="robotsim_node" pkg="elikos_roomba" type="robotsim_node" output="screen" />
+    </group>
+
+    <group ns="robot3">
+        <node name="groundrobot_node" pkg="elikos_roomba" type="groundrobot_node" output="screen" />
+        <node name="robotsim_node" pkg="elikos_roomba" type="robotsim_node" output="screen" />
+    </group>
 </launch>
