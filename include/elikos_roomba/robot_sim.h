@@ -55,6 +55,7 @@ class RobotSim
     
     protected:
         ros::NodeHandle& n_;
+        int r_id_;
 
         ros::Time time_last_;
         ros::Time time_now_;
@@ -120,7 +121,7 @@ class RobotSim
          * Constructor
          * botType: std::string with type of robot ("GROUND ROBOT" or "OBSTACLE ROBOT")
          */
-        RobotSim(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_yaw);
+        RobotSim(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_yaw, int r_id);
         ~RobotSim();
 
         /*

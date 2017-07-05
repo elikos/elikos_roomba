@@ -1,8 +1,10 @@
 #include "elikos_roomba/robot_sim.h"
 
-RobotSim::RobotSim(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_yaw)
+RobotSim::RobotSim(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_yaw, int r_id)
     : n_(n)
 {
+    r_id_ = r_id;
+
     // setup subscribers
     cmdVel_sub_ = n.subscribe(CMDVEL_TOPIC_NAME, 10, &RobotSim::cmdVelCallback, this);
     robotState_sub_ = n.subscribe(ROBOTSTATE_TOPIC_NAME, 10, &RobotSim::robotStateCallback, this);
@@ -110,7 +112,7 @@ geometry_msgs::PoseStamped RobotSim::createPoseStampedFromPosYaw(tf::Vector3 pos
 }
 
 void RobotSim::ROS_INFO_STREAM_ROBOT(std::string message) {
-    ROS_INFO_STREAM("[" << "ROBOT SIM" << "] " << message);
+    ROS_INFO_STREAM("[" << "ROBOT SIM " << r_id_ << "] " << message);
 }
 
 // ---------------------------
@@ -120,12 +122,20 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "robot");
     ros::NodeHandle n;
 
-    RobotSim robotsim_(n, tf::Vector3(0.0, 0.0, 0.0), 0.0);
+    ros::NodeHandle n_p("~");
+    double init_pos_x, init_pos_y, init_pos_z, init_yaw;
+    int robot_id;
+    n_p.getParam("init_pos_x", init_pos_x);
+    n_p.getParam("init_pos_y", init_pos_y);
+    n_p.getParam("init_pos_z", init_pos_z);
+    n_p.getParam("init_yaw", init_yaw);
+    n_p.getParam("robot_id", robot_id);
+
+    RobotSim robotsim_(n, tf::Vector3(init_pos_x, init_pos_y, init_pos_z), init_yaw, robot_id);
     
     try
     {
         ros::spin();
-        //robotsim_.spin();
     }
     catch (std::runtime_error& e)
     {
