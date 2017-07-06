@@ -1,6 +1,10 @@
 <launch>
-    <!-- elikos_roomba -->
-    <node name="obstaclerobot_node" pkg="elikos_roomba" type="obstaclerobot_node" output="screen">
-        <param name="robot_id" value="1" />
-    </node>
+     <!-- Parameter: robot id -->
+    <arg name="robot_id" default="1" />
+    
+    <group ns="robot$(arg robot_id)">
+        <node name="obstaclerobot_node" pkg="elikos_roomba" type="obstaclerobot_node" output="screen">
+            <param name="robot_id" value="$(arg robot_id)" />
+        </node>
+    </group>
 </launch>
