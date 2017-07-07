@@ -149,7 +149,7 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(groundrobot_node src/groundrobot.cpp src/robot.cpp)
 add_executable(obstaclerobot_node src/obstaclerobot.cpp src/robot.cpp)
-add_executable(robotsim_node src/robot_sim.cpp)
+add_executable(robotviz_node src/robot_viz.cpp)
 
 # Add topswitch node with wiringPi library if not remote computer
 # For remote computer compilation, use:
@@ -180,7 +180,7 @@ target_link_libraries(obstaclerobot_node
     ${catkin_LIBRARIES}
 )
 
-target_link_libraries(robotsim_node
+target_link_libraries(robotviz_node
   ${catkin_LIBRARIES}
 )
 

@@ -1,5 +1,5 @@
-#ifndef ROBOT_SIM_H
-#define ROBOT_SIM_H
+#ifndef ROBOT_VIZ_H
+#define ROBOT_VIZ_H
 
 #include <ros/ros.h>
 #include <tf/transform_broadcaster.h>
@@ -37,7 +37,7 @@ static const double ROTATE_CCW = 1.0;           // counterclockwise (positive an
 static const double ROTATE_CW = -1.0;           // clockwise (negative angular.z)
 
 
-class RobotSim
+class RobotViz
 {
     private:
         /*===========================
@@ -121,8 +121,8 @@ class RobotSim
          * Constructor
          * botType: std::string with type of robot ("GROUND ROBOT" or "OBSTACLE ROBOT")
          */
-        RobotSim(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_yaw, int r_id);
-        ~RobotSim();
+        RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_yaw, int r_id);
+        ~RobotViz();
 
         /*
          * Wrapper for ROS_INFO_STREAM, includes robotType_ string in message
@@ -135,4 +135,4 @@ class RobotSim
         geometry_msgs::PoseStamped createPoseStampedFromPosYaw(tf::Vector3 pos, double yaw);
 };
 
-#endif  // ELIKOS_ROOMBA_ROBOT_SIM_H
+#endif  // ELIKOS_ROOMBA_ROBOT_VIZ_H

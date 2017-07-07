@@ -1,12 +1,12 @@
-#include "elikos_roomba/robot_sim.h"
+#include "elikos_roomba/robot_viz.h"
 
-RobotSim::RobotSim(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_yaw, int r_id)
+RobotViz::RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_yaw, int r_id)
     : n_(n),
       r_id_(r_id)
 {
     // setup subscribers
-    cmdVel_sub_ = n.subscribe(CMDVEL_TOPIC_NAME, 10, &RobotSim::cmdVelCallback, this);
-    robotState_sub_ = n.subscribe(ROBOTSTATE_TOPIC_NAME, 10, &RobotSim::robotStateCallback, this);
+    cmdVel_sub_ = n.subscribe(CMDVEL_TOPIC_NAME, 10, &RobotViz::cmdVelCallback, this);
+    robotState_sub_ = n.subscribe(ROBOTSTATE_TOPIC_NAME, 10, &RobotViz::robotStateCallback, this);
 
     // setup publishers
     pose_pub_ = n.advertise<geometry_msgs::PoseStamped>(ROBOTPOSE_TOPIC_NAME, ROBOTSTATE_TOPIC_QUEUESIZE);
@@ -29,7 +29,7 @@ RobotSim::RobotSim(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_y
     ROS_INFO_STREAM_ROBOT("Initialization done (inactive)");
 }
 
-RobotSim::~RobotSim() {
+RobotViz::~RobotViz() {
   ROS_INFO_STREAM_ROBOT("Destruct sequence initiated");
   // add other relevant stuff
 }
@@ -38,7 +38,7 @@ RobotSim::~RobotSim() {
  * Callbacks
  *===========================*/
 
-void RobotSim::cmdVelCallback(const geometry_msgs::Twist::ConstPtr& msg) {
+void RobotViz::cmdVelCallback(const geometry_msgs::Twist::ConstPtr& msg) {
     // check if robot is active (and time_last_ reset by robotStateCallback)
     if (isActive_) {
         // time difference
@@ -57,7 +57,7 @@ void RobotSim::cmdVelCallback(const geometry_msgs::Twist::ConstPtr& msg) {
     }
 }
 
-void RobotSim::robotStateCallback(const std_msgs::String::ConstPtr& msg) {
+void RobotViz::robotStateCallback(const std_msgs::String::ConstPtr& msg) {
     bool isActive_now = !((msg->data) == "INACTIVE");
 
     if (isActive_now && !isActive_) {
@@ -74,7 +74,7 @@ void RobotSim::robotStateCallback(const std_msgs::String::ConstPtr& msg) {
  * Update
  *===========================*/
 
-void RobotSim::updatePose(double timeDiffSecs) {
+void RobotViz::updatePose(double timeDiffSecs) {
     // deltas
     double deltaLin = timeDiffSecs*linVel_;
     double deltaAngle = timeDiffSecs*angVel_;
@@ -88,11 +88,11 @@ void RobotSim::updatePose(double timeDiffSecs) {
     yaw_ += deltaAngle;
 }
 
-void RobotSim::updatePoseMsg() {
+void RobotViz::updatePoseMsg() {
     pose_msg_ = createPoseStampedFromPosYaw(pos_, yaw_);
 }
 
-void RobotSim::publishPoseMsg() {
+void RobotViz::publishPoseMsg() {
     pose_pub_.publish(pose_msg_);
 }
 
@@ -100,7 +100,7 @@ void RobotSim::publishPoseMsg() {
  * Other utilities
  *===========================*/
 
-geometry_msgs::PoseStamped RobotSim::createPoseStampedFromPosYaw(tf::Vector3 pos, double yaw) {
+geometry_msgs::PoseStamped RobotViz::createPoseStampedFromPosYaw(tf::Vector3 pos, double yaw) {
     geometry_msgs::PoseStamped pose_msg;
     pose_msg.pose.position.x = pos.x();
     pose_msg.pose.position.y = pos.y();
@@ -110,15 +110,15 @@ geometry_msgs::PoseStamped RobotSim::createPoseStampedFromPosYaw(tf::Vector3 pos
     return pose_msg;
 }
 
-void RobotSim::ROS_INFO_STREAM_ROBOT(std::string message) {
-    ROS_INFO_STREAM("[" << "ROBOT SIM " << r_id_ << "] " << message);
+void RobotViz::ROS_INFO_STREAM_ROBOT(std::string message) {
+    ROS_INFO_STREAM("[" << "ROBOT VIZ " << r_id_ << "] " << message);
 }
 
 // ---------------------------
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "robot");
+    ros::init(argc, argv, "robotviz");
     ros::NodeHandle n;
 
     ros::NodeHandle n_p("~");
@@ -130,7 +130,7 @@ int main(int argc, char **argv)
     n_p.getParam("init_yaw", init_yaw);
     n_p.getParam("robot_id", robot_id);
 
-    RobotSim robotsim_(n, tf::Vector3(init_pos_x, init_pos_y, init_pos_z), init_yaw, robot_id);
+    RobotViz robotviz_(n, tf::Vector3(init_pos_x, init_pos_y, init_pos_z), init_yaw, robot_id);
     
     try
     {
@@ -138,7 +138,7 @@ int main(int argc, char **argv)
     }
     catch (std::runtime_error& e)
     {
-        ROS_FATAL_STREAM("[ROBOT SIM] Runtime error: " << e.what());
+        ROS_FATAL_STREAM("[ROBOT VIZ] Runtime error: " << e.what());
         return 1;
     }
     return 0;
