@@ -39,4 +39,6 @@
             <param name="robot_id" value="3" />
         </node>
     </group>
+
+    <node pkg="rviz" type="rviz" name="rviz_node" args="-d $(find elikos_roomba)/config/robot_viz.rviz" />
 </launch>
