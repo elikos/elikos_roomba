@@ -28,7 +28,6 @@ RobotViz::RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_y
 
     // create pose msgs
     updatePoseMsgs();
-    
 
     ROS_INFO_STREAM_ROBOT("Initialization done (inactive)");
 }
@@ -119,11 +118,9 @@ geometry_msgs::PoseStamped RobotViz::createPoseStampedFromPosYaw(tf::Vector3 pos
 tf::Transform RobotViz::createTfFromPosYaw(tf::Vector3 pos, double yaw) {
     tf::Transform tf;
     tf::Quaternion q;
-
     tf.setOrigin(tf::Vector3(pos.x(), pos.y(), 0.0));
     q.setRPY(0, 0, yaw);
     tf.setRotation(q);
-
     return tf;
 }
 

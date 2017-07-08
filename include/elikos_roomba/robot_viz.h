@@ -3,16 +3,10 @@
 
 #include <ros/ros.h>
 #include <tf/transform_broadcaster.h>
-#include <std_msgs/Empty.h>
 #include <std_msgs/Bool.h>
 #include <std_msgs/String.h>
-#include <std_msgs/Float32.h>
-#include <std_msgs/UInt16.h>
-#include <std_msgs/Int16.h>
-#include <std_msgs/Header.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/Twist.h>
-#include <nav_msgs/Odometry.h>
 #include <std_srvs/Empty.h>
 #include <string>
 #include <sstream>
@@ -55,6 +49,7 @@ class RobotViz
     
     protected:
         ros::NodeHandle& n_;
+
         int r_id_;
         std::string tf_robot_;
 
@@ -81,6 +76,7 @@ class RobotViz
          *===========================*/
         /* Current pose message */
         geometry_msgs::PoseStamped pose_msg_;
+        /* Current tf */
         tf::Transform tf_;
 
         /*===========================

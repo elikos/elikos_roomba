@@ -5,11 +5,7 @@
 #include <std_msgs/Empty.h>
 #include <std_msgs/Bool.h>
 #include <std_msgs/String.h>
-#include <std_msgs/Float32.h>
-#include <std_msgs/UInt16.h>
-#include <std_msgs/Int16.h>
 #include <geometry_msgs/Twist.h>
-#include <nav_msgs/Odometry.h>
 #include <std_srvs/Empty.h>
 #include <string>
 #include <sstream>
