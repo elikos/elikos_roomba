@@ -1,33 +1,14 @@
 #ifndef ROBOT_VIZ_H
 #define ROBOT_VIZ_H
 
-#include <ros/ros.h>
+#include "elikos_roomba/robot.h"        // use topic names, service names, and other values
 #include <tf/transform_broadcaster.h>
-#include <std_msgs/Bool.h>
-#include <std_msgs/String.h>
 #include <geometry_msgs/PoseStamped.h>
-#include <geometry_msgs/Twist.h>
-#include <std_srvs/Empty.h>
-#include <string>
-#include <sstream>
-#include <cmath>
 
-static const double LOOP_RATE = 20.0;
 // names (topics and services)
 static const std::string TF_NAME_BASE = "elikos_arena_origin";        // origin
 static const std::string ROBOTPOSE_TOPIC_NAME = "pose";               // pose message
-static const std::string CMDVEL_TOPIC_NAME = "cmd_vel";               // subscribe to cmd_vel
-static const std::string ROBOTSTATE_TOPIC_NAME = "state";             // subscribe to robot_state
 static const std::string TF_ROBOT_PREFIX = "robot";                   // robot tf name prefix
-static const std::string ACTIVATE_SERVICE_NAME = "activate";          // service, activate robot
-static const std::string DEACTIVATE_SERVICE_NAME = "deactivate";      // service, deactivate robot
-static const std::string TOGGLEACT_SERVICE_NAME = "toggle_activate";  // service, toggle robot activation
-// number parameters
-static const int ROBOTSTATE_TOPIC_QUEUESIZE = 10;
-// convention
-static const double DEG_TO_RAD = 3.1415/180.0;  //[rad/deg]
-static const double ROTATE_CCW = 1.0;           // counterclockwise (positive angular.z)
-static const double ROTATE_CW = -1.0;           // clockwise (negative angular.z)
 
 
 class RobotViz
