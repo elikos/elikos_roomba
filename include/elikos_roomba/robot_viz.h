@@ -24,7 +24,7 @@ static const std::string TF_NAME_BASE = "elikos_arena_origin";        // origin
 static const std::string ROBOTPOSE_TOPIC_NAME = "pose";               // pose message
 static const std::string CMDVEL_TOPIC_NAME = "cmd_vel";               // subscribe to cmd_vel
 static const std::string ROBOTSTATE_TOPIC_NAME = "state";             // subscribe to robot_state
-static const std::string TF_NAME = "robot";                           // robot tf name
+static const std::string TF_ROBOT_PREFIX = "robot";                   // robot tf name prefix
 static const std::string ACTIVATE_SERVICE_NAME = "activate";          // service, activate robot
 static const std::string DEACTIVATE_SERVICE_NAME = "deactivate";      // service, deactivate robot
 static const std::string TOGGLEACT_SERVICE_NAME = "toggle_activate";  // service, toggle robot activation
@@ -42,7 +42,8 @@ class RobotViz
         /*===========================
          * Publishers
          *===========================*/
-         ros::Publisher pose_pub_;
+        ros::Publisher pose_pub_;
+        tf::TransformBroadcaster tf_br_;
 
         /*===========================
          * Subscribers
@@ -55,6 +56,7 @@ class RobotViz
     protected:
         ros::NodeHandle& n_;
         int r_id_;
+        std::string tf_robot_;
 
         ros::Time time_last_;
         ros::Time time_now_;
@@ -79,6 +81,7 @@ class RobotViz
          *===========================*/
         /* Current pose message */
         geometry_msgs::PoseStamped pose_msg_;
+        tf::Transform tf_;
 
         /*===========================
          * Callbacks
@@ -102,14 +105,14 @@ class RobotViz
         void updatePose(double timeDiffSecs, double linVel, double angVel);
 
         /*
-         * Update pose message
+         * Update pose messages (PoseStamped and tf)
          */
-        void updatePoseMsg();
+        void updatePoseMsgs();
         
         /*
-         * Publish robot pose
+         * Publish pose messages (PoseStamped and tf)
          */
-        void publishPoseMsg();
+        void publishPoseMsgs();
     
     public:
         /*
@@ -128,6 +131,16 @@ class RobotViz
          * Create PoseStamped message from position vector and yaw
          */
         geometry_msgs::PoseStamped createPoseStampedFromPosYaw(tf::Vector3 pos, double yaw);
+
+        /*
+         * Create tf from position vector and yaw
+         */
+        tf::Transform createTfFromPosYaw(tf::Vector3 pos, double yaw);
+
+        /*
+         * Concatenate string and int (because other methods weren't working)
+         */
+        std::string catStringInt(std::string strng, int eent);
 };
 
 #endif  // ELIKOS_ROOMBA_ROBOT_VIZ_H

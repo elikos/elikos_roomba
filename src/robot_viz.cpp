@@ -11,6 +11,9 @@ RobotViz::RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_y
     // setup publishers
     pose_pub_ = n.advertise<geometry_msgs::PoseStamped>(ROBOTPOSE_TOPIC_NAME, ROBOTSTATE_TOPIC_QUEUESIZE);
 
+    // create robot tf name with id
+    tf_robot_ = catStringInt(TF_ROBOT_PREFIX, r_id_);
+
     // initial state
     isActive_ = false;
 
@@ -23,8 +26,9 @@ RobotViz::RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_y
 
     time_last_ = ros::Time::now(); // could remove this
 
-    // create pose msg
-    updatePoseMsg();
+    // create pose msgs
+    updatePoseMsgs();
+    
 
     ROS_INFO_STREAM_ROBOT("Initialization done (inactive)");
 }
@@ -50,8 +54,8 @@ void RobotViz::cmdVelCallback(const geometry_msgs::Twist::ConstPtr& msg) {
         double angVel = msg->angular.z;
 
         updatePose(timeDiffSecs, linVel, angVel);
-        updatePoseMsg();
-        publishPoseMsg();
+        updatePoseMsgs();
+        publishPoseMsgs();
 
         time_last_ = time_now_;
     }
@@ -88,12 +92,14 @@ void RobotViz::updatePose(double timeDiffSecs, double linVel, double angVel) {
     yaw_ += deltaAngle;
 }
 
-void RobotViz::updatePoseMsg() {
+void RobotViz::updatePoseMsgs() {
     pose_msg_ = createPoseStampedFromPosYaw(pos_, yaw_);
+    tf_ = createTfFromPosYaw(pos_, yaw_);
 }
 
-void RobotViz::publishPoseMsg() {
+void RobotViz::publishPoseMsgs() {
     pose_pub_.publish(pose_msg_);
+    tf_br_.sendTransform(tf::StampedTransform(tf_, ros::Time::now(), TF_NAME_BASE, tf_robot_));
 }
 
 /*===========================
@@ -110,8 +116,25 @@ geometry_msgs::PoseStamped RobotViz::createPoseStampedFromPosYaw(tf::Vector3 pos
     return pose_msg;
 }
 
+tf::Transform RobotViz::createTfFromPosYaw(tf::Vector3 pos, double yaw) {
+    tf::Transform tf;
+    tf::Quaternion q;
+
+    tf.setOrigin(tf::Vector3(pos.x(), pos.y(), 0.0));
+    q.setRPY(0, 0, yaw);
+    tf.setRotation(q);
+
+    return tf;
+}
+
 void RobotViz::ROS_INFO_STREAM_ROBOT(std::string message) {
     ROS_INFO_STREAM("[" << "ROBOT VIZ " << r_id_ << "] " << message);
+}
+
+std::string RobotViz::catStringInt(std::string strng, int eent) {
+    std::stringstream sstm;
+    sstm << strng << eent;
+    return sstm.str();
 }
 
 // ---------------------------

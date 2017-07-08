@@ -41,4 +41,9 @@
     </group>
 
     <node pkg="rviz" type="rviz" name="rviz_node" args="-d $(find elikos_roomba)/config/robot_viz.rviz" />
+
+    <!-- Call activation services -->
+    <node pkg="rosservice" type="rosservice" name="r1activate" args="call --wait /robot1/activate"/>
+    <node pkg="rosservice" type="rosservice" name="r2activate" args="call --wait /robot2/activate"/>
+    <node pkg="rosservice" type="rosservice" name="r3activate" args="call --wait /robot3/activate"/>
 </launch>

@@ -55,6 +55,12 @@ Visualization Manager:
         All Enabled: true
         elikos_arena_origin:
           Value: true
+        robot1:
+          Value: true
+        robot2:
+          Value: true
+        robot3:
+          Value: true
         world:
           Value: true
       Marker Scale: 1
@@ -65,7 +71,12 @@ Visualization Manager:
       Tree:
         world:
           elikos_arena_origin:
-            {}
+            robot1:
+              {}
+            robot2:
+              {}
+            robot3:
+              {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -73,7 +84,7 @@ Visualization Manager:
       Axes Radius: 0.0199999996
       Class: rviz/Pose
       Color: 255; 25; 0
-      Enabled: true
+      Enabled: false
       Head Length: 0.300000012
       Head Radius: 0.100000001
       Name: Pose
@@ -82,13 +93,13 @@ Visualization Manager:
       Shape: Axes
       Topic: /robot1/pose
       Unreliable: false
-      Value: true
+      Value: false
     - Alpha: 1
       Axes Length: 0.25
       Axes Radius: 0.0199999996
       Class: rviz/Pose
       Color: 0; 0; 127
-      Enabled: true
+      Enabled: false
       Head Length: 0.300000012
       Head Radius: 0.100000001
       Name: Pose
@@ -97,13 +108,13 @@ Visualization Manager:
       Shape: Axes
       Topic: /robot2/pose
       Unreliable: false
-      Value: true
+      Value: false
     - Alpha: 1
       Axes Length: 0.25
       Axes Radius: 0.0199999996
       Class: rviz/Pose
       Color: 255; 25; 0
-      Enabled: true
+      Enabled: false
       Head Length: 0.300000012
       Head Radius: 0.100000001
       Name: Pose
@@ -112,7 +123,7 @@ Visualization Manager:
       Shape: Axes
       Topic: /robot3/pose
       Unreliable: false
-      Value: true
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -137,7 +148,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 13.0849686
+      Distance: 12.4117775
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
@@ -151,10 +162,10 @@ Visualization Manager:
       Focal Shape Size: 0.0500000007
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.784797072
+      Pitch: 0.564797282
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 6.11855888
+      Yaw: 0.290375352
     Saved: ~
 Window Geometry:
   Displays:
@@ -172,5 +183,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 854
-  X: 1062
+  X: 1061
   Y: 0
