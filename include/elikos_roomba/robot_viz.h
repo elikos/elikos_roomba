@@ -17,18 +17,17 @@
 #include <string>
 #include <sstream>
 #include <cmath>
-//#include <Eigen/Core>
 
 static const double LOOP_RATE = 20.0;
 // names (topics and services)
-static const std::string TF_NAME_BASE = "elikos_arena_origin";              // origin
-static const std::string ROBOTPOSE_TOPIC_NAME = "pose";                     // pose message
-static const std::string CMDVEL_TOPIC_NAME = "cmd_vel";                     // subscribe to cmd_vel
-static const std::string ROBOTSTATE_TOPIC_NAME = "robot_state";             // subscribe to robot_state
-static const std::string TF_NAME = "robot";                                 // robot tf name
-static const std::string ACTIVATE_SERVICE_NAME = "robot_activate";          // service, activate robot
-static const std::string DEACTIVATE_SERVICE_NAME = "robot_deactivate";      // service, deactivate robot
-static const std::string TOGGLEACT_SERVICE_NAME = "robot_activate_toggle";  // service, toggle robot activation
+static const std::string TF_NAME_BASE = "elikos_arena_origin";        // origin
+static const std::string ROBOTPOSE_TOPIC_NAME = "pose";               // pose message
+static const std::string CMDVEL_TOPIC_NAME = "cmd_vel";               // subscribe to cmd_vel
+static const std::string ROBOTSTATE_TOPIC_NAME = "state";             // subscribe to robot_state
+static const std::string TF_NAME = "robot";                           // robot tf name
+static const std::string ACTIVATE_SERVICE_NAME = "activate";          // service, activate robot
+static const std::string DEACTIVATE_SERVICE_NAME = "deactivate";      // service, deactivate robot
+static const std::string TOGGLEACT_SERVICE_NAME = "toggle_activate";  // service, toggle robot activation
 // number parameters
 static const int ROBOTSTATE_TOPIC_QUEUESIZE = 10;
 // convention
