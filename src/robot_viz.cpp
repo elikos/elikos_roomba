@@ -46,10 +46,10 @@ void RobotViz::cmdVelCallback(const geometry_msgs::Twist::ConstPtr& msg) {
         time_diff_ = time_now_ - time_last_;
         double timeDiffSecs = time_diff_.toSec();
 
-        linVel_ = msg->linear.x;
-        angVel_ = msg->angular.z;
+        double linVel = msg->linear.x;
+        double angVel = msg->angular.z;
 
-        updatePose(timeDiffSecs);
+        updatePose(timeDiffSecs, linVel, angVel);
         updatePoseMsg();
         publishPoseMsg();
 
@@ -74,10 +74,10 @@ void RobotViz::robotStateCallback(const std_msgs::String::ConstPtr& msg) {
  * Update
  *===========================*/
 
-void RobotViz::updatePose(double timeDiffSecs) {
+void RobotViz::updatePose(double timeDiffSecs, double linVel, double angVel) {
     // deltas
-    double deltaLin = timeDiffSecs*linVel_;
-    double deltaAngle = timeDiffSecs*angVel_;
+    double deltaLin = timeDiffSecs*linVel;
+    double deltaAngle = timeDiffSecs*angVel;
 
     // components
     double deltaX = cosf(deltaAngle+yaw_)*deltaLin;

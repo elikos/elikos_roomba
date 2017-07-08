@@ -75,10 +75,11 @@ class RobotViz
          tf::Vector3 pos_;
          double yaw_;
 
-         geometry_msgs::PoseStamped pose_msg_;
-
-         double linVel_;
-         double angVel_;
+        /*===========================
+         * Messages
+         *===========================*/
+        /* Current pose message */
+        geometry_msgs::PoseStamped pose_msg_;
 
         /*===========================
          * Callbacks
@@ -94,17 +95,12 @@ class RobotViz
         void robotStateCallback(const std_msgs::String::ConstPtr& msg);
 
         /*===========================
-         * Messages
-         *===========================*/
-
-
-        /*===========================
          * Update
          *===========================*/
         /*
          * Update pose
          */
-        void updatePose(double timeDiffSecs);
+        void updatePose(double timeDiffSecs, double linVel, double angVel);
 
         /*
          * Update pose message
@@ -125,7 +121,7 @@ class RobotViz
         ~RobotViz();
 
         /*
-         * Wrapper for ROS_INFO_STREAM, includes robotType_ string in message
+         * Wrapper for ROS_INFO_STREAM, includes robotType_ string and robot ID in message
          */
         void ROS_INFO_STREAM_ROBOT(std::string message);
 

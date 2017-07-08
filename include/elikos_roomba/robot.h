@@ -159,7 +159,7 @@ class Robot
         virtual void spin() =0;
 
         /*
-         * Wrapper for ROS_INFO_STREAM, includes robotType_ string in message
+         * Wrapper for ROS_INFO_STREAM, includes robotType_ string and robot ID in message
          */
         void ROS_INFO_STREAM_ROBOT(std::string message);
 };
