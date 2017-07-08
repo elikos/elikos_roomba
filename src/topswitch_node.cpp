@@ -6,6 +6,9 @@
 //broadcom pin number
 #define TOPSWITCH_PIN 17
 
+static const std::string TOPSWITCHSTATE_TOPIC_NAME = "topswitch_state";
+static const std::string TOPSWITCH_SERVICE_NAME = "topswitch_trigger";
+
 bool isTopSwitchActivated = false;
 bool wasTopSwitchActivated = false;
 
@@ -14,11 +17,11 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "topswitch");
     ros::NodeHandle n;
     
-    // TOPIC: /topswitch_state
-    ros::Publisher topswitch_pub = n.advertise<std_msgs::Bool>("topswitch_state", 1000);
+    // setup publisher
+    ros::Publisher topswitch_pub = n.advertise<std_msgs::Bool>(TOPSWITCHSTATE_TOPIC_NAME, 1000);
     
-    // SERVICE
-    ros::ServiceClient topswitch_srv_client = n.serviceClient<std_srvs::Empty>("topswitch_trigger");
+    // setup service
+    ros::ServiceClient topswitch_srv_client = n.serviceClient<std_srvs::Empty>(TOPSWITCH_SERVICE_NAME);
     std_srvs::Empty srv;
     
     ros::Rate loop_rate(25);
