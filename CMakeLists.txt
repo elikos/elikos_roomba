@@ -150,6 +150,7 @@ include_directories(
 add_executable(groundrobot_node src/groundrobot.cpp src/robot.cpp)
 add_executable(obstaclerobot_node src/obstaclerobot.cpp src/robot.cpp)
 add_executable(robotviz_node src/robot_viz.cpp)
+add_executable(serviceredirect_node src/service_redirect.cpp)
 
 # Add topswitch node with wiringPi library if not remote computer
 # For remote computer compilation, use:
@@ -179,8 +180,10 @@ target_link_libraries(groundrobot_node
 target_link_libraries(obstaclerobot_node
     ${catkin_LIBRARIES}
 )
-
 target_link_libraries(robotviz_node
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(serviceredirect_node
   ${catkin_LIBRARIES}
 )
 

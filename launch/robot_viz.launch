@@ -1,5 +1,9 @@
 <launch>
     <node pkg="tf" type="static_transform_publisher" name="elikos_arena_origin" args="0.0 0.0 0.0 0.0 0.0 0.0 world elikos_arena_origin 100"/>
+
+    <include file="$(find elikos_roomba)/launch/service_redirect.launch">
+        <arg name="robot_qty" value="3" />
+    </include>
     
     <group ns="robot1">
         <node name="groundrobot_node" pkg="elikos_roomba" type="groundrobot_node" output="screen">
