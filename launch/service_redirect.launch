@@ -1,5 +1,5 @@
 <launch>
-    <!-- Parameter: robot quantity -->
+    <!-- Arguments -->
     <arg name="robot_qty" default="1" />
     
     <node name="serviceredirect_node" pkg="elikos_roomba" type="serviceredirect_node" output="screen">

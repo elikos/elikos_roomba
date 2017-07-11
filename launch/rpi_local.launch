@@ -1,5 +1,5 @@
 <launch>
-    <!-- Parameter: robot id -->
+    <!-- Arguments -->
     <arg name="robot_id" default="1" />
     
     <group ns="robot$(arg robot_id)">
