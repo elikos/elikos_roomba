@@ -14,7 +14,6 @@ It interacts with `create_autonomy` through its topics. It also has a node to ma
 
 -----
 
-
 ## Launch files
 
 * `rpi_local.launch`  
@@ -95,6 +94,39 @@ It interacts with `create_autonomy` through its topics. It also has a node to ma
 
 * `/robot$robot_id/topswitch_trigger`  
    * usually called by `topswitch_node` when top switch of robot with id `$robot_id` is triggered
+
+## Using multiple robots
+
+To have multiple robots running on the same `roscore`:  
+   * start a `roscore` on a computer (preferably not one of the RPis), and note the IP
+   * for every robot `i`
+      * on RPi through SSH:
+         * set `ROS_MASTER_URI` (pointing to the above IP)
+         * set `ROS_IP` (pointing to this RPi)
+         * launch `rpi_local.launch` with a unique `robot_id`
+             ````
+             roslaunch elikos_roomba rpi_local.launch robot_id:=i
+             ````
+      * on host computer or RPi through SSH, launch `robot_ground.launch` or `robot_obstacle.launch` with corresponding `robot_id`
+          ````
+          roslaunch elikos_roomba robot_ground.launch robot_id:=i
+          ````
+          or
+          ````
+          roslaunch elikos_roomba robot_obstacle.launch robot_id:=i
+          ````
+      * or launch `joy_teleop.launch` with corresponding `robot_id` on a computer with an Xbox controller
+          ````
+          roslaunch elikos_roomba joy_teleop.launch robot_id:=i
+          ````
+   * launch `service_redirect.launch` with the number of robots `n`
+       ````
+       roslaunch elikos_roomba service_redirect.launch robot_qty:=n
+       ````
+   * activate robots
+       ````
+       rosservice call /activate
+       ````
 
 
 -----
