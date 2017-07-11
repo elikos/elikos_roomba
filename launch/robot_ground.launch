@@ -1,20 +1,22 @@
 <launch>
     <!-- Arguments -->
     <arg name="robot_id" default="1" />
-    <arg name="init_pos_x" default="0.0" />
-    <arg name="init_pos_y" default="0.0" />
-    <arg name="init_pos_z" default="0.0" />
-    <arg name="init_yaw" default="0.0" />
+    <arg name="pos_x" default="0.0" />
+    <arg name="pos_y" default="0.0" />
+    <arg name="pos_z" default="0.0" />
+    <arg name="yaw" default="0.0" />
+
+    <node pkg="tf" type="static_transform_publisher" name="elikos_arena_origin" args="0.0 0.0 0.0 0.0 0.0 0.0 world elikos_arena_origin 100"/>
     
     <group ns="robot$(arg robot_id)">
         <node name="groundrobot_node" pkg="elikos_roomba" type="groundrobot_node" output="screen">
             <param name="robot_id" value="$(arg robot_id)" />
         </node>
         <node name="robotviz_node" pkg="elikos_roomba" type="robotviz_node" output="screen">
-            <param name="init_pos_x" value="$(arg init_pos_x)" />
-            <param name="init_pos_y" value="$(arg init_pos_y)" />
-            <param name="init_pos_z" value="$(arg init_pos_z)" />
-            <param name="init_yaw" value="$(arg init_yaw)" />
+            <param name="init_pos_x" value="$(arg pos_x)" />
+            <param name="init_pos_y" value="$(arg pos_y)" />
+            <param name="init_pos_z" value="$(arg pos_z)" />
+            <param name="init_yaw" value="$(arg yaw)" />
             <param name="robot_id" value="$(arg robot_id)" />
         </node>
     </group>
