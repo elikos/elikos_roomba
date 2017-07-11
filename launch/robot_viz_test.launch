@@ -32,7 +32,7 @@
     </group>
 
     <group ns="robot3">
-        <node name="groundrobot_node" pkg="elikos_roomba" type="groundrobot_node" output="screen">
+        <node name="obstaclerobot_node" pkg="elikos_roomba" type="obstaclerobot_node" output="screen">
             <param name="robot_id" value="3" />
         </node>
         <node name="robotviz_node" pkg="elikos_roomba" type="robotviz_node" output="screen">
