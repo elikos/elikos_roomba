@@ -5,22 +5,18 @@
 #include <std_msgs/Empty.h>
 #include <std_msgs/Bool.h>
 #include <std_msgs/String.h>
-#include <std_msgs/Float32.h>
-#include <std_msgs/UInt16.h>
-#include <std_msgs/Int16.h>
 #include <geometry_msgs/Twist.h>
-#include <nav_msgs/Odometry.h>
 #include <std_srvs/Empty.h>
 #include <string>
 #include <sstream>
 
 static const double LOOP_RATE = 10.0;
 // names (topics and services)
-static const std::string CMDVEL_TOPIC_NAME = "cmd_vel";                     // publishes cmd_vel
-static const std::string ROBOTSTATE_TOPIC_NAME = "robot_state";             // publishes current robot state
-static const std::string ACTIVATE_SERVICE_NAME = "robot_activate";          // service, activate robot
-static const std::string DEACTIVATE_SERVICE_NAME = "robot_deactivate";      // service, deactivate robot
-static const std::string TOGGLEACT_SERVICE_NAME = "robot_activate_toggle";  // service, toggle robot activation
+static const std::string CMDVEL_TOPIC_NAME = "cmd_vel";               // publishes cmd_vel
+static const std::string ROBOTSTATE_TOPIC_NAME = "state";             // publishes current robot state
+static const std::string ACTIVATE_SERVICE_NAME = "activate";          // service, activate robot
+static const std::string DEACTIVATE_SERVICE_NAME = "deactivate";      // service, deactivate robot
+static const std::string TOGGLEACT_SERVICE_NAME = "toggle_activate";  // service, toggle robot activation
 // number parameters
 static const int CMDVEL_TOPIC_QUEUESIZE = 30;
 static const int ROBOTSTATE_TOPIC_QUEUESIZE = 10;
@@ -132,6 +128,9 @@ class Robot
         /* Robot type */
         std::string robotType_;
 
+        /* Robot id */
+        int r_id_;
+
         /*
          * Activate global robot state
          */
@@ -147,7 +146,7 @@ class Robot
          * Constructor
          * botType: std::string with type of robot ("GROUND ROBOT" or "OBSTACLE ROBOT")
          */
-        Robot(ros::NodeHandle& n, std::string botType);
+        Robot(ros::NodeHandle& n, std::string botType, int r_id);
         ~Robot();
 
         /*
@@ -156,7 +155,7 @@ class Robot
         virtual void spin() =0;
 
         /*
-         * Wrapper for ROS_INFO_STREAM, includes robotType_ string in message
+         * Wrapper for ROS_INFO_STREAM, includes robotType_ string and robot ID in message
          */
         void ROS_INFO_STREAM_ROBOT(std::string message);
 };

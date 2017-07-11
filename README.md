@@ -18,39 +18,83 @@ It interacts with `create_autonomy` through its topics. It also has a node to ma
 ## Launch files
 
 * `rpi_local.launch`  
-   * launches `create_autonomy/ca_driver` with the `topswitch_node`  
-   * to be launched locally on the Raspberry Pi
+   * launches `create_autonomy/ca_driver` with a `topswitch_node` inside a `/robot$robot_id` namespace  
+   * to be launched locally on the Raspberry Pi  
+   * *arguments*  
+      * `robot_id` : unique id of robot [1]
 
 * `robot_ground.launch`  
-   * launches `groundrobot_node`  
-   * to be launched on a remote computer or on the Raspberry Pi itself
+   * launches `groundrobot_node` and `robotviz_node` inside a `/robot$robot_id`  namespace  
+   * to be launched on a remote computer or on the Raspberry Pi itself  
+   * *arguments*  
+      * `robot_id` : unique id of robot [1]
+      * `pos_x` : initial x position of robot (meters) [0.0]
+      * `pos_y` : initial y position of robot (meters) [0.0]
+      * `yaw` : initial yaw of robots (radians) [0.0]
 
 * `robot_obstacle.launch`  
-   * launches `obstaclerobot_node`  
-   * to be launched on a remote computer or on the Raspberry Pi itself
+   * launches `obstaclerobot_node` and `robotviz_node` inside a `/robot$robot_id` namespace  
+   * to be launched on a remote computer or on the Raspberry Pi itself  
+   * *arguments*  
+      * `robot_id` : unique id of robot [1]
+      * `pos_x` : initial x position of robot (meters) [0.0]
+      * `pos_y` : initial y position of robot (meters) [0.0]
+      * `yaw` : initial yaw of robots (radians) [0.0]
+
+* `robot_sim.launch`  
+   * to test `robot_viz`  
+   * launches RVIZ, a `serviceredirect_node` and 2 pairs of `groundrobot_node`+`robotviz_node` and a pair of `obstaclerobot_node`+`robotviz_node` inside `/robot$robot_id` namespaces  
 
 * `joy_teleop.launch`  
-   * launches a `joy_teleop` node  
-   * to be launched on a computer with an Xbox 360/Xbox One controller
+   * launches a `joy_teleop` node inside a `/robot$robot_id` namespace  
+   * to be launched on a computer with an Xbox 360/Xbox One controller  
+   * *arguments*  
+      * `robot_id` : unique id of robot to control [1]
+
+* `service_redirect.launch`  
+   * launches a `serviceredirect_node`  
+   * *arguments*  
+      * `robot_qty` : number of robots to manage [1]
 
 ## Nodes
+
+* `groundrobot_node`  
+   * ground robot behaviour  
+   * *parameters*  
+      * `robot_id` : unique id of robot
+
+* `obstaclerobot_node`  
+   * obstacle robot behaviour  
+   * *parameters*  
+      * `robot_id` : unique id of robot
 
 * `topswitch_node`  
    * manages the top switch on the Raspberry Pi through GPIO
 
-* `groundrobot_node`  
-   * ground robot behaviour
+* `robotviz_node`  
+   * visualize position of robot in `/robot$robot_id` namespace with RVIZ  
+   * *parameters*  
+      * `robot_id` : unique id of robot
+      * `init_pos_x` : initial x position of robo (meters)
+      * `init_pos_y` : initial y position of robot (meters)
+      * `init_pos_z` : initial z position of robot (meters) (should be 0.0)
+      * `init_yaw` : initial yaw of robots (radians)
 
-* `obstaclerobot_node`  
-   * obstacle robot behaviour
+* `serviceredirect_node`  
+   * offer global activation/deactivation/toggle services and redirect service calls to all robots inside namespaces (from `/robot1` to `/robot$robot_qty`)  
+   * *parameters*  
+      * `robot_qty` : number of robots to manage
 
 ## Services
 
-* `/robot_activate_toggle`  
-   * activate/deactivate current robot
+* `/toggle_activate`  
+   * activate/deactivate all robots
 
-* `/topswitch_trigger`  
-   * usually called by `topswitch_node` when top switch is triggered
+* `/robot$robot_id/toggle_activate`  
+   * activate/deactivate robot with id `$robot_id`
+
+* `/robot$robot_id/topswitch_trigger`  
+   * usually called by `topswitch_node` when top switch of robot with id `$robot_id` is triggered
 
 
 -----

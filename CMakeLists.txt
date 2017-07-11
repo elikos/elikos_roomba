@@ -18,6 +18,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_srvs
   ca_msgs
   message_generation
+  tf
 )
 
 ## System dependencies are found with CMake's conventions
@@ -114,7 +115,7 @@ catkin_package(
   INCLUDE_DIRS include
   CATKIN_DEPENDS message_runtime
   LIBRARIES elikos_roomba
-  CATKIN_DEPENDS roscpp rospy std_msgs std_srvs geometry_msgs nav_msgs ca_msgs
+  CATKIN_DEPENDS roscpp rospy std_msgs std_srvs geometry_msgs nav_msgs ca_msgs tf
  # DEPENDS wiringPi
 )
 
@@ -148,6 +149,8 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(groundrobot_node src/groundrobot.cpp src/robot.cpp)
 add_executable(obstaclerobot_node src/obstaclerobot.cpp src/robot.cpp)
+add_executable(robotviz_node src/robot_viz.cpp)
+add_executable(serviceredirect_node src/service_redirect.cpp)
 
 # Add topswitch node with wiringPi library if not remote computer
 # For remote computer compilation, use:
@@ -176,6 +179,12 @@ target_link_libraries(groundrobot_node
 )
 target_link_libraries(obstaclerobot_node
     ${catkin_LIBRARIES}
+)
+target_link_libraries(robotviz_node
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(serviceredirect_node
+  ${catkin_LIBRARIES}
 )
 
 #############
