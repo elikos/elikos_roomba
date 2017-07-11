@@ -1,7 +1,12 @@
 <launch>
-    <!-- launch create_autonomy ca_driver -->
-    <include file="$(find ca_driver)/launch/create_2.launch" />
+    <!-- Arguments -->
+    <arg name="robot_id" default="1" />
     
-    <!-- elikos_roomba -->
-    <node name="topswitch_node" pkg="elikos_roomba" type="topswitch_node" output="screen" />
+    <group ns="robot$(arg robot_id)">
+        <!-- launch create_autonomy ca_driver -->
+        <include file="$(find ca_driver)/launch/create_2.launch" />
+        
+        <!-- elikos_roomba -->
+        <node name="topswitch_node" pkg="elikos_roomba" type="topswitch_node" output="screen" />
+    </group>
 </launch>

@@ -1,7 +1,7 @@
 #include "elikos_roomba/obstaclerobot.h"
 
-ObstacleRobot::ObstacleRobot(ros::NodeHandle& n)
-    : Robot(n, OBSTACLEROBOT_TYPE)
+ObstacleRobot::ObstacleRobot(ros::NodeHandle& n, int r_id)
+    : Robot(n, OBSTACLEROBOT_TYPE, r_id)
 {
     // initial state
     changeRobotStateTo(INACTIVE);
@@ -101,7 +101,11 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "obstaclerobot");
     ros::NodeHandle n;
 
-    ObstacleRobot obstaclerobot_(n);
+    ros::NodeHandle n_p("~");
+    int robot_id;
+    n_p.getParam("robot_id", robot_id);
+
+    ObstacleRobot obstaclerobot_(n, robot_id);
     
     try
     {
