@@ -136,16 +136,8 @@ To have multiple robots running on the same `roscore`:
 
 1. Raspberry Pi with [Ubuntu MATE 16.04](https://ubuntu-mate.org/raspberry-pi/)
 
-
 2. Install [ROS kinetic (Ubuntu/armhf)](http://wiki.ros.org/kinetic/Installation/Ubuntu) (*-desktop*)
-   ````
-   sudo apt-get update
-   sudo apt-get update
-   sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
-   sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116
-   sudo apt-get update
-   sudo apt-get install ros-kinetic-desktop
-   ````
+
 
 3. Install [WiringPi (library)](http://wiringpi.com/download-and-install/)
    ````
@@ -229,7 +221,8 @@ Mostly because Christophe is dumb and often forgets.
       
       Try:  
       1. Press the power button once. It should immediately connect.  
-      2. If that still doesn't work, force the roomba to reset. Remove the 4 screws and then remove the battery. Wait a couple seconds, then put it back in along with the screws. You should hear a little happy tune and serial communication should now work.
+      2. If that still doesn't work, force the roomba to reset. Remove the 4 screws and then remove the battery. Wait a couple seconds, then put it back in along with the screws. You should hear a little happy tune and serial communication should now work.  
+      3. Battery may be dead. Charge the roomba!
 
 
 * Can't run ROS or `roslaunch` `ca_tools joy_teleop` from another computer  
