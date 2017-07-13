@@ -253,3 +253,13 @@ Behaviour description of the ground robot and obstacle robot according to the [o
 | Normal trajectory    | foward @ 0.33 m/s                             | 10 m diameter CW circle centered on arena @ 0.33 m/s |
 | Interactions         | - Bumper: 180° CW<br>  - Top switch: 45° CW   | None                                                 |
 | Noise/random         | - Every 20 seconds: 180° CW<br>  - Every 5 seconds, while moving: 0° ≤ angle ≤ 20° CCW  | None       |
+
+## Hardware
+
+Parts list:
+
+* Raspberry Pi 3 (because it has built-in Wi-Fi)
+* Power bank (make sure it can output >= 2.5 A per port; [this one](https://www.amazon.ca/dp/B00Z9QVE4Q/) works)
+* Power cable (using a short cable like [these](https://www.amazon.ca/dp/B01C5N6D96/) is probably a good idea)  
+  Tip: disconnect the RPi power cable when not using the robot. That seems to drain the power bank very quickly even if the RPi is turned off.
+
