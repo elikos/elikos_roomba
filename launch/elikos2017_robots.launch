@@ -1,19 +1,33 @@
 <launch>
+    <node pkg="tf" type="static_transform_publisher" name="elikos_arena_origin" args="0.0 0.0 0.0 0.0 0.0 0.0 world elikos_arena_origin 100"/>
+
     <include file="$(find elikos_roomba)/launch/service_redirect.launch">
         <arg name="robot_qty" value="2" />
     </include>
     
-    <include file="$(find elikos_roomba)/launch/robot_ground.launch">
-        <arg name="robot_id" value="1" />
-        <arg name="pos_x" value="-1.0" />
-        <arg name="pos_y" value="0.0" />
-        <arg name="yaw" value="0.0" />
-    </include>
+    <group ns="robot1">
+        <node name="groundrobot_node" pkg="elikos_roomba" type="groundrobot_node" output="screen">
+            <param name="robot_id" value="1" />
+        </node>
+        <node name="robotviz_node" pkg="elikos_roomba" type="robotviz_node" output="screen">
+            <param name="init_pos_x" value="-1.0" />
+            <param name="init_pos_y" value="0.0" />
+            <param name="init_pos_z" value="0.0" />
+            <param name="init_yaw" value="0.0" />
+            <param name="robot_id" value="1" />
+        </node>
+    </group>
 
-    <include file="$(find elikos_roomba)/launch/robot_ground.launch">
-        <arg name="robot_id" value="2" />
-        <arg name="pos_x" value="2.0" />
-        <arg name="pos_y" value="2.0" />
-        <arg name="yaw" value="3.1415" />
-    </include>
+    <group ns="robot2">
+        <node name="groundrobot_node" pkg="elikos_roomba" type="groundrobot_node" output="screen">
+            <param name="robot_id" value="2" />
+        </node>
+        <node name="robotviz_node" pkg="elikos_roomba" type="robotviz_node" output="screen">
+            <param name="init_pos_x" value="2.0" />
+            <param name="init_pos_y" value="2.0" />
+            <param name="init_pos_z" value="0.0" />
+            <param name="init_yaw" value="3.1415" />
+            <param name="robot_id" value="2" />
+        </node>
+    </group>
 </launch>
