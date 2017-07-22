@@ -3,8 +3,10 @@
 #include <wiringPi.h> // Make sure the wiringPi library is installed
 #include <std_srvs/Empty.h>
 
-//broadcom pin number
+// broadcom pin number
+// see BCM 17: https://pinout.xyz/pinout/wiringpi
 #define TOPSWITCH_PIN 17
+// connect switch to TOPSWITCH_PIN and a ground pin
 
 static const std::string TOPSWITCHSTATE_TOPIC_NAME = "topswitch_state";
 static const std::string TOPSWITCH_SERVICE_NAME = "topswitch_trigger";
