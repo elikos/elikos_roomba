@@ -99,7 +99,7 @@ It interacts with `create_autonomy` through its topics. It also has a node to ma
 
 To have multiple robots running on the same `roscore`:  
    * start a `roscore` on a computer (preferably not one of the RPis), and note the IP
-   * for every robot `i`
+   * for every robot `i`, starting from `i=1`
       * on RPi through SSH:
          * set `ROS_MASTER_URI` (pointing to the above IP)
          * set `ROS_IP` (pointing to this RPi)
