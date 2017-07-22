@@ -5,15 +5,15 @@
     
     <include file="$(find elikos_roomba)/launch/robot_ground.launch">
         <arg name="robot_id" value="1" />
-        <arg name="init_pos_x" value="-1.0" />
-        <arg name="init_pos_y" value="0.0" />
-        <arg name="init_yaw" value="0.0" />
+        <arg name="pos_x" value="-1.0" />
+        <arg name="pos_y" value="0.0" />
+        <arg name="yaw" value="0.0" />
     </include>
 
     <include file="$(find elikos_roomba)/launch/robot_ground.launch">
         <arg name="robot_id" value="2" />
-        <arg name="init_pos_x" value="2.0" />
-        <arg name="init_pos_y" value="2.0" />
-        <arg name="init_yaw" value="3.1415" />
+        <arg name="pos_x" value="2.0" />
+        <arg name="pos_y" value="2.0" />
+        <arg name="yaw" value="3.1415" />
     </include>
 </launch>
