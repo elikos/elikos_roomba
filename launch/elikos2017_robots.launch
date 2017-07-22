@@ -1,0 +1,19 @@
+<launch>
+    <include file="$(find elikos_roomba)/launch/service_redirect.launch">
+        <arg name="robot_qty" value="2" />
+    </include>
+    
+    <include file="$(find elikos_roomba)/launch/robot_ground.launch">
+        <param name="robot_id" value="1" />
+        <param name="init_pos_x" value="-1.0" />
+        <param name="init_pos_y" value="0.0" />
+        <param name="init_yaw" value="0.0" />
+    </include>
+
+    <include file="$(find elikos_roomba)/launch/robot_ground.launch">
+        <param name="robot_id" value="2" />
+        <param name="init_pos_x" value="2.0" />
+        <param name="init_pos_y" value="2.0" />
+        <param name="init_yaw" value="3.1415" />
+    </include>
+</launch>
