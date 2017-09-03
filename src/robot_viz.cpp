@@ -4,6 +4,8 @@ RobotViz::RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_y
     : n_(n),
       r_id_(r_id)
 {
+    loop_hz_ = LOOP_RATE;
+
     // setup subscribers
     cmdVel_sub_ = n.subscribe(CMDVEL_TOPIC_NAME, 10, &RobotViz::cmdVelCallback, this);
     robotState_sub_ = n.subscribe(ROBOTSTATE_TOPIC_NAME, 10, &RobotViz::robotStateCallback, this);
@@ -54,7 +56,6 @@ void RobotViz::cmdVelCallback(const geometry_msgs::Twist::ConstPtr& msg) {
 
         updatePose(timeDiffSecs, linVel, angVel);
         updatePoseMsgs();
-        publishPoseMsgs();
 
         time_last_ = time_now_;
     }
@@ -99,6 +100,32 @@ void RobotViz::updatePoseMsgs() {
 void RobotViz::publishPoseMsgs() {
     pose_pub_.publish(pose_msg_);
     tf_br_.sendTransform(tf::StampedTransform(tf_, ros::Time::now(), TF_NAME_BASE, tf_robot_));
+}
+
+void RobotViz::update() {
+    publishPoseMsgs();
+}
+
+void RobotViz::spinOnce()
+{
+  update();
+  ros::spinOnce();
+}
+
+void RobotViz::spin()
+{
+  ros::Rate rate(loop_hz_);
+
+  while (ros::ok())
+  {
+    spinOnce();
+
+    is_running_slowly_ = !rate.sleep();
+    if (is_running_slowly_)
+    {
+      ROS_WARN("[ROBOT VIZ] Loop running slowly.");
+    }
+  }
 }
 
 /*===========================
@@ -154,7 +181,7 @@ int main(int argc, char **argv)
     
     try
     {
-        ros::spin();
+        robotviz_.spin();
     }
     catch (std::runtime_error& e)
     {

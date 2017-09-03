@@ -30,6 +30,8 @@ class RobotViz
     
     protected:
         ros::NodeHandle& n_;
+        double loop_hz_;
+        bool is_running_slowly_;
 
         int r_id_;
         std::string tf_robot_;
@@ -77,6 +79,11 @@ class RobotViz
          * Update
          *===========================*/
         /*
+         * Update; called every spinOnce()
+         */
+        void update();
+
+        /*
          * Update pose
          */
         void updatePose(double timeDiffSecs, double linVel, double angVel);
@@ -90,6 +97,11 @@ class RobotViz
          * Publish pose messages (PoseStamped and tf)
          */
         void publishPoseMsgs();
+
+        /*
+         * ROS spin once, called on every loop
+         */
+        void spinOnce();
     
     public:
         /*
@@ -118,6 +130,11 @@ class RobotViz
          * Concatenate string and int (because other methods weren't working)
          */
         std::string catStringInt(std::string strng, int eent);
+
+        /*
+         * ROS spin. Called only once (by node); contains ROS while loop
+         */
+        void spin();
 };
 
 #endif  // ELIKOS_ROOMBA_ROBOT_VIZ_H
