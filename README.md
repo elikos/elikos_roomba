@@ -95,6 +95,9 @@ It interacts with `create_autonomy` through its topics. It also has a node to ma
 * `/robot$robot_id/topswitch_trigger`  
    * usually called by `topswitch_node` when top switch of robot with id `$robot_id` is triggered
 
+* `/robot$robot_id/bumper_trigger`  
+   * simulate triggering of bumper of robot with id `$robot_id`
+
 ## Using multiple robots
 
 To have multiple robots running on the same `roscore`:  
