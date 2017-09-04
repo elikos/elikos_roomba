@@ -4,7 +4,8 @@
 #include "elikos_roomba/robot.h"        // use topic names, service names, and other values
 
 // names
-static const std::string ROBOT_NAMESPACE_PREFIX = "robot";      // robot namespace prefix (only missing robot id)
+static const std::string GROUNDROBOT_NAMESPACE_PREFIX = "groundrobot";      // ground robot namespace prefix (only missing robot id)
+static const std::string OBSTACLEROBOT_NAMESPACE_PREFIX = "obstaclerobot";  // obstacle robot namespace prefix (only missing robot id)
 
 
 class ServiceRedirect
@@ -20,19 +21,27 @@ class ServiceRedirect
         /* Global robot toggle activate service */
         ros::ServiceServer toglActivate_srv_;
 
-        /* Robot activation service clients */
-        std::vector<ros::ServiceClient> activate_srv_clients_;
-        /* Robot deactivation service clients */
-        std::vector<ros::ServiceClient> deactivate_srv_clients_;
-        /* Robot toggle activate service clients */
-        std::vector<ros::ServiceClient> toglActivate_srv_clients_;
+        /* Ground robot activation service clients */
+        std::vector<ros::ServiceClient> grndbot_activate_srv_clients_;
+        /* Ground robot deactivation service clients */
+        std::vector<ros::ServiceClient> grndbot_deactivate_srv_clients_;
+        /* Ground robot toggle activate service clients */
+        std::vector<ros::ServiceClient> grndbot_toglActivate_srv_clients_;
+
+        /* Obstacle robot activation service clients */
+        std::vector<ros::ServiceClient> obsbot_activate_srv_clients_;
+        /* Obstacle robot deactivation service clients */
+        std::vector<ros::ServiceClient> obsbot_deactivate_srv_clients_;
+        /* Obstacle robot toggle activate service clients */
+        std::vector<ros::ServiceClient> obsbot_toglActivate_srv_clients_;
 
         std_srvs::Empty srv_;
     
     protected:
         ros::NodeHandle& n_;
 
-        int robotQty_;
+        int groundrobotQty_;
+        int obstaclerobotQty_;
 
         /*===========================
          * Callbacks
@@ -55,15 +64,16 @@ class ServiceRedirect
     public:
         /*
          * Constructor
-         * robotQty: number of robots
+         * groundrobotQty: number of ground robots
+         * obstaclerobotQty: number of obstacle robots
          */
-        ServiceRedirect(ros::NodeHandle& n, int robotQty);
+        ServiceRedirect(ros::NodeHandle& n, int groundrobotQty, int obstaclerobotQty);
         ~ServiceRedirect();
 
         /*
          * Call individual services in vector corresponding to pointer
          */
-        void callServiceVector(std::vector<ros::ServiceClient>* srv_clients);
+        void callServiceVector(std::vector<ros::ServiceClient>* srv_clients, int botQty);
 
         /*
          * Concatenate string and int (because other methods weren't working)
