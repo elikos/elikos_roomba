@@ -14,7 +14,7 @@ RobotViz::RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_y
     // setup publishers
     pose_pub_ = n.advertise<geometry_msgs::PoseStamped>(ROBOTPOSE_TOPIC_NAME, ROBOTSTATE_TOPIC_QUEUESIZE);
 
-    // create robot tf name with id
+    // create robot tf name with id and type
     tf_robot_ = catStringInt(robotType_ + TF_ROBOT_PREFIX, r_id_);
 
     // initial state
@@ -153,7 +153,7 @@ tf::Transform RobotViz::createTfFromPosYaw(tf::Vector3 pos, double yaw) {
 }
 
 void RobotViz::ROS_INFO_STREAM_ROBOT(std::string message) {
-    ROS_INFO_STREAM("[" << "ROBOT VIZ " << robotType_ << r_id_ << "] " << message);
+    ROS_INFO_STREAM("[" << "ROBOT VIZ " << robotType_ << "robot" << r_id_ << "] " << message);
 }
 
 std::string RobotViz::catStringInt(std::string strng, int eent) {

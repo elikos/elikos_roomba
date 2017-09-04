@@ -6,6 +6,7 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
+        - /Grid1
       Splitter Ratio: 0.5
     Tree Height: 926
   - Class: rviz/Selection
@@ -45,7 +46,7 @@ Visualization Manager:
         Y: 0
         Z: 0
       Plane: XY
-      Plane Cell Count: 10
+      Plane Cell Count: 5
       Reference Frame: <Fixed Frame>
       Value: true
     - Class: rviz/TF
@@ -183,5 +184,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 1438
-  X: 1060
+  X: 1059
   Y: 0

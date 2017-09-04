@@ -1,0 +1,10 @@
+<launch>
+    <!-- Arguments -->
+    <arg name="groundrobot_qty" default="1" />
+    <arg name="arena_dimension" default="5" />
+    
+    <node name="arenamanager_node" pkg="elikos_roomba" type="arenamanager_node" output="screen">
+        <param name="groundrobot_qty" value="$(arg groundrobot_qty)" />
+        <param name="arena_dimension" value="$(arg arena_dimension)" />
+    </node>
+</launch>

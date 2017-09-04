@@ -17,6 +17,7 @@ static const std::string ROBOTSTATE_TOPIC_NAME = "state";             // publish
 static const std::string ACTIVATE_SERVICE_NAME = "activate";          // service, activate robot
 static const std::string DEACTIVATE_SERVICE_NAME = "deactivate";      // service, deactivate robot
 static const std::string TOGGLEACT_SERVICE_NAME = "toggle_activate";  // service, toggle robot activation
+static const std::string BUMPER_SERVICE_NAME = "bumper_trigger";      // exposed as feature for robot viz and such
 // number parameters
 static const int CMDVEL_TOPIC_QUEUESIZE = 30;
 static const int ROBOTSTATE_TOPIC_QUEUESIZE = 10;

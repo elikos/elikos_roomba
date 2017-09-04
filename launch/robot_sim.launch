@@ -54,4 +54,9 @@
     <node pkg="rosservice" type="rosservice" name="gr1activate" args="call --wait /groundrobot1/activate"/>
     <node pkg="rosservice" type="rosservice" name="gr2activate" args="call --wait /groundrobot2/activate"/>
     <node pkg="rosservice" type="rosservice" name="or1activate" args="call --wait /obstaclerobot1/activate"/>
+
+    <include file="$(find elikos_roomba)/launch/arenamanager.launch">
+        <arg name="groundrobot_qty" value="2" />
+        <arg name="arena_dimension" value="5" />
+    </include>
 </launch>
