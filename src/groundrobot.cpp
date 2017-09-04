@@ -8,6 +8,7 @@ GroundRobot::GroundRobot(ros::NodeHandle& n, int r_id)
 
     // setup services
     topSwitch_srv_ = n.advertiseService(TOPSWITCH_SERVICE_NAME, &GroundRobot::topSwitchCallback, this);
+    bumper_srv_ = n.advertiseService(BUMPER_SERVICE_NAME, &GroundRobot::bumperTrigCallback, this);
 
     // setup timers (oneshot TRUE, autostart FALSE)
     timeout_tim_ = n.createTimer(ros::Duration(TIMEOUT_DURATION), &GroundRobot::timeoutCallback, this, true, false);
@@ -97,10 +98,20 @@ void GroundRobot::bumperCallback(const ca_msgs::Bumper::ConstPtr& msg) {
     // collision if either bumper is pressed
     if (msg->is_left_pressed || msg->is_right_pressed) {
         Robot::ROS_INFO_STREAM_ROBOT("Bumper collision");
-        // if robot is going forward
-        if (isRobotState(FORWARD)) {
-            startBumperTurn();
-        }
+        bumperTrig();
+    }
+}
+
+bool GroundRobot::bumperTrigCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
+    Robot::ROS_INFO_STREAM_ROBOT("Bumper triggered");
+    bumperTrig();
+    return true;
+}
+
+void GroundRobot::bumperTrig() {
+    // if robot is going forward
+    if (isRobotState(FORWARD)) {
+        startBumperTurn();
     }
 }
 

@@ -9,6 +9,7 @@
 // names
 static const std::string TOPSWITCH_SERVICE_NAME = "topswitch_trigger";          // called by topswitch_node
 static const std::string BUMPER_TOPIC_NAME = "bumper";                          // published by create_autonomy
+static const std::string BUMPER_SERVICE_NAME = "bumper_trigger";                // exposed as feature for robot viz and such
 static const std::string GROUNDROBOT_TYPE = "GROUND ROBOT";
 // speeds
 static const float TURN_SPEED = 90.0f*DEG_TO_RAD;                               //[deg/s]*[rad/deg]=[rad/s]
@@ -35,6 +36,9 @@ class GroundRobot : public Robot
          *===========================*/
         /* Top switch service */
         ros::ServiceServer topSwitch_srv_;
+
+        /* Bumper service */
+        ros::ServiceServer bumper_srv_;
 
         /*===========================
          * Subscribers
@@ -69,6 +73,16 @@ class GroundRobot : public Robot
          * Callback class method for bumper contact
          */
         void bumperCallback(const ca_msgs::Bumper::ConstPtr& msg);
+
+        /*
+         * Callback class method for bumper trigger service (used only by sim-related nodes; create_autonomy uses a topic)
+         */
+        bool bumperTrigCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
+
+        /*
+         * Method for bumper trigger (used by bumperCallback() and bumperTrigCallback())
+         */
+        void bumperTrig();
 
         /*
          * Callback class method for timeout timer
