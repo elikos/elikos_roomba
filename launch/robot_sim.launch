@@ -2,10 +2,11 @@
     <node pkg="tf" type="static_transform_publisher" name="elikos_arena_origin" args="0.0 0.0 0.0 0.0 0.0 0.0 world elikos_arena_origin 100"/>
 
     <include file="$(find elikos_roomba)/launch/service_redirect.launch">
-        <arg name="robot_qty" value="3" />
+        <arg name="groundrobot_qty" value="2" />
+        <arg name="obstaclerobot_qty" value="1" />
     </include>
     
-    <group ns="robot1">
+    <group ns="groundrobot1">
         <node name="groundrobot_node" pkg="elikos_roomba" type="groundrobot_node" output="screen">
             <param name="robot_id" value="1" />
         </node>
@@ -15,10 +16,11 @@
             <param name="init_pos_z" value="0.0" />
             <param name="init_yaw" value="0.0" />
             <param name="robot_id" value="1" />
+            <param name="robot_type" value="ground" />
         </node>
     </group>
 
-    <group ns="robot2">
+    <group ns="groundrobot2">
         <node name="groundrobot_node" pkg="elikos_roomba" type="groundrobot_node" output="screen">
             <param name="robot_id" value="2" />
         </node>
@@ -28,26 +30,33 @@
             <param name="init_pos_z" value="0.0" />
             <param name="init_yaw" value="0.0" />
             <param name="robot_id" value="2" />
+            <param name="robot_type" value="ground" />
         </node>
     </group>
 
-    <group ns="robot3">
+    <group ns="obstaclerobot1">
         <node name="obstaclerobot_node" pkg="elikos_roomba" type="obstaclerobot_node" output="screen">
-            <param name="robot_id" value="3" />
+            <param name="robot_id" value="1" />
         </node>
         <node name="robotviz_node" pkg="elikos_roomba" type="robotviz_node" output="screen">
             <param name="init_pos_x" value="-1.0" />
             <param name="init_pos_y" value="0.0" />
             <param name="init_pos_z" value="0.0" />
             <param name="init_yaw" value="0.5" />
-            <param name="robot_id" value="3" />
+            <param name="robot_id" value="1" />
+            <param name="robot_type" value="obstacle" />
         </node>
     </group>
 
     <node pkg="rviz" type="rviz" name="rviz_node" args="-d $(find elikos_roomba)/config/robot_viz.rviz" />
 
     <!-- Call activation services -->
-    <node pkg="rosservice" type="rosservice" name="r1activate" args="call --wait /robot1/activate"/>
-    <node pkg="rosservice" type="rosservice" name="r2activate" args="call --wait /robot2/activate"/>
-    <node pkg="rosservice" type="rosservice" name="r3activate" args="call --wait /robot3/activate"/>
+    <node pkg="rosservice" type="rosservice" name="gr1activate" args="call --wait /groundrobot1/activate"/>
+    <node pkg="rosservice" type="rosservice" name="gr2activate" args="call --wait /groundrobot2/activate"/>
+    <node pkg="rosservice" type="rosservice" name="or1activate" args="call --wait /obstaclerobot1/activate"/>
+
+    <include file="$(find elikos_roomba)/launch/arenamanager.launch">
+        <arg name="groundrobot_qty" value="2" />
+        <arg name="arena_dimension" value="5" />
+    </include>
 </launch>

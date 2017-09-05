@@ -127,6 +127,7 @@ catkin_package(
 ## Your package locations should be listed before other locations
 # include_directories(include)
 include_directories(
+  include ${catkin_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
   include
 )
@@ -151,6 +152,7 @@ add_executable(groundrobot_node src/groundrobot.cpp src/robot.cpp)
 add_executable(obstaclerobot_node src/obstaclerobot.cpp src/robot.cpp)
 add_executable(robotviz_node src/robot_viz.cpp)
 add_executable(serviceredirect_node src/service_redirect.cpp)
+add_executable(arenamanager_node src/arenamanager.cpp)
 
 # Add topswitch node with wiringPi library if not remote computer
 # For remote computer compilation, use:
@@ -184,6 +186,9 @@ target_link_libraries(robotviz_node
   ${catkin_LIBRARIES}
 )
 target_link_libraries(serviceredirect_node
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(arenamanager_node
   ${catkin_LIBRARIES}
 )
 

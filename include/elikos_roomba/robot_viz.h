@@ -34,6 +34,7 @@ class RobotViz
         bool is_running_slowly_;
 
         int r_id_;
+        std::string robotType_;
         std::string tf_robot_;
 
         ros::Time time_last_;
@@ -106,9 +107,8 @@ class RobotViz
     public:
         /*
          * Constructor
-         * botType: std::string with type of robot ("GROUND ROBOT" or "OBSTACLE ROBOT")
          */
-        RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_yaw, int r_id);
+        RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_yaw, int r_id, std::string robotType);
         ~RobotViz();
 
         /*

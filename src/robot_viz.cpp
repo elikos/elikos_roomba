@@ -1,8 +1,9 @@
 #include "elikos_roomba/robot_viz.h"
 
-RobotViz::RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_yaw, int r_id)
+RobotViz::RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_yaw, int r_id, std::string robotType)
     : n_(n),
-      r_id_(r_id)
+      r_id_(r_id),
+      robotType_(robotType)
 {
     loop_hz_ = LOOP_RATE;
 
@@ -13,8 +14,8 @@ RobotViz::RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_y
     // setup publishers
     pose_pub_ = n.advertise<geometry_msgs::PoseStamped>(ROBOTPOSE_TOPIC_NAME, ROBOTSTATE_TOPIC_QUEUESIZE);
 
-    // create robot tf name with id
-    tf_robot_ = catStringInt(TF_ROBOT_PREFIX, r_id_);
+    // create robot tf name with id and type
+    tf_robot_ = catStringInt(robotType_ + TF_ROBOT_PREFIX, r_id_);
 
     // initial state
     isActive_ = false;
@@ -152,7 +153,7 @@ tf::Transform RobotViz::createTfFromPosYaw(tf::Vector3 pos, double yaw) {
 }
 
 void RobotViz::ROS_INFO_STREAM_ROBOT(std::string message) {
-    ROS_INFO_STREAM("[" << "ROBOT VIZ " << r_id_ << "] " << message);
+    ROS_INFO_STREAM("[" << "ROBOT VIZ " << robotType_ << "robot" << r_id_ << "] " << message);
 }
 
 std::string RobotViz::catStringInt(std::string strng, int eent) {
@@ -171,13 +172,15 @@ int main(int argc, char **argv)
     ros::NodeHandle n_p("~");
     double init_pos_x, init_pos_y, init_pos_z, init_yaw;
     int robot_id;
+    std::string robot_type;
     n_p.getParam("init_pos_x", init_pos_x);
     n_p.getParam("init_pos_y", init_pos_y);
     n_p.getParam("init_pos_z", init_pos_z);
     n_p.getParam("init_yaw", init_yaw);
     n_p.getParam("robot_id", robot_id);
+    n_p.getParam("robot_type", robot_type);
 
-    RobotViz robotviz_(n, tf::Vector3(init_pos_x, init_pos_y, init_pos_z), init_yaw, robot_id);
+    RobotViz robotviz_(n, tf::Vector3(init_pos_x, init_pos_y, init_pos_z), init_yaw, robot_id, robot_type);
     
     try
     {
