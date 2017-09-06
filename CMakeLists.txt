@@ -1,6 +1,5 @@
-cmake_minimum_required(VERSION 2.8.3)
 project(elikos_roomba)
-
+cmake_minimum_required(VERSION 2.8.3)
 option(REMOTE "Compile remote computer (without wiringPi)" FALSE)
 
 ## Add support for C++11, supported in ROS Kinetic and newer
@@ -149,6 +148,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(groundrobot_node src/groundrobot.cpp src/robot.cpp)
+add_dependencies(groundrobot_node ca_msgs_generate_messages_cpp)
 add_executable(obstaclerobot_node src/obstaclerobot.cpp src/robot.cpp)
 add_executable(robotviz_node src/robot_viz.cpp)
 add_executable(serviceredirect_node src/service_redirect.cpp)
@@ -244,3 +244,4 @@ add_executable(roombabot_node src/roombabot.cpp)
 target_link_libraries(roombabot_node
     ${catkin_LIBRARIES}
 )
+
