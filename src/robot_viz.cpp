@@ -13,6 +13,7 @@ RobotViz::RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_y
 
     // setup publishers
     pose_pub_ = n.advertise<geometry_msgs::PoseStamped>(ROBOTPOSE_TOPIC_NAME, ROBOTSTATE_TOPIC_QUEUESIZE);
+    marker_pub_ = n.advertise<visualization_msgs::Marker>(MARKER_TOPIC_NAME, MARKER_TOPIC_QUEUESIZE);
 
     // create robot tf name with id and type
     tf_robot_ = catStringInt(robotType_ + TF_ROBOT_PREFIX, r_id_);
@@ -31,6 +32,9 @@ RobotViz::RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_y
 
     // create pose msgs
     updatePoseMsgs();
+
+    // generate mesh resource for marker
+    mesh_resource_ = generateMeshResource();
 
     ROS_INFO_STREAM_ROBOT("Initialization done (inactive)");
 }
@@ -103,8 +107,37 @@ void RobotViz::publishPoseMsgs() {
     tf_br_.sendTransform(tf::StampedTransform(tf_, ros::Time::now(), TF_NAME_BASE, tf_robot_));
 }
 
+void RobotViz::publishMarker() {
+    // create message
+    visualization_msgs::Marker marker_msg;
+    marker_msg.header.frame_id = catStringInt("/" + robotType_ + "robot", r_id_);
+    marker_msg.header.stamp = ros::Time::now();
+    //marker_msg.ns = "myns";
+    marker_msg.id = 0;
+    marker_msg.type = visualization_msgs::Marker::MESH_RESOURCE;
+    marker_msg.action = visualization_msgs::Marker::ADD;
+    marker_msg.mesh_resource = MESH_RESOURCE_PREFIX + mesh_resource_;
+    marker_msg.pose.position.x = 0.0;
+    marker_msg.pose.position.y = 0.0;
+    marker_msg.pose.position.z = 0.0;
+    marker_msg.pose.orientation.x = 0.0;
+    marker_msg.pose.orientation.y = 0.0;
+    marker_msg.pose.orientation.z = 0.0;
+    marker_msg.pose.orientation.w = 1.0;
+    marker_msg.scale.x = 1.0;
+    marker_msg.scale.y = 1.0;
+    marker_msg.scale.z = 1.0;
+    marker_msg.color.r = 1.0f;
+    marker_msg.color.g = 1.0f;
+    marker_msg.color.b = 1.0f;
+    marker_msg.color.a = 1.0f;
+    marker_msg.lifetime = ros::Duration();
+    marker_pub_.publish(marker_msg);
+}
+
 void RobotViz::update() {
     publishPoseMsgs();
+    publishMarker();
 }
 
 void RobotViz::spinOnce()
@@ -132,6 +165,19 @@ void RobotViz::spin()
 /*===========================
  * Other utilities
  *===========================*/
+
+std::string RobotViz::generateMeshResource() {
+    // TODO: use static const
+    std::string frame_res;
+
+    if (robotType_ == "obstacle") {
+        frame_res = "obs_10.dae";
+    } else if (robotType_ == "ground") {
+        frame_res = "robot_red.dae";
+    }
+    
+    return frame_res;
+}
 
 geometry_msgs::PoseStamped RobotViz::createPoseStampedFromPosYaw(tf::Vector3 pos, double yaw) {
     geometry_msgs::PoseStamped pose_msg;
