@@ -25,7 +25,7 @@ GroundRobot::GroundRobot(ros::NodeHandle& n, int r_id)
     //ROS_INFO_STREAM_ROBOT("Parent initialization done");
 
     // seed rand()
-    std::srand(ros::Time::now().toSec());
+    std::srand(ros::WallTime::now().toNSec());
 }
 
 GroundRobot::~GroundRobot() {
