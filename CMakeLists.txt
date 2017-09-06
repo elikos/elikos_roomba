@@ -240,8 +240,8 @@ target_link_libraries(arenamanager_node
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-add_executable(roombabot_node src/roombabot.cpp)
-target_link_libraries(roombabot_node
-    ${catkin_LIBRARIES}
-)
+#add_executable(roombabot_node src/roombabot.cpp)
+#target_link_libraries(roombabot_node
+#    ${catkin_LIBRARIES}
+#)
 
