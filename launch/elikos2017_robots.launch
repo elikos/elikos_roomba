@@ -5,7 +5,7 @@
         <arg name="robot_qty" value="2" />
     </include>
     
-    <group ns="robot1">
+    <group ns="groundrobot1">
         <node name="groundrobot_node" pkg="elikos_roomba" type="groundrobot_node" output="screen">
             <param name="robot_id" value="1" />
         </node>
@@ -15,10 +15,11 @@
             <param name="init_pos_z" value="0.0" />
             <param name="init_yaw" value="0.0" />
             <param name="robot_id" value="1" />
+            <param name="robot_type" value="ground" />
         </node>
     </group>
 
-    <group ns="robot2">
+    <group ns="groundrobot2">
         <node name="groundrobot_node" pkg="elikos_roomba" type="groundrobot_node" output="screen">
             <param name="robot_id" value="2" />
         </node>
@@ -28,6 +29,7 @@
             <param name="init_pos_z" value="0.0" />
             <param name="init_yaw" value="3.1415" />
             <param name="robot_id" value="2" />
+            <param name="robot_type" value="ground" />
         </node>
     </group>
 </launch>
