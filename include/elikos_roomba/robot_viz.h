@@ -4,12 +4,16 @@
 #include "elikos_roomba/robot.h"        // use topic names, service names, and other values
 #include <tf/transform_broadcaster.h>
 #include <geometry_msgs/PoseStamped.h>
+#include <visualization_msgs/Marker.h>
 
 // names (topics and services)
 static const std::string TF_NAME_BASE = "elikos_arena_origin";        // origin
 static const std::string ROBOTPOSE_TOPIC_NAME = "pose";               // pose message
 static const std::string TF_ROBOT_PREFIX = "robot";                   // robot tf name prefix
-
+// marker/model
+static const std::string MESH_RESOURCE_PREFIX = "package://elikos_roomba/models/";
+static const std::string MARKER_TOPIC_NAME = "marker";
+static const int MARKER_TOPIC_QUEUESIZE = 10;
 
 class RobotViz
 {
@@ -19,6 +23,7 @@ class RobotViz
          *===========================*/
         ros::Publisher pose_pub_;
         tf::TransformBroadcaster tf_br_;
+        ros::Publisher marker_pub_;
 
         /*===========================
          * Subscribers
@@ -40,6 +45,8 @@ class RobotViz
         ros::Time time_last_;
         ros::Time time_now_;
         ros::Duration time_diff_;
+
+        std::string mesh_resource_;
         
         /*===========================
          * Robot state
@@ -100,6 +107,11 @@ class RobotViz
         void publishPoseMsgs();
 
         /*
+         * Publish marker message
+         */
+        void publishMarker();
+
+        /*
          * ROS spin once, called on every loop
          */
         void spinOnce();
@@ -130,6 +142,11 @@ class RobotViz
          * Concatenate string and int (because other methods weren't working)
          */
         std::string catStringInt(std::string strng, int eent);
+
+        /*
+         * Generate mesh resource for marker depending on robot type and id
+         */
+        std::string generateMeshResource();
 
         /*
          * ROS spin. Called only once (by node); contains ROS while loop
