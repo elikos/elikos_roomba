@@ -21,9 +21,10 @@ It interacts with `create_autonomy` through its topics. It also has a node to ma
    * to be launched locally on the Raspberry Pi  
    * *arguments*  
       * `robot_id` : unique id of robot [1]
+      * `robot_type` : type of robot (`ground` or `obstacle`) [`ground`]
 
 * `robot_ground.launch`  
-   * launches `groundrobot_node` and `robotviz_node` inside a `/robot$robot_id`  namespace  
+   * launches `groundrobot_node` and `robotviz_node` inside a `/groundrobot$robot_id`  namespace  
    * to be launched on a remote computer or on the Raspberry Pi itself  
    * *arguments*  
       * `robot_id` : unique id of robot [1]
@@ -42,18 +43,20 @@ It interacts with `create_autonomy` through its topics. It also has a node to ma
 
 * `robot_sim.launch`  
    * to test `robot_viz`  
-   * launches RVIZ, a `serviceredirect_node` and 2 pairs of `groundrobot_node`+`robotviz_node` and a pair of `obstaclerobot_node`+`robotviz_node` inside `/robot$robot_id` namespaces  
-
-* `joy_teleop.launch`  
-   * launches a `joy_teleop` node inside a `/robot$robot_id` namespace  
-   * to be launched on a computer with an Xbox 360/Xbox One controller  
-   * *arguments*  
-      * `robot_id` : unique id of robot to control [1]
+   * launches RVIZ, a `serviceredirect_node` and 2 pairs of `groundrobot_node`+`robotviz_node` and a pair of `obstaclerobot_node`+`robotviz_node` inside `/$(arg robot_type)robot$(arg robot_id)` namespaces  
 
 * `service_redirect.launch`  
    * launches a `serviceredirect_node`  
    * *arguments*  
-      * `robot_qty` : number of robots to manage [1]
+      * `groundrobot_qty` : number of ground robots to manage [1]
+      * `obstaclerobot_qty` : number of obstacle robots to manage [1]
+
+* `joy_teleop.launch`  
+   * launches a `joy_teleop` node inside a `/$(arg robot_type)robot$(arg robot_id)` namespace  
+   * to be launched on a computer with an Xbox 360/Xbox One controller  
+   * *arguments*  
+      * `robot_id` : unique id of robot to control [1]
+      * `robot_type` : type of robot (`ground` or `obstacle`) [`ground`]
 
 ## Nodes
 
@@ -71,32 +74,39 @@ It interacts with `create_autonomy` through its topics. It also has a node to ma
    * manages the top switch on the Raspberry Pi through GPIO
 
 * `robotviz_node`  
-   * visualize position of robot in `/robot$robot_id` namespace with RVIZ  
+   * visualize position of robot in `/$(arg robot_type)robot$(arg robot_id)` namespace with RVIZ  
    * *parameters*  
       * `robot_id` : unique id of robot
+      * `robot_type` : type of robot (`ground` or `obstacle`)
       * `init_pos_x` : initial x position of robo (meters)
       * `init_pos_y` : initial y position of robot (meters)
       * `init_pos_z` : initial z position of robot (meters) (should be 0.0)
       * `init_yaw` : initial yaw of robots (radians)
 
 * `serviceredirect_node`  
-   * offer global activation/deactivation/toggle services and redirect service calls to all robots inside namespaces (from `/robot1` to `/robot$robot_qty`)  
+   * offer global activation/deactivation/toggle services and redirect service calls to all robots inside namespaces (e.g. from `/groundrobot1` to `/groundrobot$groundrobot_qty`)  
    * *parameters*  
-      * `robot_qty` : number of robots to manage
+      * `groundrobot_qty` : number of ground robots to manage
+      * `obstaclerobot_qty` : number of obstacle robots to manage
 
 ## Services
 
 * `/toggle_activate`  
-   * activate/deactivate all robots
+   * activate/deactivate all robots (via `serviceredirect_node`)
 
-* `/robot$robot_id/toggle_activate`  
-   * activate/deactivate robot with id `$robot_id`
+* `/$(arg robot_type)robot$(arg robot_id)/toggle_activate`  
+   * activate/deactivate robot with id `$robot_id` and type `$robot_type`
+   * *example*
+       * For a ground robot with id 1
+          ````
+          rosservice call /groundrobot1/toggle_activate
+          ````
 
-* `/robot$robot_id/topswitch_trigger`  
+* `/$(arg robot_type)robot$(arg robot_id)/topswitch_trigger`  
    * usually called by `topswitch_node` when top switch of robot with id `$robot_id` is triggered
 
-* `/robot$robot_id/bumper_trigger`  
-   * simulate triggering of bumper of robot with id `$robot_id`
+* `/$(arg robot_type)robot$(arg robot_id)/bumper_trigger`  
+   * simulate triggering of bumper of robot with id `$robot_id` and type `$robot_type`
 
 ## Using multiple robots
 
@@ -118,13 +128,13 @@ To have multiple robots running on the same `roscore`:
           ````
           roslaunch elikos_roomba robot_obstacle.launch robot_id:=i
           ````
-      * or launch `joy_teleop.launch` with corresponding `robot_id` on a computer with an Xbox controller
+      * or launch `joy_teleop.launch` with corresponding `robot_id` and `robot_type` on a computer with an Xbox controller
           ````
-          roslaunch elikos_roomba joy_teleop.launch robot_id:=i
+          roslaunch elikos_roomba joy_teleop.launch robot_id:=i robot_type:=TYPE
           ````
-   * launch `service_redirect.launch` with the number of robots `n`
+   * launch `service_redirect.launch` with the number of ground robots `ng` and number of obstacle robots `no`
        ````
-       roslaunch elikos_roomba service_redirect.launch robot_qty:=n
+       roslaunch elikos_roomba service_redirect.launch groundrobot_qty:=ng obstaclerobot_qty:=no
        ````
    * activate robots
        ````

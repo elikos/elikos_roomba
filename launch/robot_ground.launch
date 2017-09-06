@@ -8,7 +8,7 @@
 
     <node pkg="tf" type="static_transform_publisher" name="elikos_arena_origin" args="0.0 0.0 0.0 0.0 0.0 0.0 world elikos_arena_origin 100"/>
     
-    <group ns="robot$(arg robot_id)">
+    <group ns="groundrobot$(arg robot_id)">
         <node name="groundrobot_node" pkg="elikos_roomba" type="groundrobot_node" output="screen">
             <param name="robot_id" value="$(arg robot_id)" />
         </node>
@@ -18,6 +18,7 @@
             <param name="init_pos_z" value="$(arg pos_z)" />
             <param name="init_yaw" value="$(arg yaw)" />
             <param name="robot_id" value="$(arg robot_id)" />
+            <param name="robot_type" value="ground" />
         </node>
     </group>
 </launch>
