@@ -93,11 +93,6 @@ class Robot
         void publishCmdVel(geometry_msgs::Twist cmdVel_msg);
 
         /*
-         * Get CmdVel message (Twist) from linear (x) velocity and angular (z) velocity
-         */
-        geometry_msgs::Twist getCmdVelMsg(float lin_x, float ang_z);
-
-        /*
          * Publish robot state message (String)
          */
         void publishRobotState();
@@ -149,6 +144,11 @@ class Robot
          */
         Robot(ros::NodeHandle& n, std::string botType, int r_id);
         ~Robot();
+
+        /*
+         * Get CmdVel message (Twist) from linear (x) velocity and angular (z) velocity
+         */
+        geometry_msgs::Twist getCmdVelMsg(float lin_x, float ang_z);
 
         /*
          * ROS spin. Called only once (by node); contains ROS while loop
