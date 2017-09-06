@@ -186,6 +186,7 @@ To have multiple robots running on the same `roscore`:
    ````
    catkin build -DREMOTE=TRUE
    ````
+   If you don't have the catkin_tools package, you can use `catkin_make` as well.
 
 5. Source 
    ````
