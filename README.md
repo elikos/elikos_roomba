@@ -17,7 +17,7 @@ It interacts with `create_autonomy` through its topics. It also has a node to ma
 ## Launch files
 
 * `rpi_local.launch`  
-   * launches `create_autonomy/ca_driver` with a `topswitch_node` inside a `/robot$robot_id` namespace  
+   * launches `create_autonomy/ca_driver` with a `topswitch_node` inside a `/$(arg robot_type)robot$(arg robot_id)` namespace  
    * to be launched locally on the Raspberry Pi  
    * *arguments*  
       * `robot_id` : unique id of robot [1]
@@ -33,7 +33,7 @@ It interacts with `create_autonomy` through its topics. It also has a node to ma
       * `yaw` : initial yaw of robots (radians) [0.0]
 
 * `robot_obstacle.launch`  
-   * launches `obstaclerobot_node` and `robotviz_node` inside a `/robot$robot_id` namespace  
+   * launches `obstaclerobot_node` and `robotviz_node` inside a `/obstaclerobot$robot_id` namespace  
    * to be launched on a remote computer or on the Raspberry Pi itself  
    * *arguments*  
       * `robot_id` : unique id of robot [1]
@@ -116,9 +116,9 @@ To have multiple robots running on the same `roscore`:
       * on RPi through SSH:
          * set `ROS_MASTER_URI` (pointing to the above IP)
          * set `ROS_IP` (pointing to this RPi)
-         * launch `rpi_local.launch` with a unique `robot_id`
+         * launch `rpi_local.launch` with a unique `robot_id` and a corresponding `robot_type`
              ````
-             roslaunch elikos_roomba rpi_local.launch robot_id:=i
+             roslaunch elikos_roomba rpi_local.launch robot_id:=i robot_type:=TYPE
              ````
       * on host computer or RPi through SSH, launch `robot_ground.launch` or `robot_obstacle.launch` with corresponding `robot_id`
           ````
