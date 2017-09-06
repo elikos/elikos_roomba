@@ -1,12 +1,13 @@
 <launch>
   <!-- Arguments -->
   <arg name="robot_id" default="1" />
+  <arg name="robot_type" default="ground" />
 
   <arg name="joy_dev" default="/dev/input/js0" />
   <arg name="joy_config" default="xbox360_mod" />
   <arg name="teleop_config" default="$(find elikos_roomba)/config/$(arg joy_config).yaml" />
 
-  <group ns="robot$(arg robot_id)">
+  <group ns="$(arg robot_type)robot$(arg robot_id)">
     <rosparam file="$(arg teleop_config)" command="load" />
     
     <node pkg="joy" type="joy_node" name="joy_node">
