@@ -166,20 +166,28 @@ void RobotViz::createMarkerMsg() {
     ros::NodeHandle nh("~");
     std::string color = "";
     nh.getParam("robot_color", color);
-    if(color == "green")
+    if (color == "green")
     {
         marker_msg_.color.r = 0.8f;
         marker_msg_.color.g = 1.0f;
         marker_msg_.color.b = 0.8f;
         marker_msg_.color.a = 1.0f;
     }
-    else
+    else if (color == "red")
     {
         marker_msg_.color.r = 1.0f;
         marker_msg_.color.g = 0.8f;
         marker_msg_.color.b = 0.8f;
         marker_msg_.color.a = 1.0f;
     }
+    else
+    {
+        marker_msg_.color.r = 1.0f;
+        marker_msg_.color.g = 1.0f;
+        marker_msg_.color.b = 1.0f;
+        marker_msg_.color.a = 1.0f;
+    }
+
 
     marker_msg_.lifetime = ros::Duration();
 }
