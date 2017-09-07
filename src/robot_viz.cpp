@@ -170,13 +170,12 @@ void RobotViz::createMarkerMsg() {
 }
 
 std::string RobotViz::generateMeshResource() {
-    // TODO: use static const
     std::string frame_res;
 
     if (robotType_ == "obstacle") {
-        frame_res = "obs_10.dae";
+        frame_res = OBSTACLE_ROBOT_MODEL_FILE;
     } else if (robotType_ == "ground") {
-        frame_res = "robot_red.dae";
+        frame_res = GROUND_ROBOT_MODEL_FILE;
     }
     
     return frame_res;

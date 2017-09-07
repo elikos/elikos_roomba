@@ -14,6 +14,9 @@ static const std::string TF_ROBOT_PREFIX = "robot";                   // robot t
 static const std::string MESH_RESOURCE_PREFIX = "package://elikos_roomba/models/";
 static const std::string MARKER_TOPIC_NAME = "marker";
 static const int MARKER_TOPIC_QUEUESIZE = 10;
+static const std::string OBSTACLE_ROBOT_MODEL_FILE = "obs_10.dae";
+static const std::string GROUND_ROBOT_MODEL_FILE = "robot_red.dae";   // TODO: use parameter for colour
+
 
 class RobotViz
 {
