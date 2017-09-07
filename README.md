@@ -8,9 +8,9 @@ It interacts with `create_autonomy` through its topics. It also has a node to ma
 
 | `elikos_roomba`     |  Topic/service        | Description                                                                                             |
 | :------------------ | :-------------------- |:------------------------------------------------------------------------------------------------------- |
-|  subscriber         | `/bumper`             | Bumper state message (published by `create_autonomy`)                                                   |
-|  publisher          | `/cmd_vel`            | Drives the robot's wheels according to a forward and angular velocity (`create_autonomy` is subscribed) |
-|  service server     | `/topswitch_trigger`  | Top switch trigger call (`topswitch_node` is the service client) |
+|  subscriber         | `bumper`             | Bumper state message (published by `create_autonomy`)                                                   |
+|  publisher          | `cmd_vel`            | Drives the robot's wheels according to a forward and angular velocity (`create_autonomy` is subscribed) |
+|  service server     | `topswitch_trigger`  | Top switch trigger call (`topswitch_node` is the service client) |
 
 -----
 
