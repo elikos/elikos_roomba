@@ -67,6 +67,8 @@ class RobotViz
          *===========================*/
         /* Current pose message */
         geometry_msgs::PoseStamped pose_msg_;
+        /* Current marker message */
+        visualization_msgs::Marker marker_msg_;
         /* Current tf */
         tf::Transform tf_;
 
@@ -122,6 +124,11 @@ class RobotViz
          */
         RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_yaw, int r_id, std::string robotType);
         ~RobotViz();
+
+        /*
+         * Create marker message
+         */
+        void createMarkerMsg();
 
         /*
          * Wrapper for ROS_INFO_STREAM, includes robotType_ string and robot ID in message

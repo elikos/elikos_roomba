@@ -35,6 +35,8 @@ RobotViz::RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_y
 
     // generate mesh resource for marker
     mesh_resource_ = generateMeshResource();
+    // create marker message
+    createMarkerMsg();
 
     ROS_INFO_STREAM_ROBOT("Initialization done (inactive)");
 }
@@ -108,31 +110,8 @@ void RobotViz::publishPoseMsgs() {
 }
 
 void RobotViz::publishMarker() {
-    // create message
-    visualization_msgs::Marker marker_msg;
-    marker_msg.header.frame_id = catStringInt("/" + robotType_ + "robot", r_id_);
-    marker_msg.header.stamp = ros::Time::now();
-    //marker_msg.ns = "myns";
-    marker_msg.id = 0;
-    marker_msg.type = visualization_msgs::Marker::MESH_RESOURCE;
-    marker_msg.action = visualization_msgs::Marker::ADD;
-    marker_msg.mesh_resource = MESH_RESOURCE_PREFIX + mesh_resource_;
-    marker_msg.pose.position.x = 0.0;
-    marker_msg.pose.position.y = 0.0;
-    marker_msg.pose.position.z = 0.0;
-    marker_msg.pose.orientation.x = 0.0;
-    marker_msg.pose.orientation.y = 0.0;
-    marker_msg.pose.orientation.z = 0.0;
-    marker_msg.pose.orientation.w = 1.0;
-    marker_msg.scale.x = 1.0;
-    marker_msg.scale.y = 1.0;
-    marker_msg.scale.z = 1.0;
-    marker_msg.color.r = 1.0f;
-    marker_msg.color.g = 1.0f;
-    marker_msg.color.b = 1.0f;
-    marker_msg.color.a = 1.0f;
-    marker_msg.lifetime = ros::Duration();
-    marker_pub_.publish(marker_msg);
+    marker_msg_.header.stamp = ros::Time::now();
+    marker_pub_.publish(marker_msg_);
 }
 
 void RobotViz::update() {
@@ -165,6 +144,30 @@ void RobotViz::spin()
 /*===========================
  * Other utilities
  *===========================*/
+
+void RobotViz::createMarkerMsg() {
+    marker_msg_.header.frame_id = catStringInt("/" + robotType_ + "robot", r_id_);
+    //marker_msg.ns = "myns";
+    marker_msg_.id = 0;
+    marker_msg_.type = visualization_msgs::Marker::MESH_RESOURCE;
+    marker_msg_.action = visualization_msgs::Marker::ADD;
+    marker_msg_.mesh_resource = MESH_RESOURCE_PREFIX + mesh_resource_;
+    marker_msg_.pose.position.x = 0.0;
+    marker_msg_.pose.position.y = 0.0;
+    marker_msg_.pose.position.z = 0.0;
+    marker_msg_.pose.orientation.x = 0.0;
+    marker_msg_.pose.orientation.y = 0.0;
+    marker_msg_.pose.orientation.z = 0.0;
+    marker_msg_.pose.orientation.w = 1.0;
+    marker_msg_.scale.x = 1.0;
+    marker_msg_.scale.y = 1.0;
+    marker_msg_.scale.z = 1.0;
+    marker_msg_.color.r = 1.0f;
+    marker_msg_.color.g = 1.0f;
+    marker_msg_.color.b = 1.0f;
+    marker_msg_.color.a = 1.0f;
+    marker_msg_.lifetime = ros::Duration();
+}
 
 std::string RobotViz::generateMeshResource() {
     // TODO: use static const
