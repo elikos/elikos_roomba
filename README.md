@@ -78,6 +78,7 @@ It interacts with `create_autonomy` through its topics. It also has a node to ma
    * *parameters*  
       * `robot_id` : unique id of robot
       * `robot_type` : type of robot (`ground` or `obstacle`)
+      * `robot_color` : colour of robot (`red` or `green`)
       * `init_pos_x` : initial x position of robo (meters)
       * `init_pos_y` : initial y position of robot (meters)
       * `init_pos_z` : initial z position of robot (meters) (should be 0.0)
