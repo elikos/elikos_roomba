@@ -89,6 +89,13 @@ It interacts with `create_autonomy` through its topics. It also has a node to ma
       * `groundrobot_qty` : number of ground robots to manage
       * `obstaclerobot_qty` : number of obstacle robots to manage
 
+* `arenamanager_node`
+   * (not currently working)  
+   * checks position estimate of robots (given by their `robotviz_node`) and triggers their bumper if they leave the arena. Can be useful to avoid putting robots back in the arena when testing. Currently only supports ground robots.  
+   * *parameters*  
+      * `groundrobot_qty` : number of ground robots to manage
+      * `arena_dimension` : dimension of (square) arena (meters)
+
 ## Services
 
 * `/toggle_activate`  
