@@ -1,9 +1,10 @@
 #include "elikos_roomba/robot_viz.h"
 
-RobotViz::RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_yaw, int r_id, std::string robotType)
+RobotViz::RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_yaw, int r_id, std::string robotType, std::string robotColor)
     : n_(n),
       r_id_(r_id),
-      robotType_(robotType)
+      robotType_(robotType),
+      robotColor_(robotColor)
 {
     loop_hz_ = LOOP_RATE;
 
@@ -162,18 +163,16 @@ void RobotViz::createMarkerMsg() {
     marker_msg_.scale.x = 1.0;
     marker_msg_.scale.y = 1.0;
     marker_msg_.scale.z = 1.0;
-    // Color parameter, red by default
-    ros::NodeHandle nh("~");
-    std::string color = "";
-    nh.getParam("robot_color", color);
-    if (color == "green")
+    
+    // Color parameter, all white by default
+    if (robotColor_ == "green")
     {
         marker_msg_.color.r = 0.8f;
         marker_msg_.color.g = 1.0f;
         marker_msg_.color.b = 0.8f;
         marker_msg_.color.a = 1.0f;
     }
-    else if (color == "red")
+    else if (robotColor_ == "red")
     {
         marker_msg_.color.r = 1.0f;
         marker_msg_.color.g = 0.8f;
@@ -187,7 +186,6 @@ void RobotViz::createMarkerMsg() {
         marker_msg_.color.b = 1.0f;
         marker_msg_.color.a = 1.0f;
     }
-
 
     marker_msg_.lifetime = ros::Duration();
 }
@@ -244,14 +242,15 @@ int main(int argc, char **argv)
     double init_pos_x, init_pos_y, init_pos_z, init_yaw;
     int robot_id;
     std::string robot_type;
+    std::string robot_color = "";
     n_p.getParam("init_pos_x", init_pos_x);
     n_p.getParam("init_pos_y", init_pos_y);
     n_p.getParam("init_pos_z", init_pos_z);
     n_p.getParam("init_yaw", init_yaw);
     n_p.getParam("robot_id", robot_id);
     n_p.getParam("robot_type", robot_type);
-
-    RobotViz robotviz_(n, tf::Vector3(init_pos_x, init_pos_y, init_pos_z), init_yaw, robot_id, robot_type);
+    n_p.getParam("robot_color", robot_color);
+    RobotViz robotviz_(n, tf::Vector3(init_pos_x, init_pos_y, init_pos_z), init_yaw, robot_id, robot_type, robot_color);
     
     try
     {

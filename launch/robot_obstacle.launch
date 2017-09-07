@@ -19,6 +19,7 @@
             <param name="init_yaw" value="$(arg yaw)" />
             <param name="robot_id" value="$(arg robot_id)" />
             <param name="robot_type" value="obstacle" />
+            <param name="robot_color" value="white" />
         </node>
     </group>
 </launch>

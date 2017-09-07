@@ -17,6 +17,7 @@
             <param name="init_yaw" value="0.0" />
             <param name="robot_id" value="1" />
             <param name="robot_type" value="ground" />
+            <param name="robot_color" value="red" />
         </node>
     </group>
 
@@ -31,6 +32,7 @@
             <param name="init_yaw" value="0.78539816339" />
             <param name="robot_id" value="2" />
             <param name="robot_type" value="ground" />
+            <param name="robot_color" value="green" />
         </node>
     </group>
 
@@ -45,6 +47,7 @@
             <param name="init_yaw" value="1.57079632679" />
             <param name="robot_id" value="1" />
             <param name="robot_type" value="obstacle" />
+            <param name="robot_color" value="white" />
         </node>
     </group>
 

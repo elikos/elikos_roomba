@@ -5,6 +5,7 @@
     <arg name="pos_y" default="0.0" />
     <arg name="pos_z" default="0.0" />
     <arg name="yaw" default="0.0" />
+    <arg name="color" default="white" />
 
     <node pkg="tf" type="static_transform_publisher" name="elikos_arena_origin" args="0.0 0.0 0.0 0.0 0.0 0.0 world elikos_arena_origin 100"/>
     
@@ -19,6 +20,7 @@
             <param name="init_yaw" value="$(arg yaw)" />
             <param name="robot_id" value="$(arg robot_id)" />
             <param name="robot_type" value="ground" />
+            <param name="robot_color" value="$(arg color)" />
         </node>
     </group>
 </launch>

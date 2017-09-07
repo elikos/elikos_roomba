@@ -50,6 +50,7 @@ class RobotViz
         ros::Duration time_diff_;
 
         std::string mesh_resource_;
+        std::string robotColor_;
         
         /*===========================
          * Robot state
@@ -125,7 +126,7 @@ class RobotViz
         /*
          * Constructor
          */
-        RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_yaw, int r_id, std::string robotType);
+        RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_yaw, int r_id, std::string robotType, std::string robotColor);
         ~RobotViz();
 
         /*

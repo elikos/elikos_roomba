@@ -31,6 +31,7 @@ It interacts with `create_autonomy` through its topics. It also has a node to ma
       * `pos_x` : initial x position of robot (meters) [0.0]
       * `pos_y` : initial y position of robot (meters) [0.0]
       * `yaw` : initial yaw of robots (radians) [0.0]
+      * `color` : color of robot (`red`, `green`, or `white`) [white]
 
 * `robot_obstacle.launch`  
    * launches `obstaclerobot_node` and `robotviz_node` inside a `/obstaclerobot$robot_id` namespace  
@@ -78,14 +79,14 @@ It interacts with `create_autonomy` through its topics. It also has a node to ma
    * *parameters*  
       * `robot_id` : unique id of robot
       * `robot_type` : type of robot (`ground` or `obstacle`)
-      * `robot_color` : colour of robot (`red` or `green`)
+      * `robot_color` : colour of robot (`red`, `green` or `white`)
       * `init_pos_x` : initial x position of robo (meters)
       * `init_pos_y` : initial y position of robot (meters)
       * `init_pos_z` : initial z position of robot (meters) (should be 0.0)
       * `init_yaw` : initial yaw of robots (radians)
 
 * `serviceredirect_node`  
-   * offer global activation/deactivation/toggle services and redirect service calls to all robots inside namespaces (e.g. from `/groundrobot1` to `/groundrobot$groundrobot_qty`)  
+   * offer global activation/deactivation/toggle services and redirect service calls to all robots inside namespaces (e.g. a call to `/activate` also calls services `/groundrobot1/activate` to `/groundrobot$groundrobot_qty/activate`)  
    * *parameters*  
       * `groundrobot_qty` : number of ground robots to manage
       * `obstaclerobot_qty` : number of obstacle robots to manage
