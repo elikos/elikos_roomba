@@ -1,0 +1,50 @@
+<!--
+Launch file for elikos_projet_introductif
+See instructions
+-->
+<launch>
+    <node pkg="tf" type="static_transform_publisher" name="elikos_arena_origin" args="0.0 0.0 0.0 0.0 0.0 0.0 world elikos_arena_origin 100"/>
+    
+    <!-- First robot: target robot (piloted via keyboard) -->
+    <group ns="groundrobot1">
+        <!-- Ground robot behaviour -->
+        <node name="groundrobot_node" pkg="elikos_roomba" type="groundrobot_node" output="screen">
+            <param name="robot_id" value="1" />
+        </node>
+        <!-- Visualisation node -->
+        <node name="robotviz_node" pkg="elikos_roomba" type="robotviz_node" output="screen">
+            <param name="init_pos_x" value="1.0" />
+            <param name="init_pos_y" value="0.0" />
+            <param name="init_pos_z" value="0.0" />
+            <param name="init_yaw" value="0.0" />
+            <param name="robot_id" value="1" />
+            <param name="robot_type" value="ground" />
+        </node>
+    </group>
+
+    <!-- Second robot: roomba bot (tracks target robot) -->
+    <group ns="groundrobot2">
+        <!-- ================================================ -->
+        <!-- Roomba tracking node; modify this to use your own node! -->
+        <!-- ================================================ -->
+        <node name="roombabot_node" pkg="elikos_roomba" type="roombabot_node" output="screen" />
+
+        <!-- Publish constant "ACTIVE" state -->
+        <node pkg="rostopic" type="rostopic" name="gr2state" args="pub -r 10 state std_msgs/String ACTIVE"/>
+        <!-- Visualisation node -->
+        <node name="robotviz_node" pkg="elikos_roomba" type="robotviz_node" output="screen">
+            <param name="init_pos_x" value="1.0" />
+            <param name="init_pos_y" value="2.0" />
+            <param name="init_pos_z" value="0.0" />
+            <param name="init_yaw" value="1.5" />
+            <param name="robot_id" value="2" />
+            <param name="robot_type" value="ground" />
+        </node>
+    </group>
+
+    <!-- Call activation service for target robot -->
+    <node pkg="rosservice" type="rosservice" name="gr1activate" args="call --wait /groundrobot1/activate"/>
+
+    <!-- Launch rviz -->
+    <node pkg="rviz" type="rviz" name="rviz_node" args="-d $(find elikos_roomba)/config/robot_viz.rviz" />
+</launch>
