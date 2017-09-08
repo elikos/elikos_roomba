@@ -163,29 +163,7 @@ void RobotViz::createMarkerMsg() {
     marker_msg_.scale.x = 1.0;
     marker_msg_.scale.y = 1.0;
     marker_msg_.scale.z = 1.0;
-    
-    // Color parameter, all white by default
-    if (robotColor_ == "green")
-    {
-        marker_msg_.color.r = 0.8f;
-        marker_msg_.color.g = 1.0f;
-        marker_msg_.color.b = 0.8f;
-        marker_msg_.color.a = 1.0f;
-    }
-    else if (robotColor_ == "red")
-    {
-        marker_msg_.color.r = 1.0f;
-        marker_msg_.color.g = 0.8f;
-        marker_msg_.color.b = 0.8f;
-        marker_msg_.color.a = 1.0f;
-    }
-    else
-    {
-        marker_msg_.color.r = 1.0f;
-        marker_msg_.color.g = 1.0f;
-        marker_msg_.color.b = 1.0f;
-        marker_msg_.color.a = 1.0f;
-    }
+    marker_msg_.mesh_use_embedded_materials = true;
 
     marker_msg_.lifetime = ros::Duration();
 }
@@ -196,7 +174,7 @@ std::string RobotViz::generateMeshResource() {
     if (robotType_ == "obstacle") {
         frame_res = OBSTACLE_ROBOT_MODEL_FILE;
     } else if (robotType_ == "ground") {
-        frame_res = GROUND_ROBOT_MODEL_FILE;
+        frame_res = GROUND_ROBOT_MODEL_FILE_SUFFIX + robotColor_ + "." + GROUND_ROBOT_MODEL_FILE_EXTENSION;
     }
     
     return frame_res;
