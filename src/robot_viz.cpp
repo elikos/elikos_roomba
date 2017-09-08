@@ -174,7 +174,7 @@ std::string RobotViz::generateMeshResource() {
     if (robotType_ == "obstacle") {
         frame_res = OBSTACLE_ROBOT_MODEL_FILE;
     } else if (robotType_ == "ground") {
-        frame_res = GROUND_ROBOT_MODEL_FILE_SUFFIX + robotColor_ + "." + GROUND_ROBOT_MODEL_FILE_EXTENSION;
+        frame_res = GROUND_ROBOT_MODEL_FILE_PREFIX + robotColor_ + "." + GROUND_ROBOT_MODEL_FILE_EXTENSION;
     }
     
     return frame_res;
