@@ -205,7 +205,14 @@ To have multiple robots running on the same `roscore`:
    ````
    catkin build -DREMOTE=TRUE
    ````
-   If you don't have the catkin_tools package, you can use `catkin_make` as well.
+   If you don't have the `catkin_tools` package, you can either install it
+   ````
+   sudo apt-get install python-catkin-tools
+   ````  
+   or simply use `catkin_make` instead.
+   ````
+   catkin_make -DREMOTE=TRUE
+   ````  
 
 5. Source 
    ````
