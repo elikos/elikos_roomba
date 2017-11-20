@@ -1,8 +1,7 @@
-#include "elikos_roomba/robot.h"        // use topic names, service names, and other values
-#include <tf/transform_broadcaster.h>
-#include <geometry_msgs/PoseStamped.h>
+#include <ros/ros.h>
 #include <visualization_msgs/MarkerArray.h>
 
+static const double LOOP_RATE = 1.0;
 static const std::string NODE_NAME = "arena";
 static const std::string TF_MIDDLE_ARENA = "/elikos_arena_origin";
 static const std::string ARENA_SQUARES_TOPIC_NAME = "/arena_squares";
@@ -10,7 +9,6 @@ static const std::string ARENA_SQUARE_MODEL = "package://elikos_roomba/models/ar
 static const double SQUARE_MODEL_OFFSET_X = 0.5;        // Offset to get the "origin" on the (0,0) corner 
 static const double SQUARE_MODEL_OFFSET_Y = 0.5;        // Offset to get the "origin" on the (0,0) corner 
 
-int arena_dimension;
 visualization_msgs::MarkerArray markerarray_msg;
 ros::Publisher arenasquares_pub;
 
@@ -65,13 +63,14 @@ int main(int argc, char** argv){
     ros::NodeHandle n;
 
     ros::NodeHandle n_p("~");
+    int arena_dimension;
     n_p.getParam("arena_dimension", arena_dimension);
 
     arenasquares_pub = n.advertise<visualization_msgs::MarkerArray>(ARENA_SQUARES_TOPIC_NAME, 1);
     
     createMarkerArray(arena_dimension);
 
-    ros::Rate rate(1.0);
+    ros::Rate rate(LOOP_RATE);
     while (ros::ok())
     {
         publishMarkerArray();
