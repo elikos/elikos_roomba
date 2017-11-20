@@ -1,0 +1,11 @@
+<launch>
+    <arg name="arena_dimension" default="20" />
+
+    <node pkg="tf" type="static_transform_publisher" name="elikos_arena_origin" args="0.0 0.0 0.0 0.0 0.0 0.0 world elikos_arena_origin 100"/>
+
+    <node name="arena_node" pkg="elikos_roomba" type="arena_node" output="screen">
+        <param name="arena_dimension" value="$(arg arena_dimension)" />
+    </node>
+
+    <node pkg="rviz" type="rviz" name="rviz_node" />
+</launch>
