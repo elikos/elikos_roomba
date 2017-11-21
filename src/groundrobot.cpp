@@ -254,7 +254,7 @@ void GroundRobot::spin()
 }
 
 // ---------------------------
-
+/*
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "groundrobot");
@@ -277,3 +277,4 @@ int main(int argc, char **argv)
     }
     return 0;
 }
+*/
