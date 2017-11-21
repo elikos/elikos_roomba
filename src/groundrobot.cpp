@@ -4,11 +4,11 @@ GroundRobot::GroundRobot(ros::NodeHandle& n, int r_id)
     : Robot(n, GROUNDROBOT_TYPE, r_id)
 {
     // setup subscribers
-    bumper_sub_ = n.subscribe(BUMPER_TOPIC_NAME, 10, &GroundRobot::bumperCallback, this);
+    bumper_sub_ = n.subscribe(Robot::toRobotNamespace(BUMPER_TOPIC_NAME), 10, &GroundRobot::bumperCallback, this);
 
     // setup services
-    topSwitch_srv_ = n.advertiseService(TOPSWITCH_SERVICE_NAME, &GroundRobot::topSwitchCallback, this);
-    bumper_srv_ = n.advertiseService(BUMPER_SERVICE_NAME, &GroundRobot::bumperTrigCallback, this);
+    topSwitch_srv_ = n.advertiseService(Robot::toRobotNamespace(TOPSWITCH_SERVICE_NAME), &GroundRobot::topSwitchCallback, this);
+    bumper_srv_ = n.advertiseService(Robot::toRobotNamespace(BUMPER_SERVICE_NAME), &GroundRobot::bumperTrigCallback, this);
 
     // setup timers (oneshot TRUE, autostart FALSE)
     timeout_tim_ = n.createTimer(ros::Duration(TIMEOUT_DURATION), &GroundRobot::timeoutCallback, this, true, false);

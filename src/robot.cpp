@@ -9,13 +9,13 @@ Robot::Robot(ros::NodeHandle& n, std::string botType, int r_id)
     loop_hz_ = LOOP_RATE;
 
     // setup publishers
-    cmdVel_pub_ = n.advertise<geometry_msgs::Twist>(CMDVEL_TOPIC_NAME, CMDVEL_TOPIC_QUEUESIZE);
-    robotState_pub_ = n.advertise<std_msgs::String>(ROBOTSTATE_TOPIC_NAME, ROBOTSTATE_TOPIC_QUEUESIZE);
+    cmdVel_pub_ = n.advertise<geometry_msgs::Twist>(toRobotNamespace(CMDVEL_TOPIC_NAME), CMDVEL_TOPIC_QUEUESIZE);
+    robotState_pub_ = n.advertise<std_msgs::String>(toRobotNamespace(ROBOTSTATE_TOPIC_NAME), ROBOTSTATE_TOPIC_QUEUESIZE);
 
     // setup services
-    activate_srv_ = n.advertiseService(ACTIVATE_SERVICE_NAME, &Robot::activateCallback, this);
-    deactivate_srv_ = n.advertiseService(DEACTIVATE_SERVICE_NAME, &Robot::deactivateCallback, this);
-    toglActivate_srv_ = n.advertiseService(TOGGLEACT_SERVICE_NAME, &Robot::toglActivateCallback, this);
+    activate_srv_ = n.advertiseService(toRobotNamespace(ACTIVATE_SERVICE_NAME), &Robot::activateCallback, this);
+    deactivate_srv_ = n.advertiseService(toRobotNamespace(DEACTIVATE_SERVICE_NAME), &Robot::deactivateCallback, this);
+    toglActivate_srv_ = n.advertiseService(toRobotNamespace(TOGGLEACT_SERVICE_NAME), &Robot::toglActivateCallback, this);
 
     // initial state
     isActive_ = false;
@@ -34,6 +34,10 @@ Robot::~Robot() {
 
 void Robot::ROS_INFO_STREAM_ROBOT(std::string message) {
     ROS_INFO_STREAM("[" << robotType_ << " " << r_id_ << "] " << message);
+}
+
+std::string Robot::toRobotNamespace(std::string topicOrService) {
+    return robotType_ + "robot" + std::to_string(r_id_) + "/" + topicOrService;
 }
 
 /*===========================

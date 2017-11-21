@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8.3)
 option(REMOTE "Compile remote computer (without wiringPi)" TRUE)
 
 ## Add support for C++11, supported in ROS Kinetic and newer
-# add_definitions(-std=c++11)
+add_definitions(-std=c++11)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -141,7 +141,6 @@ add_library(${PROJECT_NAME}_lib
   include/elikos_roomba/robot.h
   ${catkin_LIBRARIES}
 )
-#add_library(${PROJECT_NAME}_lib ${${PROJECT_NAME}_SRCS})
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries

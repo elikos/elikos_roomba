@@ -9,7 +9,7 @@
 // names
 static const std::string TOPSWITCH_SERVICE_NAME = "topswitch_trigger";          // called by topswitch_node
 static const std::string BUMPER_TOPIC_NAME = "bumper";                          // published by create_autonomy
-static const std::string GROUNDROBOT_TYPE = "GROUND ROBOT";
+static const std::string GROUNDROBOT_TYPE = "ground";
 // speeds
 static const float TURN_SPEED = 90.0f*DEG_TO_RAD;                               //[deg/s]*[rad/deg]=[rad/s]
 static const float NOISE_TURN_SPEED = 90.0f*DEG_TO_RAD;                         //[deg/s]*[rad/deg]=[rad/s]

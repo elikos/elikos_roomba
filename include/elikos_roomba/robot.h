@@ -159,6 +159,11 @@ class Robot
          * Wrapper for ROS_INFO_STREAM, includes robotType_ string and robot ID in message
          */
         void ROS_INFO_STREAM_ROBOT(std::string message);
+
+        /*
+         * Adds namespace (robotType_ + r_id_) to given service/topic name
+         */
+        std::string toRobotNamespace(std::string topicOrService);
 };
 
 #endif  // ELIKOS_ROOMBA_ROBOT_H

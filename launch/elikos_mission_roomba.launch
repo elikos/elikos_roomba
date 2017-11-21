@@ -6,11 +6,11 @@ See instructions
     <node pkg="tf" type="static_transform_publisher" name="elikos_arena_origin" args="0.0 0.0 0.0 0.0 0.0 0.0 world elikos_arena_origin 100"/>
     
     <!-- First robot: target robot (piloted via keyboard) -->
+    <!-- Ground robot behaviour -->
+    <node name="groundrobot_node" pkg="elikos_roomba" type="groundrobot_node" output="screen">
+        <param name="robot_id" value="1" />
+    </node>
     <group ns="groundrobot1">
-        <!-- Ground robot behaviour -->
-        <node name="groundrobot_node" pkg="elikos_roomba" type="groundrobot_node" output="screen">
-            <param name="robot_id" value="1" />
-        </node>
         <!-- Visualisation node -->
         <node name="robotviz_node" pkg="elikos_roomba" type="robotviz_node" output="screen">
             <param name="init_pos_x" value="1.0" />
