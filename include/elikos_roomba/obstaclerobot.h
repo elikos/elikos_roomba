@@ -30,19 +30,9 @@ class ObstacleRobot : public Robot
          * Update
          *===========================*/
         /*
-         * Update robot state; called every spinOnce()
-         */
-        void update();
-
-        /*
          * Update ground robot message based on current state
          */
         void updateState();
-
-        /*
-         * ROS spin once, called on every loop
-         */
-        void spinOnce();
 
         /*===========================
          * Global state
@@ -78,6 +68,16 @@ class ObstacleRobot : public Robot
          * ROS spin. Called only once (by node); contains ROS while loop
          */
         void spin();
+
+        /*
+         * ROS spin once, called on every loop
+         */
+        void spinOnce();
+
+        /*
+         * Update robot state; called every spinOnce()
+         */
+        void update();
 };
 
 #endif  // ELIKOS_ROOMBA_OBSTACLEROBOT_H
