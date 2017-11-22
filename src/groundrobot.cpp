@@ -1,14 +1,14 @@
 #include "elikos_roomba/groundrobot.h"
 
-GroundRobot::GroundRobot(ros::NodeHandle& n, int r_id)
-    : Robot(n, GROUNDROBOT_TYPE, r_id)
+GroundRobot::GroundRobot(ros::NodeHandle& n, int r_id, tf::Vector3 initial_pos, double initial_yaw, std::string color)
+    : Robot(n, GROUNDROBOT_TYPE, r_id, initial_pos, initial_yaw, color)
 {
     // setup subscribers
-    bumper_sub_ = n.subscribe(Robot::toRobotNamespace(BUMPER_TOPIC_NAME), 10, &GroundRobot::bumperCallback, this);
+    bumper_sub_ = n.subscribe(ns_ + "/" + BUMPER_TOPIC_NAME, 10, &GroundRobot::bumperCallback, this);
 
     // setup services
-    topSwitch_srv_ = n.advertiseService(Robot::toRobotNamespace(TOPSWITCH_SERVICE_NAME), &GroundRobot::topSwitchCallback, this);
-    bumper_srv_ = n.advertiseService(Robot::toRobotNamespace(BUMPER_SERVICE_NAME), &GroundRobot::bumperTrigCallback, this);
+    topSwitch_srv_ = n.advertiseService(ns_ + "/" + TOPSWITCH_SERVICE_NAME, &GroundRobot::topSwitchCallback, this);
+    bumper_srv_ = n.advertiseService(ns_ + "/" + BUMPER_SERVICE_NAME, &GroundRobot::bumperTrigCallback, this);
 
     // setup timers (oneshot TRUE, autostart FALSE)
     timeout_tim_ = n.createTimer(ros::Duration(TIMEOUT_DURATION), &GroundRobot::timeoutCallback, this, true, false);
@@ -228,6 +228,7 @@ void GroundRobot::updateState() {
 void GroundRobot::update() {
     //Robot::ROS_INFO_STREAM_ROBOT("update");
     updateState();
+
     Robot::update();
 }
 
@@ -261,10 +262,17 @@ int main(int argc, char **argv)
     ros::NodeHandle n;
 
     ros::NodeHandle n_p("~");
+    double init_pos_x, init_pos_y, init_pos_z, init_yaw;
     int robot_id;
+    std::string robot_color;
+    n_p.getParam("init_pos_x", init_pos_x);
+    n_p.getParam("init_pos_y", init_pos_y);
+    n_p.getParam("init_pos_z", init_pos_z);
+    n_p.getParam("init_yaw", init_yaw);
     n_p.getParam("robot_id", robot_id);
+    n_p.getParam("robot_color", robot_color);
 
-    GroundRobot groundrobot_(n, robot_id);
+    GroundRobot groundrobot_(n, robot_id, tf::Vector3(init_pos_x, init_pos_y, init_pos_z), init_yaw, robot_color);
     
     try
     {

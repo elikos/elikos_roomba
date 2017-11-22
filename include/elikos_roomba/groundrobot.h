@@ -195,7 +195,7 @@ class GroundRobot : public Robot
         bool isRobotState(GroundRobotState cmpRobotState);
     
     public:
-        GroundRobot(ros::NodeHandle& n, int r_id);
+        GroundRobot(ros::NodeHandle& n, int r_id, tf::Vector3 initial_pos, double initial_yaw, std::string color);
         ~GroundRobot();
 
         /*

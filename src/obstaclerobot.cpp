@@ -1,7 +1,7 @@
 #include "elikos_roomba/obstaclerobot.h"
 
-ObstacleRobot::ObstacleRobot(ros::NodeHandle& n, int r_id)
-    : Robot(n, OBSTACLEROBOT_TYPE, r_id)
+ObstacleRobot::ObstacleRobot(ros::NodeHandle& n, int r_id, tf::Vector3 initial_pos, double initial_yaw, std::string height)
+    : Robot(n, OBSTACLEROBOT_TYPE, r_id, initial_pos, initial_yaw, height)
 {
     // initial state
     changeRobotStateTo(INACTIVE);
@@ -102,10 +102,17 @@ int main(int argc, char **argv)
     ros::NodeHandle n;
 
     ros::NodeHandle n_p("~");
+    double init_pos_x, init_pos_y, init_pos_z, init_yaw;
     int robot_id;
+    std::string robot_height;
+    n_p.getParam("init_pos_x", init_pos_x);
+    n_p.getParam("init_pos_y", init_pos_y);
+    n_p.getParam("init_pos_z", init_pos_z);
+    n_p.getParam("init_yaw", init_yaw);
     n_p.getParam("robot_id", robot_id);
+    n_p.getParam("robot_height", robot_height);
 
-    ObstacleRobot obstaclerobot_(n, robot_id);
+    ObstacleRobot obstaclerobot_(n, robot_id, tf::Vector3(init_pos_x, init_pos_y, init_pos_z), init_yaw, robot_height);
     
     try
     {

@@ -6,17 +6,11 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <visualization_msgs/Marker.h>
 
+
 // names (topics and services)
-static const std::string TF_NAME_BASE = "elikos_arena_origin";        // origin
-static const std::string ROBOTPOSE_TOPIC_NAME = "pose";               // pose message
 static const std::string TF_ROBOT_PREFIX = "robot";                   // robot tf name prefix
 // marker/model
-static const std::string MESH_RESOURCE_PREFIX = "package://elikos_roomba/models/";
-static const std::string MARKER_TOPIC_NAME = "marker";
-static const int MARKER_TOPIC_QUEUESIZE = 10;
 static const std::string OBSTACLE_ROBOT_MODEL_FILE = "obs_10.dae";
-static const std::string GROUND_ROBOT_MODEL_FILE_PREFIX = "robot_";
-static const std::string GROUND_ROBOT_MODEL_FILE_EXTENSION = "dae";
 
 
 class RobotViz

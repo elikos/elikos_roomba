@@ -174,7 +174,7 @@ std::string RobotViz::generateMeshResource() {
     if (robotType_ == "obstacle") {
         frame_res = OBSTACLE_ROBOT_MODEL_FILE;
     } else if (robotType_ == "ground") {
-        frame_res = GROUND_ROBOT_MODEL_FILE_PREFIX + robotColor_ + "." + GROUND_ROBOT_MODEL_FILE_EXTENSION;
+        frame_res = GROUND_ROBOT_MODEL_FILE_PREFIX + robotColor_ + ROBOT_MODEL_FILE_EXTENSION;
     }
     
     return frame_res;
@@ -220,7 +220,7 @@ int main(int argc, char **argv)
     double init_pos_x, init_pos_y, init_pos_z, init_yaw;
     int robot_id;
     std::string robot_type;
-    std::string robot_color = "";
+    std::string robot_color;
     n_p.getParam("init_pos_x", init_pos_x);
     n_p.getParam("init_pos_y", init_pos_y);
     n_p.getParam("init_pos_z", init_pos_z);
@@ -228,6 +228,7 @@ int main(int argc, char **argv)
     n_p.getParam("robot_id", robot_id);
     n_p.getParam("robot_type", robot_type);
     n_p.getParam("robot_color", robot_color);
+    
     RobotViz robotviz_(n, tf::Vector3(init_pos_x, init_pos_y, init_pos_z), init_yaw, robot_id, robot_type, robot_color);
     
     try
