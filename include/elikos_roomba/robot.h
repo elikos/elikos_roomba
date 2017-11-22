@@ -60,11 +60,6 @@ class Robot : public MovingObject
          * Update
          *===========================*/
         /*
-         * Update robot state; called every spinOnce()
-         */
-        void update();
-
-        /*
          * Update ground robot message based on current state
          */
         virtual void updateState() =0;
@@ -130,14 +125,19 @@ class Robot : public MovingObject
         ~Robot();
 
         /*
-         * Get CmdVel message (Twist) from linear (x) velocity and angular (z) velocity
+         * Update robot; called every spinOnce()
          */
-        geometry_msgs::Twist getCmdVelMsg(float lin_x, float ang_z);
+        virtual void update();
 
         /*
          * ROS spin. Called only once (by node); contains ROS while loop
          */
         virtual void spin() =0;
+
+        /*
+         * Get CmdVel message (Twist) from linear (x) velocity and angular (z) velocity
+         */
+        geometry_msgs::Twist getCmdVelMsg(float lin_x, float ang_z);
 
         /*
          * Wrapper for ROS_INFO_STREAM, includes robotType_ string and robot ID in message
