@@ -1,38 +1,34 @@
 #include "elikos_roomba/service_redirect.h"
 
 
-ServiceRedirect::ServiceRedirect(ros::NodeHandle& n, int groundrobotQty, int obstaclerobotQty)
-    : n_(n),
-      groundrobotQty_(groundrobotQty),
-      obstaclerobotQty_(obstaclerobotQty)
+ServiceRedirect::ServiceRedirect(ros::NodeHandle& n)
+    : n_(n)
 {
+    // get params
+    ros::NodeHandle n_p("~");
+    n_p.getParam("groundrobot_qty", groundrobotQty_);
+    n_p.getParam("obstaclerobot_qty", obstaclerobotQty_);
+
     // setup services (global service servers)
     activate_srv_ = n_.advertiseService(ACTIVATE_SERVICE_NAME, &ServiceRedirect::activateCallback, this);
     deactivate_srv_ = n_.advertiseService(DEACTIVATE_SERVICE_NAME, &ServiceRedirect::deactivateCallback, this);
     toglActivate_srv_ = n_.advertiseService(TOGGLEACT_SERVICE_NAME, &ServiceRedirect::toglActivateCallback, this);
     reset_srv_ = n_.advertiseService(RESET_SERVICE_NAME, &ServiceRedirect::resetCallback, this);
 
-    // setup service clients for ground robots
-    for (int i = 0; i < groundrobotQty_; ++i) {
-        std::string robotnamespace = catStringInt(GROUNDROBOT_NAMESPACE_PREFIX, i+1);
-        activate_srv_clients_.push_back(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + ACTIVATE_SERVICE_NAME));
-        deactivate_srv_clients_.push_back(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + DEACTIVATE_SERVICE_NAME));
-        toglActivate_srv_clients_.push_back(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + TOGGLEACT_SERVICE_NAME));
-        reset_srv_clients_.push_back(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + RESET_SERVICE_NAME));
-    }
-
-    // setup service clients for obstacle robots
-    for (int i = 0; i < obstaclerobotQty_; ++i) {
-        std::string robotnamespace = catStringInt(OBSTACLEROBOT_NAMESPACE_PREFIX, i+1);
-        activate_srv_clients_.push_back(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + ACTIVATE_SERVICE_NAME));
-        deactivate_srv_clients_.push_back(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + DEACTIVATE_SERVICE_NAME));
-        toglActivate_srv_clients_.push_back(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + TOGGLEACT_SERVICE_NAME));
-        reset_srv_clients_.push_back(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + RESET_SERVICE_NAME));
-    }
+    // setup service clients
+    activate_srv_clients_ = new std::vector<ros::ServiceClient*>();
+    deactivate_srv_clients_ = new std::vector<ros::ServiceClient*>();
+    toglActivate_srv_clients_ = new std::vector<ros::ServiceClient*>();
+    reset_srv_clients_ = new std::vector<ros::ServiceClient*>();
+    createServices(GROUNDROBOT_NAMESPACE_PREFIX, groundrobotQty_);
+    createServices(OBSTACLEROBOT_NAMESPACE_PREFIX, obstaclerobotQty_);
 }
 
 ServiceRedirect::~ServiceRedirect() {
-  // add other relevant stuff
+    clearServiceVector(activate_srv_clients_);
+    clearServiceVector(deactivate_srv_clients_);
+    clearServiceVector(toglActivate_srv_clients_);
+    clearServiceVector(reset_srv_clients_);
 }
 
 /*===========================
@@ -40,22 +36,22 @@ ServiceRedirect::~ServiceRedirect() {
  *===========================*/
 
 bool ServiceRedirect::activateCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
-    callServiceVector(&activate_srv_clients_, groundrobotQty_ + obstaclerobotQty_);
+    callServiceVector(activate_srv_clients_);
     return true;
 }
 
 bool ServiceRedirect::deactivateCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
-    callServiceVector(&deactivate_srv_clients_, groundrobotQty_ + obstaclerobotQty_);
+    callServiceVector(deactivate_srv_clients_);
     return true;
 }
 
 bool ServiceRedirect::toglActivateCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
-    callServiceVector(&toglActivate_srv_clients_, groundrobotQty_ + obstaclerobotQty_);
+    callServiceVector(toglActivate_srv_clients_);
     return true;
 }
 
 bool ServiceRedirect::resetCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
-    callServiceVector(&reset_srv_clients_, groundrobotQty_ + obstaclerobotQty_);
+    callServiceVector(reset_srv_clients_);
     return true;
 }
 
@@ -63,40 +59,34 @@ bool ServiceRedirect::resetCallback(std_srvs::Empty::Request& request, std_srvs:
  * Other utilities
  *===========================*/
 
- void ServiceRedirect::callServiceVector(std::vector<ros::ServiceClient>* srv_clients, int botQty) {
-    for (int i = 0; i < botQty; ++i) {
-        srv_clients->operator[](i).call(srv_.request, srv_.response);
+void ServiceRedirect::createServices(std::string nsPrefix, int qty) {
+    for (int i = 0; i < qty; ++i) {
+        std::string robotnamespace = nsPrefix + std::to_string(i+1);
+        auto act = new ros::ServiceClient(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + ACTIVATE_SERVICE_NAME));
+        auto deact = new ros::ServiceClient(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + DEACTIVATE_SERVICE_NAME));
+        auto togl = new ros::ServiceClient(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + TOGGLEACT_SERVICE_NAME));
+        auto reset = new ros::ServiceClient(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + RESET_SERVICE_NAME));
+        activate_srv_clients_->push_back(act);
+        deactivate_srv_clients_->push_back(deact);
+        toglActivate_srv_clients_->push_back(togl);
+        reset_srv_clients_->push_back(reset);
     }
 }
 
-std::string ServiceRedirect::catStringInt(std::string strng, int eent) {
-    std::stringstream sstm;
-    sstm << strng << eent;
-    return sstm.str();
+void ServiceRedirect::callServiceVector(std::vector<ros::ServiceClient*>* srvs) {
+    auto it = srvs->begin();
+    while (it != srvs->end()) {
+        (*it)->call(srv_.request, srv_.response);
+        ++it;
+    }
 }
 
-// ---------------------------
-
-int main(int argc, char **argv)
-{
-    ros::init(argc, argv, "serviceredirect");
-    ros::NodeHandle n;
-
-    ros::NodeHandle n_p("~");
-    int groundrobotQty, obstaclerobotQty;
-    n_p.getParam("groundrobot_qty", groundrobotQty);
-    n_p.getParam("obstaclerobot_qty", obstaclerobotQty);
-
-    ServiceRedirect serviceredirect_(n, groundrobotQty, obstaclerobotQty);
-    
-    try
-    {
-        ros::spin();
+void ServiceRedirect::clearServiceVector(std::vector<ros::ServiceClient*>* srvs) {
+    auto it = srvs->begin();
+    while (it != srvs->end()) {
+        delete (*it);
+        ++it;
     }
-    catch (std::runtime_error& e)
-    {
-        ROS_FATAL_STREAM("[SERVICE REDIRECT] Runtime error: " << e.what());
-        return 1;
-    }
-    return 0;
+    srvs->clear();
+    delete srvs;
 }

@@ -10,6 +10,21 @@ static const std::string OBSTACLEROBOT_NAMESPACE_PREFIX = "obstaclerobot";  // o
 
 class ServiceRedirect
 {
+    public:
+        /*
+         * Constructor
+         * groundrobotQty: number of ground robots
+         * obstaclerobotQty: number of obstacle robots
+         */
+        ServiceRedirect(ros::NodeHandle& n);
+        ~ServiceRedirect();
+    
+    protected:
+        ros::NodeHandle& n_;
+
+        int groundrobotQty_;
+        int obstaclerobotQty_;
+    
     private:
         /*===========================
          * Services
@@ -24,21 +39,15 @@ class ServiceRedirect
         ros::ServiceServer reset_srv_;
 
         /* Robot activation service clients */
-        std::vector<ros::ServiceClient> activate_srv_clients_;
+        std::vector<ros::ServiceClient*>* activate_srv_clients_;
         /* Robot deactivation service clients */
-        std::vector<ros::ServiceClient> deactivate_srv_clients_;
+        std::vector<ros::ServiceClient*>* deactivate_srv_clients_;
         /* Robot toggle activate service clients */
-        std::vector<ros::ServiceClient> toglActivate_srv_clients_;
+        std::vector<ros::ServiceClient*>* toglActivate_srv_clients_;
         /* Robot reset service clients */
-        std::vector<ros::ServiceClient> reset_srv_clients_;
+        std::vector<ros::ServiceClient*>* reset_srv_clients_;
 
         std_srvs::Empty srv_;
-    
-    protected:
-        ros::NodeHandle& n_;
-
-        int groundrobotQty_;
-        int obstaclerobotQty_;
 
         /*===========================
          * Callbacks
@@ -62,25 +71,24 @@ class ServiceRedirect
          * Callback class method for robot reset service
          */
         bool resetCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
-    
-    public:
+
+        /*===========================
+         * Utilities
+         *===========================*/
         /*
-         * Constructor
-         * groundrobotQty: number of ground robots
-         * obstaclerobotQty: number of obstacle robots
+         * Create services
          */
-        ServiceRedirect(ros::NodeHandle& n, int groundrobotQty, int obstaclerobotQty);
-        ~ServiceRedirect();
+        void createServices(std::string nsPrefix, int qty);
 
         /*
          * Call individual services in vector corresponding to pointer
          */
-        void callServiceVector(std::vector<ros::ServiceClient>* srv_clients, int botQty);
+        void callServiceVector(std::vector<ros::ServiceClient*>* srv_clients);
 
         /*
-         * Concatenate string and int (because other methods weren't working)
+         * Deallocate
          */
-        std::string catStringInt(std::string strng, int eent);
+        void clearServiceVector(std::vector<ros::ServiceClient*>* srvs);
 };
 
 #endif  // ELIKOS_ROOMBA_SERVICE_REDIRECT_H
