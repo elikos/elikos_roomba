@@ -151,6 +151,13 @@ void MovingObject::updatePosition() {
         // robot reactivated; reset time
         time_last_ = ros::Time::now();
     }
+
+    // check if robot was reset
+    if (isReset_) {
+        isReset_ = false;
+        // update pose msgs following reset
+        updatePoseMsgs();
+    }
     
     // check if robot is active
     if (isActive_) {

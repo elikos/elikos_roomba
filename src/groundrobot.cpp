@@ -197,7 +197,6 @@ void GroundRobot::startTimeoutTurn() {
 void GroundRobot::updateState() {
     // check reset state
     if (isReset_) {
-        isReset_ = false;
         deactivateRobot();
     }
 

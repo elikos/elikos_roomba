@@ -50,7 +50,6 @@ void ObstacleRobot::deactivateRobot() {
 void ObstacleRobot::updateState() {
     // check reset state
     if (isReset_) {
-        isReset_ = false;
         deactivateRobot();
     }
 
