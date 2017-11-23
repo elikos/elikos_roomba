@@ -1,6 +1,6 @@
 project(elikos_roomba)
 cmake_minimum_required(VERSION 2.8.3)
-option(REMOTE "Compile remote computer (without wiringPi)" FALSE)
+option(RPI "Compile for Raspberry Pi (with wiringPi)" FALSE)
 
 ## Add support for C++11, supported in ROS Kinetic and newer
 add_definitions(-std=c++11)
@@ -163,10 +163,10 @@ add_executable(serviceredirect_node src/service_redirect.cpp)
 #add_executable(arenamanager_node src/arenamanager.cpp)
 add_executable(arena_node src/arena.cpp)
 
-# Add topswitch node with wiringPi library if not remote computer
-# For remote computer compilation, use:
-#   catkin_make -DREMOTE=TRUE
-if(NOT REMOTE)
+# Add topswitch node with wiringPi library if RPi
+# For Raspberry Pis, use:
+#   catkin_make -DRPI=TRUE
+if(RPI)
   add_executable(topswitch_node src/topswitch_node.cpp)
   target_link_libraries(topswitch_node wiringPi
       ${catkin_LIBRARIES}

@@ -65,9 +65,9 @@ It also has a node to manage the ground robot's top switch and call a service wh
    cd ~/roomba_ws
    catkin build
    ````
-   If compiling for a remote computer (not a RPi), use this option to avoid linking the wiringPi library:
+   If compiling for a RPi, use this option to link the wiringPi library and build the topswitch node:
    ````
-   catkin build -DREMOTE=TRUE
+   catkin build -DRPI=TRUE
    ````
    If you don't have the `catkin_tools` package, you can either install it
    ````
@@ -75,7 +75,7 @@ It also has a node to manage the ground robot's top switch and call a service wh
    ````  
    or simply use `catkin_make` instead.
    ````
-   catkin_make -DREMOTE=TRUE
+   catkin_make
    ````  
 
 5. Source 
