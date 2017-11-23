@@ -101,7 +101,7 @@ It also has a node to manage the ground robot's top switch and call a service wh
       * `robot_type` : type of robot (`ground` or `obstacle`) [`ground`]
 
 * `robot_ground.launch`  
-   * launches `groundrobot_node` and `robotviz_node` inside a `/groundrobot$robot_id`  namespace  
+   * launches `groundrobot_node`  
    * to be launched on a remote computer or on the Raspberry Pi itself  
    * *arguments*  
       * `robot_id` : unique id of robot [1]
@@ -111,7 +111,7 @@ It also has a node to manage the ground robot's top switch and call a service wh
       * `color` : color of robot (`red`, `green`, or `white`) [white]
 
 * `robot_obstacle.launch`  
-   * launches `obstaclerobot_node` and `robotviz_node` inside a `/obstaclerobot$robot_id` namespace  
+   * launches `obstaclerobot_node`  
    * to be launched on a remote computer or on the Raspberry Pi itself  
    * *arguments*  
       * `robot_id` : unique id of robot [1]
