@@ -4,11 +4,11 @@
     <include file="$(find elikos_roomba)/launch/service_redirect.launch">
         <arg name="robot_qty" value="2" />
     </include>
-    
+
+    <node name="groundrobot_node" pkg="elikos_roomba" type="groundrobot_node" output="screen">
+        <param name="robot_id" value="1" />
+    </node>
     <group ns="groundrobot1">
-        <node name="groundrobot_node" pkg="elikos_roomba" type="groundrobot_node" output="screen">
-            <param name="robot_id" value="1" />
-        </node>
         <node name="robotviz_node" pkg="elikos_roomba" type="robotviz_node" output="screen">
             <param name="init_pos_x" value="-1.0" />
             <param name="init_pos_y" value="0.0" />
@@ -19,10 +19,10 @@
         </node>
     </group>
 
+    <node name="groundrobot_node" pkg="elikos_roomba" type="groundrobot_node" output="screen">
+        <param name="robot_id" value="2" />
+    </node>
     <group ns="groundrobot2">
-        <node name="groundrobot_node" pkg="elikos_roomba" type="groundrobot_node" output="screen">
-            <param name="robot_id" value="2" />
-        </node>
         <node name="robotviz_node" pkg="elikos_roomba" type="robotviz_node" output="screen">
             <param name="init_pos_x" value="2.0" />
             <param name="init_pos_y" value="2.0" />

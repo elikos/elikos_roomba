@@ -1,24 +1,20 @@
 #include "elikos_roomba/robot.h"
 
-Robot::Robot(ros::NodeHandle& n, std::string botType, int r_id)
-    : n_(n),
-      is_running_slowly_(false),
+Robot::Robot(ros::NodeHandle& n, std::string botType, int r_id, tf::Vector3 initial_pos, double initial_yaw, std::string model_option)
+    : is_running_slowly_(false),
       robotType_(botType),
-      r_id_(r_id)
+      r_id_(r_id),
+      MovingObject(n, getRobotNamespace(botType, r_id), initial_pos, initial_yaw, model_option)
 {
     loop_hz_ = LOOP_RATE;
 
     // setup publishers
-    cmdVel_pub_ = n.advertise<geometry_msgs::Twist>(CMDVEL_TOPIC_NAME, CMDVEL_TOPIC_QUEUESIZE);
-    robotState_pub_ = n.advertise<std_msgs::String>(ROBOTSTATE_TOPIC_NAME, ROBOTSTATE_TOPIC_QUEUESIZE);
+    robotState_pub_ = n.advertise<std_msgs::String>(ns_ + "/" + ROBOTSTATE_TOPIC_NAME, ROBOTSTATE_TOPIC_QUEUESIZE);
 
     // setup services
-    activate_srv_ = n.advertiseService(ACTIVATE_SERVICE_NAME, &Robot::activateCallback, this);
-    deactivate_srv_ = n.advertiseService(DEACTIVATE_SERVICE_NAME, &Robot::deactivateCallback, this);
-    toglActivate_srv_ = n.advertiseService(TOGGLEACT_SERVICE_NAME, &Robot::toglActivateCallback, this);
-
-    // initial state
-    isActive_ = false;
+    activate_srv_ = n.advertiseService(ns_ + "/" + ACTIVATE_SERVICE_NAME, &Robot::activateCallback, this);
+    deactivate_srv_ = n.advertiseService(ns_ + "/" + DEACTIVATE_SERVICE_NAME, &Robot::deactivateCallback, this);
+    toglActivate_srv_ = n.advertiseService(ns_ + "/" + TOGGLEACT_SERVICE_NAME, &Robot::toglActivateCallback, this);
 
     ROS_INFO_STREAM_ROBOT("Robot initialization done (inactive)");
 }
@@ -33,7 +29,11 @@ Robot::~Robot() {
  *===========================*/
 
 void Robot::ROS_INFO_STREAM_ROBOT(std::string message) {
-    ROS_INFO_STREAM("[" << robotType_ << " " << r_id_ << "] " << message);
+    ROS_INFO_STREAM("[" << ns_ << "] " << message);
+}
+
+std::string Robot::getRobotNamespace(std::string robotType, int robotId) {
+    return robotType + "robot" + std::to_string(robotId);
 }
 
 /*===========================
@@ -73,14 +73,6 @@ bool Robot::toglActivateCallback(std_srvs::Empty::Request& request, std_srvs::Em
  * Update
  *===========================*/
 
-void Robot::publishCmdVel() {
-    cmdVel_pub_.publish(cmdVel_msg_);
-}
-
-void Robot::publishCmdVel(geometry_msgs::Twist msg_) {
-    cmdVel_pub_.publish(msg_);
-}
-
 geometry_msgs::Twist Robot::getCmdVelMsg(float lin_x, float ang_z) {
     geometry_msgs::Twist cmdVel_msg;
     cmdVel_msg.linear.x = lin_x;
@@ -94,9 +86,11 @@ void Robot::publishRobotState() {
 }
 
 void Robot::update() {
-    //ROS_INFO_STREAM_ROBOT("base update");
+    // update position before cmd_vel
+    MovingObject::update();
+
     // ghetto way to only publish cmdvel if robot is active
-    if (isActive_) { publishCmdVel(); }
+    if (isActive_) { MovingObject::publishCmdVel(); }
 
     publishRobotState();
 }
@@ -120,28 +114,4 @@ void Robot::spin()
       ROS_WARN("[ROBOT] Loop running slowly.");
     }
   }
-}*/
-
-// ---------------------------
-
-/*int main(int argc, char **argv)
-{
-    ros::init(argc, argv, "robot");
-    ros::NodeHandle n;
-
-    Robot robot_(n, 1);
-
-    //geometry_msgs::Twist ms = robot_.getCmdVelMsg(0.0f, 2.5f);
-    //robot_.publishCmdVel(ms);
-    
-    try
-    {
-        //robot_.spin();
-    }
-    catch (std::runtime_error& e)
-    {
-        ROS_FATAL_STREAM("[ROBOT] Runtime error: " << e.what());
-        return 1;
-    }
-    return 0;
 }*/

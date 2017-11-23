@@ -20,20 +20,17 @@ class ServiceRedirect
         ros::ServiceServer deactivate_srv_;
         /* Global robot toggle activate service */
         ros::ServiceServer toglActivate_srv_;
+        /* Global robot reset service */
+        ros::ServiceServer reset_srv_;
 
-        /* Ground robot activation service clients */
-        std::vector<ros::ServiceClient> grndbot_activate_srv_clients_;
-        /* Ground robot deactivation service clients */
-        std::vector<ros::ServiceClient> grndbot_deactivate_srv_clients_;
-        /* Ground robot toggle activate service clients */
-        std::vector<ros::ServiceClient> grndbot_toglActivate_srv_clients_;
-
-        /* Obstacle robot activation service clients */
-        std::vector<ros::ServiceClient> obsbot_activate_srv_clients_;
-        /* Obstacle robot deactivation service clients */
-        std::vector<ros::ServiceClient> obsbot_deactivate_srv_clients_;
-        /* Obstacle robot toggle activate service clients */
-        std::vector<ros::ServiceClient> obsbot_toglActivate_srv_clients_;
+        /* Robot activation service clients */
+        std::vector<ros::ServiceClient> activate_srv_clients_;
+        /* Robot deactivation service clients */
+        std::vector<ros::ServiceClient> deactivate_srv_clients_;
+        /* Robot toggle activate service clients */
+        std::vector<ros::ServiceClient> toglActivate_srv_clients_;
+        /* Robot reset service clients */
+        std::vector<ros::ServiceClient> reset_srv_clients_;
 
         std_srvs::Empty srv_;
     
@@ -60,6 +57,11 @@ class ServiceRedirect
          * Callback class method for robot toggle activate service
          */
         bool toglActivateCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
+
+        /*
+         * Callback class method for robot reset service
+         */
+        bool resetCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
     
     public:
         /*

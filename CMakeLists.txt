@@ -1,9 +1,9 @@
 project(elikos_roomba)
 cmake_minimum_required(VERSION 2.8.3)
-option(REMOTE "Compile remote computer (without wiringPi)" FALSE)
+option(REMOTE "Compile remote computer (without wiringPi)" TRUE)
 
 ## Add support for C++11, supported in ROS Kinetic and newer
-# add_definitions(-std=c++11)
+add_definitions(-std=c++11)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -113,7 +113,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS include
   CATKIN_DEPENDS message_runtime
-  LIBRARIES elikos_roomba
+  LIBRARIES ${PROJECT_NAME}_lib
   CATKIN_DEPENDS roscpp rospy std_msgs std_srvs geometry_msgs nav_msgs ca_msgs tf
  # DEPENDS wiringPi
 )
@@ -132,9 +132,17 @@ include_directories(
 )
 
 ## Declare a C++ library
-# add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/elikos_roomba.cpp
-# )
+add_library(${PROJECT_NAME}_lib
+  src/groundrobot.cpp
+  include/elikos_roomba/groundrobot.h
+  src/obstaclerobot.cpp
+  include/elikos_roomba/obstaclerobot.h
+  src/robot.cpp
+  include/elikos_roomba/robot.h
+  src/movingobject.cpp
+  include/elikos_roomba/movingobject.h
+  ${catkin_LIBRARIES}
+)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -147,12 +155,13 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(groundrobot_node src/groundrobot.cpp src/robot.cpp)
+add_executable(groundrobot_node src/groundrobot_node.cpp src/groundrobot.cpp src/robot.cpp src/movingobject.cpp)
 add_dependencies(groundrobot_node ca_msgs_generate_messages_cpp)
-add_executable(obstaclerobot_node src/obstaclerobot.cpp src/robot.cpp)
+add_executable(obstaclerobot_node src/obstaclerobot_node.cpp src/obstaclerobot.cpp src/robot.cpp src/movingobject.cpp)
 add_executable(robotviz_node src/robot_viz.cpp)
 add_executable(serviceredirect_node src/service_redirect.cpp)
-add_executable(arenamanager_node src/arenamanager.cpp)
+#add_executable(arenamanager_node src/arenamanager.cpp)
+add_executable(arena_node src/arena.cpp)
 
 # Add topswitch node with wiringPi library if not remote computer
 # For remote computer compilation, use:
@@ -188,7 +197,10 @@ target_link_libraries(robotviz_node
 target_link_libraries(serviceredirect_node
   ${catkin_LIBRARIES}
 )
-target_link_libraries(arenamanager_node
+#target_link_libraries(arenamanager_node
+#  ${catkin_LIBRARIES}
+#)
+target_link_libraries(arena_node
   ${catkin_LIBRARIES}
 )
 
@@ -244,4 +256,3 @@ target_link_libraries(arenamanager_node
 #target_link_libraries(roombabot_node
 #    ${catkin_LIBRARIES}
 #)
-

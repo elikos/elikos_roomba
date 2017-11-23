@@ -5,21 +5,16 @@
     <arg name="pos_y" default="0.0" />
     <arg name="pos_z" default="0.0" />
     <arg name="yaw" default="0.0" />
+    <arg name="height" default="10" />
 
     <node pkg="tf" type="static_transform_publisher" name="elikos_arena_origin" args="0.0 0.0 0.0 0.0 0.0 0.0 world elikos_arena_origin 100"/>
     
-    <group ns="obstaclerobot$(arg robot_id)">
-        <node name="obstaclerobot_node" pkg="elikos_roomba" type="obstaclerobot_node" output="screen">
-            <param name="robot_id" value="$(arg robot_id)" />
-        </node>
-        <node name="robotviz_node" pkg="elikos_roomba" type="robotviz_node" output="screen">
-            <param name="init_pos_x" value="$(arg pos_x)" />
-            <param name="init_pos_y" value="$(arg pos_y)" />
-            <param name="init_pos_z" value="$(arg pos_z)" />
-            <param name="init_yaw" value="$(arg yaw)" />
-            <param name="robot_id" value="$(arg robot_id)" />
-            <param name="robot_type" value="obstacle" />
-            <param name="robot_color" value="white" />
-        </node>
-    </group>
+    <node name="obstaclerobot_node" pkg="elikos_roomba" type="obstaclerobot_node" output="screen">
+        <param name="robot_id" value="$(arg robot_id)" />
+        <param name="init_pos_x" value="$(arg pos_x)" />
+        <param name="init_pos_y" value="$(arg pos_y)" />
+        <param name="init_pos_z" value="$(arg pos_z)" />
+        <param name="init_yaw" value="$(arg yaw)" />
+        <param name="robot_height" value="$(arg height)" type="string" />
+    </node>
 </launch>

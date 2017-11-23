@@ -9,7 +9,7 @@
 // names
 static const std::string TOPSWITCH_SERVICE_NAME = "topswitch_trigger";          // called by topswitch_node
 static const std::string BUMPER_TOPIC_NAME = "bumper";                          // published by create_autonomy
-static const std::string GROUNDROBOT_TYPE = "GROUND ROBOT";
+static const std::string GROUNDROBOT_TYPE = "ground";
 // speeds
 static const float TURN_SPEED = 90.0f*DEG_TO_RAD;                               //[deg/s]*[rad/deg]=[rad/s]
 static const float NOISE_TURN_SPEED = 90.0f*DEG_TO_RAD;                         //[deg/s]*[rad/deg]=[rad/s]
@@ -164,19 +164,9 @@ class GroundRobot : public Robot
          * Update
          *===========================*/
         /*
-         * Update robot state; called every spinOnce()
-         */
-        void update();
-
-        /*
          * Update ground robot message based on current state
          */
         void updateState();
-
-        /*
-         * ROS spin once, called on every loop
-         */
-        void spinOnce();
 
         /*===========================
          * Global state
@@ -205,13 +195,23 @@ class GroundRobot : public Robot
         bool isRobotState(GroundRobotState cmpRobotState);
     
     public:
-        GroundRobot(ros::NodeHandle& n, int r_id);
+        GroundRobot(ros::NodeHandle& n, int r_id, tf::Vector3 initial_pos, double initial_yaw, std::string color);
         ~GroundRobot();
 
         /*
          * ROS spin. Called only once (by node); contains ROS while loop
          */
         void spin();
+
+        /*
+         * ROS spin once, called on every loop
+         */
+        void spinOnce();
+
+        /*
+         * Update robot state; called every spinOnce()
+         */
+        void update();
 };
 
 #endif  // ELIKOS_ROOMBA_GROUNDROBOT_H

@@ -10,21 +10,24 @@ ServiceRedirect::ServiceRedirect(ros::NodeHandle& n, int groundrobotQty, int obs
     activate_srv_ = n_.advertiseService(ACTIVATE_SERVICE_NAME, &ServiceRedirect::activateCallback, this);
     deactivate_srv_ = n_.advertiseService(DEACTIVATE_SERVICE_NAME, &ServiceRedirect::deactivateCallback, this);
     toglActivate_srv_ = n_.advertiseService(TOGGLEACT_SERVICE_NAME, &ServiceRedirect::toglActivateCallback, this);
+    reset_srv_ = n_.advertiseService(RESET_SERVICE_NAME, &ServiceRedirect::resetCallback, this);
 
     // setup service clients for ground robots
     for (int i = 0; i < groundrobotQty_; ++i) {
         std::string robotnamespace = catStringInt(GROUNDROBOT_NAMESPACE_PREFIX, i+1);
-        grndbot_activate_srv_clients_.push_back(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + ACTIVATE_SERVICE_NAME));
-        grndbot_deactivate_srv_clients_.push_back(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + DEACTIVATE_SERVICE_NAME));
-        grndbot_toglActivate_srv_clients_.push_back(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + TOGGLEACT_SERVICE_NAME));
+        activate_srv_clients_.push_back(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + ACTIVATE_SERVICE_NAME));
+        deactivate_srv_clients_.push_back(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + DEACTIVATE_SERVICE_NAME));
+        toglActivate_srv_clients_.push_back(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + TOGGLEACT_SERVICE_NAME));
+        reset_srv_clients_.push_back(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + RESET_SERVICE_NAME));
     }
 
     // setup service clients for obstacle robots
     for (int i = 0; i < obstaclerobotQty_; ++i) {
         std::string robotnamespace = catStringInt(OBSTACLEROBOT_NAMESPACE_PREFIX, i+1);
-        obsbot_activate_srv_clients_.push_back(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + ACTIVATE_SERVICE_NAME));
-        obsbot_deactivate_srv_clients_.push_back(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + DEACTIVATE_SERVICE_NAME));
-        obsbot_toglActivate_srv_clients_.push_back(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + TOGGLEACT_SERVICE_NAME));
+        activate_srv_clients_.push_back(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + ACTIVATE_SERVICE_NAME));
+        deactivate_srv_clients_.push_back(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + DEACTIVATE_SERVICE_NAME));
+        toglActivate_srv_clients_.push_back(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + TOGGLEACT_SERVICE_NAME));
+        reset_srv_clients_.push_back(n_.serviceClient<std_srvs::Empty>(robotnamespace + "/" + RESET_SERVICE_NAME));
     }
 }
 
@@ -37,20 +40,22 @@ ServiceRedirect::~ServiceRedirect() {
  *===========================*/
 
 bool ServiceRedirect::activateCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
-    callServiceVector(&grndbot_activate_srv_clients_, groundrobotQty_);
-    callServiceVector(&obsbot_activate_srv_clients_, obstaclerobotQty_);
+    callServiceVector(&activate_srv_clients_, groundrobotQty_ + obstaclerobotQty_);
     return true;
 }
 
 bool ServiceRedirect::deactivateCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
-    callServiceVector(&grndbot_deactivate_srv_clients_, groundrobotQty_);
-    callServiceVector(&obsbot_deactivate_srv_clients_, obstaclerobotQty_);
+    callServiceVector(&deactivate_srv_clients_, groundrobotQty_ + obstaclerobotQty_);
     return true;
 }
 
 bool ServiceRedirect::toglActivateCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
-    callServiceVector(&grndbot_toglActivate_srv_clients_, groundrobotQty_);
-    callServiceVector(&obsbot_toglActivate_srv_clients_, obstaclerobotQty_);
+    callServiceVector(&toglActivate_srv_clients_, groundrobotQty_ + obstaclerobotQty_);
+    return true;
+}
+
+bool ServiceRedirect::resetCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
+    callServiceVector(&reset_srv_clients_, groundrobotQty_ + obstaclerobotQty_);
     return true;
 }
 

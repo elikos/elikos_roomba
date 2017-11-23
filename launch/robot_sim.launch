@@ -6,50 +6,32 @@
         <arg name="obstaclerobot_qty" value="1" />
     </include>
     
-    <group ns="groundrobot1">
-        <node name="groundrobot_node" pkg="elikos_roomba" type="groundrobot_node" output="screen">
+    <node name="groundrobot1" pkg="elikos_roomba" type="groundrobot_node" output="screen">
             <param name="robot_id" value="1" />
-        </node>
-        <node name="robotviz_node" pkg="elikos_roomba" type="robotviz_node" output="screen">
             <param name="init_pos_x" value="-1.0" />
             <param name="init_pos_y" value="-2.0" />
             <param name="init_pos_z" value="0.0" />
             <param name="init_yaw" value="0.0" />
-            <param name="robot_id" value="1" />
-            <param name="robot_type" value="ground" />
             <param name="robot_color" value="red" />
-        </node>
-    </group>
+    </node>
 
-    <group ns="groundrobot2">
-        <node name="groundrobot_node" pkg="elikos_roomba" type="groundrobot_node" output="screen">
+    <node name="groundrobot2" pkg="elikos_roomba" type="groundrobot_node" output="screen">
             <param name="robot_id" value="2" />
-        </node>
-        <node name="robotviz_node" pkg="elikos_roomba" type="robotviz_node" output="screen">
             <param name="init_pos_x" value="0.0" />
             <param name="init_pos_y" value="1.0" />
             <param name="init_pos_z" value="0.0" />
             <param name="init_yaw" value="0.78539816339" />
-            <param name="robot_id" value="2" />
-            <param name="robot_type" value="ground" />
             <param name="robot_color" value="green" />
-        </node>
-    </group>
+    </node>
 
-    <group ns="obstaclerobot1">
-        <node name="obstaclerobot_node" pkg="elikos_roomba" type="obstaclerobot_node" output="screen">
+    <node name="obstaclerobot1" pkg="elikos_roomba" type="obstaclerobot_node" output="screen">
             <param name="robot_id" value="1" />
-        </node>
-        <node name="robotviz_node" pkg="elikos_roomba" type="robotviz_node" output="screen">
             <param name="init_pos_x" value="-1.5" />
             <param name="init_pos_y" value="0.0" />
             <param name="init_pos_z" value="0.0" />
             <param name="init_yaw" value="1.57079632679" />
-            <param name="robot_id" value="1" />
-            <param name="robot_type" value="obstacle" />
-            <param name="robot_color" value="white" />
-        </node>
-    </group>
+            <param name="robot_height" value="10" type="string" />
+    </node>
 
     <node pkg="rviz" type="rviz" name="rviz_node" args="-d $(find elikos_roomba)/config/robot_viz.rviz" />
 

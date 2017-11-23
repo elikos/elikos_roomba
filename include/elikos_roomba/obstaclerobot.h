@@ -5,7 +5,7 @@
 #include "elikos_roomba/robot.h"
 
 // names
-static const std::string OBSTACLEROBOT_TYPE = "OBSTACLE ROBOT";
+static const std::string OBSTACLEROBOT_TYPE = "obstacle";
 // trajectory
 static const double CIRC_TRAJECTORY_DIAMETER = 10.0;                                    //[m]
 // find angular velocity
@@ -30,19 +30,9 @@ class ObstacleRobot : public Robot
          * Update
          *===========================*/
         /*
-         * Update robot state; called every spinOnce()
-         */
-        void update();
-
-        /*
          * Update ground robot message based on current state
          */
         void updateState();
-
-        /*
-         * ROS spin once, called on every loop
-         */
-        void spinOnce();
 
         /*===========================
          * Global state
@@ -71,13 +61,23 @@ class ObstacleRobot : public Robot
         bool isRobotState(ObstacleRobotState cmpRobotState);
     
     public:
-        ObstacleRobot(ros::NodeHandle& n, int r_id);
+        ObstacleRobot(ros::NodeHandle& n, int r_id, tf::Vector3 initial_pos, double initial_yaw, std::string height);
         ~ObstacleRobot();
 
         /*
          * ROS spin. Called only once (by node); contains ROS while loop
          */
         void spin();
+
+        /*
+         * ROS spin once, called on every loop
+         */
+        void spinOnce();
+
+        /*
+         * Update robot state; called every spinOnce()
+         */
+        void update();
 };
 
 #endif  // ELIKOS_ROOMBA_OBSTACLEROBOT_H
