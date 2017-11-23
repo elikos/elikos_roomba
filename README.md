@@ -47,15 +47,15 @@ It also has a node to manage the ground robot's top switch and call a service wh
 2. Fork the [`elikos/elikos_roomba`](https://github.com/elikos/elikos_roomba) repo  
    Clone your own fork in the `~/roomba_ws/src` folder
    ````
-   git clone git@github.com:USERNAME/elikos_roomba.git
+   git clone https://github.com/USERNAME/elikos_roomba.git
    cd elikos_roomba/
-   git remote add upstream git@github.com:elikos/elikos_roomba.git
+   git remote add upstream https://github.com/elikos/elikos_roomba.git
    ````  
    with `USERNAME` being your GitHub username
 
 3. Clone the [`create_autonomy`](https://github.com/AutonomyLab/create_autonomy) package repo in the `~/roomba_ws/src` folder
    ````
-   git clone git@github.com:AutonomyLab/create_autonomy.git
+   git clone https://github.com/AutonomyLab/create_autonomy.git
    sudo usermod -a -G dialout $USER
    ````  
    Log out and log back in.
