@@ -84,7 +84,7 @@ double GroundRobot::getTurnDurationFromAngleAndSpeed(double angl, double speed) 
     return angl/speed;
 }
 
-void GroundRobot::timerRestart(ros::Timer tim, double dur) {
+void GroundRobot::timerRestart(ros::Timer& tim, double dur) {
     tim.stop();
     tim.setPeriod(ros::Duration(dur));
     tim.start();

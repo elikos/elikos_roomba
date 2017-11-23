@@ -58,7 +58,7 @@ class GroundRobot : public Robot
         /*
          * Restart timer with duration
          */
-        void timerRestart(ros::Timer tim, double dur);
+        void timerRestart(ros::Timer& tim, double dur);
 
         /*===========================
          * Callbacks
