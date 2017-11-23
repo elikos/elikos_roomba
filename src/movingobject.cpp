@@ -10,9 +10,13 @@ MovingObject::MovingObject(ros::NodeHandle& n, std::string nspace, tf::Vector3 i
     pose_pub_ = n.advertise<geometry_msgs::PoseStamped>(ns_ + "/" + ROBOTPOSE_TOPIC_NAME, POSE_TOPIC_QUEUESIZE);
     marker_pub_ = n.advertise<visualization_msgs::Marker>(ns_ + "/" + MARKER_TOPIC_NAME, MARKER_TOPIC_QUEUESIZE);
 
+    // setup services
+    reset_srv_ = n.advertiseService(ns_ + "/" + RESET_SERVICE_NAME, &MovingObject::resetCallback, this);
+
     // initial state
     isActive_ = false;
     wasActive_ = false;
+    isReset_ = false;
 
     // initial pose
     initial_pos_ = initial_pos;
@@ -86,8 +90,23 @@ tf::Transform MovingObject::createTfFromPosYaw(tf::Vector3 pos, double yaw) {
 }
 
 /*===========================
+ * Callbacks
+ *===========================*/
+
+bool MovingObject::resetCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
+    reset();
+    return true;
+}
+
+/*===========================
  * Update
  *===========================*/
+
+void MovingObject::reset() {
+    isReset_ = true;
+    pos_ = initial_pos_;
+    yaw_ = initial_yaw_;
+}
 
  void MovingObject::publishCmdVel() {
     cmdVel_pub_.publish(cmdVel_msg_);

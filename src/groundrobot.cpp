@@ -195,6 +195,13 @@ void GroundRobot::startTimeoutTurn() {
  *===========================*/
 
 void GroundRobot::updateState() {
+    // check reset state
+    if (isReset_) {
+        isReset_ = false;
+        deactivateRobot();
+    }
+
+    // set cmd_vel msg according to state
     switch ( robotState_ ) {
         case INACTIVE:
             // nothing
