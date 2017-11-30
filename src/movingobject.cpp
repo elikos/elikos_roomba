@@ -183,3 +183,15 @@ void MovingObject::update() {
     publishPoseMsgs();
     publishMarker();
 }
+
+/*===========================
+ * Accessors
+ *===========================*/
+
+ tf::Vector3 MovingObject::getPosition() {
+     return pos_;
+ }
+
+ double MovingObject::getYaw() {
+     return yaw_;
+ }

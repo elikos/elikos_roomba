@@ -40,6 +40,12 @@ class MovingObject
          * ROS spin. Called only once (by node); contains ROS while loop
          */
         virtual void spin() =0;
+
+        /*
+         * Accessors
+         */
+        tf::Vector3 getPosition();
+        double getYaw();
     
     protected:
         ros::NodeHandle& n_;
