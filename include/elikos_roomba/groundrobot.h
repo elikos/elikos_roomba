@@ -29,7 +29,74 @@ static const double NOISE_DURATION = 5.0;                                       
 
 class GroundRobot : public Robot
 {
+    public:
+        GroundRobot(ros::NodeHandle& n, int r_id, tf::Vector3 initial_pos, double initial_yaw, std::string color);
+        ~GroundRobot();
+
+        /*
+         * ROS spin. Called only once (by node); contains ROS while loop
+         */
+        void spin();
+
+        /*
+         * ROS spin once, called on every loop
+         */
+        void spinOnce();
+
+        /*
+         * Update robot state; called every spinOnce()
+         */
+        void update();
+
+    protected:
+        /*===========================
+         * Ground robot state
+         *===========================*/
+        enum GroundRobotState {
+            INACTIVE,
+            FORWARD,
+            TURN_BUMPER,
+            TURN_TOPSWITCH,
+            TURN_TIMEOUT
+        };
+
+        /*===========================
+         * Update
+         *===========================*/
+        /*
+         * Update ground robot message based on current state
+         */
+        void updateState();
+
+        /*===========================
+         * Global state
+         *===========================*/
+        /*
+         * Activate global robot state
+         */
+        void activateRobot();
+
+        /*
+         * Deactivate global robot state
+         */
+        void deactivateRobot();
+
+        /*===========================
+         * Ground robot state changes
+         *===========================*/
+        /*
+         * Change robot state to new given state
+         */
+        void changeRobotStateTo(GroundRobotState newRobotState);
+
+        /*
+         * Compare current robot state to given state
+         */
+        bool isRobotState(GroundRobotState cmpRobotState);
+    
     private:
+        GroundRobotState robotState_;
+
         /*===========================
          * Services
          *===========================*/
@@ -114,18 +181,6 @@ class GroundRobot : public Robot
         void timeoutTurnTimCallback(const ros::TimerEvent& event);
 
         /*===========================
-         * Ground robot state
-         *===========================*/
-        enum GroundRobotState {
-            INACTIVE,
-            FORWARD,
-            TURN_BUMPER,
-            TURN_TOPSWITCH,
-            TURN_TIMEOUT
-        };
-        GroundRobotState robotState_;
-
-        /*===========================
          * Actions
          *===========================*/
         /*
@@ -158,60 +213,6 @@ class GroundRobot : public Robot
          * Get turn duration from angular velocity and total angle of turn
          */
         double getTurnDurationFromAngleAndSpeed(double angl, double speed);
-
-    protected:
-        /*===========================
-         * Update
-         *===========================*/
-        /*
-         * Update ground robot message based on current state
-         */
-        void updateState();
-
-        /*===========================
-         * Global state
-         *===========================*/
-        /*
-         * Activate global robot state
-         */
-        void activateRobot();
-
-        /*
-         * Deactivate global robot state
-         */
-        void deactivateRobot();
-
-        /*===========================
-         * Ground robot state changes
-         *===========================*/
-        /*
-         * Change robot state to new given state
-         */
-        void changeRobotStateTo(GroundRobotState newRobotState);
-
-        /*
-         * Compare current robot state to given state
-         */
-        bool isRobotState(GroundRobotState cmpRobotState);
-    
-    public:
-        GroundRobot(ros::NodeHandle& n, int r_id, tf::Vector3 initial_pos, double initial_yaw, std::string color);
-        ~GroundRobot();
-
-        /*
-         * ROS spin. Called only once (by node); contains ROS while loop
-         */
-        void spin();
-
-        /*
-         * ROS spin once, called on every loop
-         */
-        void spinOnce();
-
-        /*
-         * Update robot state; called every spinOnce()
-         */
-        void update();
 };
 
 #endif  // ELIKOS_ROOMBA_GROUNDROBOT_H

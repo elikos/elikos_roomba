@@ -29,47 +29,17 @@ static const std::string ROBOT_MODEL_FILE_EXTENSION = ".dae";
 
 class MovingObject
 {
-    private:
-        /*===========================
-         * Publishers
-         *===========================*/
-        /* CmdVel publisher */
-        ros::Publisher cmdVel_pub_;
-        /* Pose publisher */
-        ros::Publisher pose_pub_;
-        /* Pose tf publisher */
-        tf::TransformBroadcaster tf_br_;
-        /* Marker publisher */
-        ros::Publisher marker_pub_;
-
-        /*===========================
-         * Services
-         *===========================*/
-        /* Reset service  */
-        ros::ServiceServer reset_srv_;
-
-        /*===========================
-         * Utilities
-         *===========================*/
+    public:
         /*
-         * Create marker message
+         * Constructor
          */
-        void createMarkerMsg();
+        MovingObject(ros::NodeHandle& n, std::string nspace, tf::Vector3 initial_pos, double initial_yaw, std::string model_option);
+        ~MovingObject();
 
         /*
-         * Create PoseStamped message from position vector and yaw
+         * ROS spin. Called only once (by node); contains ROS while loop
          */
-        geometry_msgs::PoseStamped createPoseStampedFromPosYaw(tf::Vector3 pos, double yaw);
-
-        /*
-         * Create tf from position vector and yaw
-         */
-        tf::Transform createTfFromPosYaw(tf::Vector3 pos, double yaw);
-
-        /*
-         * Generate mesh resource for marker depending on robot type and id
-         */
-        std::string generateMeshResource();
+        virtual void spin() =0;
     
     protected:
         ros::NodeHandle& n_;
@@ -174,19 +144,48 @@ class MovingObject
          * Callback class method for reset service
          */
         bool resetCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
-    
-    public:
+
+    private:
+        /*===========================
+         * Publishers
+         *===========================*/
+        /* CmdVel publisher */
+        ros::Publisher cmdVel_pub_;
+        /* Pose publisher */
+        ros::Publisher pose_pub_;
+        /* Pose tf publisher */
+        tf::TransformBroadcaster tf_br_;
+        /* Marker publisher */
+        ros::Publisher marker_pub_;
+
+        /*===========================
+         * Services
+         *===========================*/
+        /* Reset service  */
+        ros::ServiceServer reset_srv_;
+
+        /*===========================
+         * Utilities
+         *===========================*/
         /*
-         * Constructor
+         * Create marker message
          */
-        MovingObject(ros::NodeHandle& n, std::string nspace, tf::Vector3 initial_pos, double initial_yaw, std::string model_option);
-        ~MovingObject();
+        void createMarkerMsg();
 
         /*
-         * ROS spin. Called only once (by node); contains ROS while loop
+         * Create PoseStamped message from position vector and yaw
          */
-        virtual void spin() =0;
+        geometry_msgs::PoseStamped createPoseStampedFromPosYaw(tf::Vector3 pos, double yaw);
 
+        /*
+         * Create tf from position vector and yaw
+         */
+        tf::Transform createTfFromPosYaw(tf::Vector3 pos, double yaw);
+
+        /*
+         * Generate mesh resource for marker depending on robot type and id
+         */
+        std::string generateMeshResource();
 };
 
 #endif  // ELIKOS_ROOMBA_MOVINGOBJECT_H

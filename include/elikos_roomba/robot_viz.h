@@ -15,21 +15,47 @@ static const std::string OBSTACLE_ROBOT_MODEL_FILE = "obs_10.dae";
 
 class RobotViz
 {
-    private:
-        /*===========================
-         * Publishers
-         *===========================*/
-        ros::Publisher pose_pub_;
-        tf::TransformBroadcaster tf_br_;
-        ros::Publisher marker_pub_;
+    public:
+        /*
+         * Constructor
+         */
+        RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_yaw, int r_id, std::string robotType, std::string robotColor);
+        ~RobotViz();
 
-        /*===========================
-         * Subscribers
-         *===========================*/
-        /* CmdVel subscriber */
-        ros::Subscriber cmdVel_sub_;
-        /* Robot state subscriber */
-        ros::Subscriber robotState_sub_;
+        /*
+         * Create marker message
+         */
+        void createMarkerMsg();
+
+        /*
+         * Wrapper for ROS_INFO_STREAM, includes robotType_ string and robot ID in message
+         */
+        void ROS_INFO_STREAM_ROBOT(std::string message);
+
+        /*
+         * Create PoseStamped message from position vector and yaw
+         */
+        geometry_msgs::PoseStamped createPoseStampedFromPosYaw(tf::Vector3 pos, double yaw);
+
+        /*
+         * Create tf from position vector and yaw
+         */
+        tf::Transform createTfFromPosYaw(tf::Vector3 pos, double yaw);
+
+        /*
+         * Concatenate string and int (because other methods weren't working)
+         */
+        std::string catStringInt(std::string strng, int eent);
+
+        /*
+         * Generate mesh resource for marker depending on robot type and id
+         */
+        std::string generateMeshResource();
+
+        /*
+         * ROS spin. Called only once (by node); contains ROS while loop
+         */
+        void spin();
     
     protected:
         ros::NodeHandle& n_;
@@ -116,48 +142,22 @@ class RobotViz
          * ROS spin once, called on every loop
          */
         void spinOnce();
-    
-    public:
-        /*
-         * Constructor
-         */
-        RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_yaw, int r_id, std::string robotType, std::string robotColor);
-        ~RobotViz();
 
-        /*
-         * Create marker message
-         */
-        void createMarkerMsg();
+    private:
+        /*===========================
+         * Publishers
+         *===========================*/
+        ros::Publisher pose_pub_;
+        tf::TransformBroadcaster tf_br_;
+        ros::Publisher marker_pub_;
 
-        /*
-         * Wrapper for ROS_INFO_STREAM, includes robotType_ string and robot ID in message
-         */
-        void ROS_INFO_STREAM_ROBOT(std::string message);
-
-        /*
-         * Create PoseStamped message from position vector and yaw
-         */
-        geometry_msgs::PoseStamped createPoseStampedFromPosYaw(tf::Vector3 pos, double yaw);
-
-        /*
-         * Create tf from position vector and yaw
-         */
-        tf::Transform createTfFromPosYaw(tf::Vector3 pos, double yaw);
-
-        /*
-         * Concatenate string and int (because other methods weren't working)
-         */
-        std::string catStringInt(std::string strng, int eent);
-
-        /*
-         * Generate mesh resource for marker depending on robot type and id
-         */
-        std::string generateMeshResource();
-
-        /*
-         * ROS spin. Called only once (by node); contains ROS while loop
-         */
-        void spin();
+        /*===========================
+         * Subscribers
+         *===========================*/
+        /* CmdVel subscriber */
+        ros::Subscriber cmdVel_sub_;
+        /* Robot state subscriber */
+        ros::Subscriber robotState_sub_;
 };
 
 #endif  // ELIKOS_ROOMBA_ROBOT_VIZ_H

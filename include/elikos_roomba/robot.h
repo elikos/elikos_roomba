@@ -29,22 +29,38 @@ static const float FORWARD_SPEED = 0.33f;       //[m/s]
 
 class Robot : public MovingObject
 {
-    private:
-        /*===========================
-         * Publishers
-         *===========================*/
-        /* Robot state publisher */
-        ros::Publisher robotState_pub_;
+    public:
+        /*
+         * Constructor
+         * botType: std::string with type of robot ("GROUND ROBOT" or "OBSTACLE ROBOT")
+         */
+        Robot(ros::NodeHandle& n, std::string botType, int r_id, tf::Vector3 initial_pos, double initial_yaw, std::string model_option);
+        ~Robot();
 
-        /*===========================
-         * Services
-         *===========================*/
-        /* Robot activation service  */
-        ros::ServiceServer activate_srv_;
-        /* Robot deactivation service */
-        ros::ServiceServer deactivate_srv_;
-        /* Robot toggle activate service */
-        ros::ServiceServer toglActivate_srv_;
+        /*
+         * Update robot; called every spinOnce()
+         */
+        virtual void update();
+
+        /*
+         * ROS spin. Called only once (by node); contains ROS while loop
+         */
+        virtual void spin() =0;
+
+        /*
+         * Get CmdVel message (Twist) from linear (x) velocity and angular (z) velocity
+         */
+        geometry_msgs::Twist getCmdVelMsg(float lin_x, float ang_z);
+
+        /*
+         * Wrapper for ROS_INFO_STREAM, includes robotType_ string and robot ID in message
+         */
+        void ROS_INFO_STREAM_ROBOT(std::string message);
+
+        /*
+         * Get namespace from (robotType_ + r_id_)
+         */
+        std::string getRobotNamespace(std::string robotType, int robotId);
     
     protected:
         double loop_hz_;
@@ -115,39 +131,23 @@ class Robot : public MovingObject
          * Deactivate global robot state
          */
         virtual void deactivateRobot();
-    
-    public:
-        /*
-         * Constructor
-         * botType: std::string with type of robot ("GROUND ROBOT" or "OBSTACLE ROBOT")
-         */
-        Robot(ros::NodeHandle& n, std::string botType, int r_id, tf::Vector3 initial_pos, double initial_yaw, std::string model_option);
-        ~Robot();
 
-        /*
-         * Update robot; called every spinOnce()
-         */
-        virtual void update();
+    private:
+        /*===========================
+         * Publishers
+         *===========================*/
+        /* Robot state publisher */
+        ros::Publisher robotState_pub_;
 
-        /*
-         * ROS spin. Called only once (by node); contains ROS while loop
-         */
-        virtual void spin() =0;
-
-        /*
-         * Get CmdVel message (Twist) from linear (x) velocity and angular (z) velocity
-         */
-        geometry_msgs::Twist getCmdVelMsg(float lin_x, float ang_z);
-
-        /*
-         * Wrapper for ROS_INFO_STREAM, includes robotType_ string and robot ID in message
-         */
-        void ROS_INFO_STREAM_ROBOT(std::string message);
-
-        /*
-         * Get namespace from (robotType_ + r_id_)
-         */
-        std::string getRobotNamespace(std::string robotType, int robotId);
+        /*===========================
+         * Services
+         *===========================*/
+        /* Robot activation service  */
+        ros::ServiceServer activate_srv_;
+        /* Robot deactivation service */
+        ros::ServiceServer deactivate_srv_;
+        /* Robot toggle activate service */
+        ros::ServiceServer toglActivate_srv_;
 };
 
 #endif  // ELIKOS_ROOMBA_ROBOT_H

@@ -15,7 +15,26 @@ static const float CIRC_TURN_SPEED = 360.0f*DEG_TO_RAD/CIRC_TRAJECTORY_DURATION;
 
 class ObstacleRobot : public Robot
 {
-    private:
+    public:
+        ObstacleRobot(ros::NodeHandle& n, int r_id, tf::Vector3 initial_pos, double initial_yaw, std::string height);
+        ~ObstacleRobot();
+
+        /*
+         * ROS spin. Called only once (by node); contains ROS while loop
+         */
+        void spin();
+
+        /*
+         * ROS spin once, called on every loop
+         */
+        void spinOnce();
+
+        /*
+         * Update robot state; called every spinOnce()
+         */
+        void update();
+
+    protected:
         /*===========================
          * Obstacle robot state
          *===========================*/
@@ -23,9 +42,7 @@ class ObstacleRobot : public Robot
             INACTIVE,
             CIRCULAR
         };
-        ObstacleRobotState robotState_;
 
-    protected:
         /*===========================
          * Update
          *===========================*/
@@ -60,24 +77,8 @@ class ObstacleRobot : public Robot
          */
         bool isRobotState(ObstacleRobotState cmpRobotState);
     
-    public:
-        ObstacleRobot(ros::NodeHandle& n, int r_id, tf::Vector3 initial_pos, double initial_yaw, std::string height);
-        ~ObstacleRobot();
-
-        /*
-         * ROS spin. Called only once (by node); contains ROS while loop
-         */
-        void spin();
-
-        /*
-         * ROS spin once, called on every loop
-         */
-        void spinOnce();
-
-        /*
-         * Update robot state; called every spinOnce()
-         */
-        void update();
+    private:
+        ObstacleRobotState robotState_;
 };
 
 #endif  // ELIKOS_ROOMBA_OBSTACLEROBOT_H

@@ -8,43 +8,6 @@
 
 class ArenaManager
 {
-    private:
-        tf::TransformListener tf_listener_;
-
-        bool new_isInsideArena_[];
-        bool old_isInsideArena_[];
-
-        /*===========================
-         * Services
-         *===========================*/
-        /* Ground robot bumper trigger service clients */
-        std::vector<ros::ServiceClient> grndbot_brumpertrigger_srv_clients_;
-
-        std_srvs::Empty srv_;
-    
-    protected:
-        ros::NodeHandle& n_;
-        double loop_hz_;
-        bool is_running_slowly_;
-
-        /* Ground robot quantity */
-        int groundrobotQty_;
-        /* Dimension of arena, assuming square and origin (0,0) being in the middle */
-        double arenaDimension_;
-
-        /*===========================
-         * Update
-         *===========================*/
-        /*
-         * Update; called every spinOnce()
-         */
-        void update();
-
-        /*
-         * ROS spin once, called on every loop
-         */
-        void spinOnce();
-        
     public:
         /*
          * Constructor
@@ -72,6 +35,43 @@ class ArenaManager
          * ROS spin. Called only once (by node); contains ROS while loop
          */
         void spin();
+    
+    protected:
+        ros::NodeHandle& n_;
+        double loop_hz_;
+        bool is_running_slowly_;
+
+        /* Ground robot quantity */
+        int groundrobotQty_;
+        /* Dimension of arena, assuming square and origin (0,0) being in the middle */
+        double arenaDimension_;
+
+        /*===========================
+         * Update
+         *===========================*/
+        /*
+         * Update; called every spinOnce()
+         */
+        void update();
+
+        /*
+         * ROS spin once, called on every loop
+         */
+        void spinOnce();
+
+    private:
+        tf::TransformListener tf_listener_;
+
+        bool new_isInsideArena_[];
+        bool old_isInsideArena_[];
+
+        /*===========================
+         * Services
+         *===========================*/
+        /* Ground robot bumper trigger service clients */
+        std::vector<ros::ServiceClient> grndbot_brumpertrigger_srv_clients_;
+
+        std_srvs::Empty srv_;
 };
 
 #endif  // ELIKOS_ROOMBA_ARENA_MANAGER_H
