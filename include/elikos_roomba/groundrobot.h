@@ -11,8 +11,8 @@ static const std::string TOPSWITCH_SERVICE_NAME = "topswitch_trigger";          
 static const std::string BUMPER_TOPIC_NAME = "bumper";                          // published by create_autonomy
 static const std::string GROUNDROBOT_TYPE = "ground";
 // speeds
-static const float TURN_SPEED = 90.0f*DEG_TO_RAD;                               //[deg/s]*[rad/deg]=[rad/s]
-static const float NOISE_TURN_SPEED = 90.0f*DEG_TO_RAD;                         //[deg/s]*[rad/deg]=[rad/s]
+static const double TURN_SPEED = 90.0*DEG_TO_RAD;                               //[deg/s]*[rad/deg]=[rad/s]
+static const double NOISE_TURN_SPEED = 90.0*DEG_TO_RAD;                         //[deg/s]*[rad/deg]=[rad/s]
 // angles (direction of rotation is applied in updateState())
 static const double BUMPER_TURN_ANGLE = 180.0*DEG_TO_RAD;                       //[deg]*[rad/deg]=[rad]
 static const double TOPSWITCH_TURN_ANGLE = 45.0*DEG_TO_RAD;                     //[deg]*[rad/deg]=[rad]
@@ -34,6 +34,16 @@ class GroundRobot : public Robot
         ~GroundRobot();
 
         /*
+         * Check if current robot is colliding with another robot and react accordingly
+         */
+        void checkCollision(tf::Vector3 pos);
+
+        /*
+         * Update robot state; called every spinOnce()
+         */
+        void update();
+
+        /*
          * ROS spin. Called only once (by node); contains ROS while loop
          */
         void spin();
@@ -42,11 +52,6 @@ class GroundRobot : public Robot
          * ROS spin once, called on every loop
          */
         void spinOnce();
-
-        /*
-         * Update robot state; called every spinOnce()
-         */
-        void update();
 
     protected:
         /*===========================

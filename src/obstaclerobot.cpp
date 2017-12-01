@@ -47,6 +47,10 @@ void ObstacleRobot::deactivateRobot() {
  * Update
  *===========================*/
 
+void ObstacleRobot::checkCollision(tf::Vector3 pos) {
+    // no collision for obstacle robot
+}
+
 void ObstacleRobot::updateState() {
     // check reset state
     if (isReset_) {

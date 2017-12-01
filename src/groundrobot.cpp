@@ -194,6 +194,24 @@ void GroundRobot::startTimeoutTurn() {
  * Update
  *===========================*/
 
+void GroundRobot::checkCollision(tf::Vector3 pos) {
+    // distance
+    double distanceSquaredWrtMe = pow((pos.getY() - pos_.getY()), 2) + pow((pos.getX() - pos_.getX()), 2);
+
+    // yaw
+    double angle = atan2(pos.getY() - pos_.getY(), pos.getX() - pos_.getX());
+    // actual yaw : difference between my heading and the robot's angle wrt me
+    double yaw_diff = angle - yaw_;
+
+    bool isTooClose = distanceSquaredWrtMe <= pow(DIAMETER, 2);
+    bool isBumper = (yaw_diff >= (-BUMPER_ANGLE/2)) && (yaw_diff <= (BUMPER_ANGLE/2));
+
+    // if collision
+    if (isTooClose && isBumper) {
+        bumperTrig();
+    }
+}
+
 void GroundRobot::updateState() {
     // check reset state
     if (isReset_) {

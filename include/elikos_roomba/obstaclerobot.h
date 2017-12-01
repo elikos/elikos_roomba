@@ -11,13 +11,23 @@ static const double CIRC_TRAJECTORY_DIAMETER = 10.0;                            
 // find angular velocity
 static const double CIRC_TRAJECTORY_CIRCUMFERENCE = CIRC_TRAJECTORY_DIAMETER*3.1415;    //[m]
 static const double CIRC_TRAJECTORY_DURATION = CIRC_TRAJECTORY_DIAMETER/FORWARD_SPEED;  //[m]/[m/s]=[s]
-static const float CIRC_TURN_SPEED = 360.0f*DEG_TO_RAD/CIRC_TRAJECTORY_DURATION;        //[deg]*[rad/deg]/[s]=[rad/s]
+static const double CIRC_TURN_SPEED = 360.0*DEG_TO_RAD/CIRC_TRAJECTORY_DURATION;        //[deg]*[rad/deg]/[s]=[rad/s]
 
 class ObstacleRobot : public Robot
 {
     public:
         ObstacleRobot(ros::NodeHandle& n, int r_id, tf::Vector3 initial_pos, double initial_yaw, std::string height);
         ~ObstacleRobot();
+
+        /*
+         * Check if current robot is colliding with another robot and react accordingly
+         */
+        void checkCollision(tf::Vector3 pos);
+
+        /*
+         * Update robot state; called every spinOnce()
+         */
+        void update();
 
         /*
          * ROS spin. Called only once (by node); contains ROS while loop
@@ -28,11 +38,6 @@ class ObstacleRobot : public Robot
          * ROS spin once, called on every loop
          */
         void spinOnce();
-
-        /*
-         * Update robot state; called every spinOnce()
-         */
-        void update();
 
     protected:
         /*===========================

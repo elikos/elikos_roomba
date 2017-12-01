@@ -188,10 +188,14 @@ void MovingObject::update() {
  * Accessors
  *===========================*/
 
- tf::Vector3 MovingObject::getPosition() {
+ tf::Vector3 MovingObject::getPosition() const {
      return pos_;
  }
 
- double MovingObject::getYaw() {
+ double MovingObject::getYaw() const {
      return yaw_;
+ }
+
+ std::string MovingObject::getNamespace() const {
+     return ns_;
  }

@@ -20,11 +20,14 @@ static const std::string BUMPER_SERVICE_NAME = "bumper_trigger";      // exposed
 // number parameters
 static const int ROBOTSTATE_TOPIC_QUEUESIZE = 10;
 // convention
-static const double DEG_TO_RAD = 3.1415/180.0;  //[rad/deg]
-static const double ROTATE_CCW = 1.0;           // counterclockwise (positive angular.z)
-static const double ROTATE_CW = -1.0;           // clockwise (negative angular.z)
+static const double DEG_TO_RAD = 3.1415/180.0;          //[rad/deg]
+static const double ROTATE_CCW = 1.0;                   // counterclockwise (positive angular.z)
+static const double ROTATE_CW = -1.0;                   // clockwise (negative angular.z)
 // speeds
-static const float FORWARD_SPEED = 0.33f;       //[m/s]
+static const double FORWARD_SPEED = 0.33;               //[m/s]
+// physical dimensions
+static const double DIAMETER = 0.3485;                    //[m] (according to specs)
+static const double BUMPER_ANGLE = 180.0*DEG_TO_RAD;    //[deg] total angle interval (symmetrical) for bumper
 
 
 class Robot : public MovingObject
@@ -32,10 +35,15 @@ class Robot : public MovingObject
     public:
         /*
          * Constructor
-         * botType: std::string with type of robot ("GROUND ROBOT" or "OBSTACLE ROBOT")
+         * botType: std::string with type of robot ("ground" or "obstacle")
          */
         Robot(ros::NodeHandle& n, std::string botType, int r_id, tf::Vector3 initial_pos, double initial_yaw, std::string model_option);
         ~Robot();
+
+        /*
+         * Check if current robot is colliding with another robot and react accordingly
+         */
+        virtual void checkCollision(tf::Vector3 pos) =0;
 
         /*
          * Update robot; called every spinOnce()
@@ -46,31 +54,19 @@ class Robot : public MovingObject
          * ROS spin. Called only once (by node); contains ROS while loop
          */
         virtual void spin() =0;
-
-        /*
-         * Get CmdVel message (Twist) from linear (x) velocity and angular (z) velocity
-         */
-        geometry_msgs::Twist getCmdVelMsg(float lin_x, float ang_z);
-
-        /*
-         * Wrapper for ROS_INFO_STREAM, includes robotType_ string and robot ID in message
-         */
-        void ROS_INFO_STREAM_ROBOT(std::string message);
-
-        /*
-         * Get namespace from (robotType_ + r_id_)
-         */
-        std::string getRobotNamespace(std::string robotType, int robotId);
     
     protected:
         double loop_hz_;
         bool is_running_slowly_;
 
-        /*===========================
-         * Messages
-         *===========================*/
         /* Current robot state message (String) */
         std_msgs::String robotState_msg_;
+
+        /* Robot type */
+        std::string robotType_;
+
+        /* Robot id */
+        int r_id_;
 
         /*===========================
          * Update
@@ -114,14 +110,8 @@ class Robot : public MovingObject
         bool toglActivateCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
 
         /*===========================
-         * Info
+         * Global state
          *===========================*/
-        /* Robot type */
-        std::string robotType_;
-
-        /* Robot id */
-        int r_id_;
-
         /*
          * Activate global robot state
          */
@@ -131,6 +121,19 @@ class Robot : public MovingObject
          * Deactivate global robot state
          */
         virtual void deactivateRobot();
+
+        /*===========================
+         * Other utilities
+         *===========================*/
+        /*
+         * Get CmdVel message (Twist) from linear (x) velocity and angular (z) velocity
+         */
+        geometry_msgs::Twist getCmdVelMsg(float lin_x, float ang_z);
+
+        /*
+         * Wrapper for ROS_INFO_STREAM, includes robotType_ string and robot ID in message
+         */
+        void ROS_INFO_STREAM_ROBOT(std::string message);
 
     private:
         /*===========================
@@ -148,6 +151,11 @@ class Robot : public MovingObject
         ros::ServiceServer deactivate_srv_;
         /* Robot toggle activate service */
         ros::ServiceServer toglActivate_srv_;
+
+        /*
+         * Get namespace from (robotType_ + r_id_)
+         */
+        std::string getRobotNamespace(std::string robotType, int robotId);
 };
 
 #endif  // ELIKOS_ROOMBA_ROBOT_H

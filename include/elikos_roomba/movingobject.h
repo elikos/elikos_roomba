@@ -44,8 +44,9 @@ class MovingObject
         /*
          * Accessors
          */
-        tf::Vector3 getPosition();
-        double getYaw();
+        tf::Vector3 getPosition() const;
+        double getYaw() const;
+        std::string getNamespace() const;
     
     protected:
         ros::NodeHandle& n_;
