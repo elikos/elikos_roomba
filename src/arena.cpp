@@ -4,7 +4,7 @@
 static const double LOOP_RATE = 1.0;
 static const std::string NODE_NAME = "arena";
 static const std::string TF_MIDDLE_ARENA = "/elikos_arena_origin";
-static const std::string ARENA_SQUARES_TOPIC_NAME = "arena_markers";
+static const std::string ARENA_SQUARES_TOPIC_NAME = "markers/arena";
 static const std::string ARENA_SQUARE_MODEL = "package://elikos_roomba/models/arena_square.dae";
 static const double SQUARE_MODEL_OFFSET_X = 0.5;        // Offset to get the "origin" on the (0,0) corner 
 static const double SQUARE_MODEL_OFFSET_Y = 0.5;        // Offset to get the "origin" on the (0,0) corner 
