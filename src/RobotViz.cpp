@@ -17,8 +17,8 @@ RobotViz::RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_y
     robotState_sub_ = n.subscribe(ROBOTSTATE_TOPIC_NAME, 10, &RobotViz::robotStateCallback, this);
 
     // setup publishers
-    pose_pub_ = n.advertise<geometry_msgs::PoseStamped>(ROBOTPOSE_TOPIC_NAME, ROBOTSTATE_TOPIC_QUEUESIZE);
-    marker_pub_ = n.advertise<visualization_msgs::Marker>(MARKER_TOPIC_NAME, MARKER_TOPIC_QUEUESIZE);
+    pose_pub_ = n.advertise<geometry_msgs::PoseStamped>(ROBOTPOSE_TOPIC_NAME, 10);
+    marker_pub_ = n.advertise<visualization_msgs::Marker>(MARKER_TOPIC_NAME, 10);
 
     // create robot tf name with id and type
     tf_robot_ = robotType_ + TF_ROBOT_PREFIX + std::to_string(r_id_);
