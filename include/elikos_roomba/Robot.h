@@ -1,6 +1,12 @@
 #ifndef ROBOT_H
 #define ROBOT_H
 
+/**
+ * \file Robot.h
+ * \brief Robot class declaration
+ * \author christophebedard
+ */
+
 #include <ros/ros.h>
 #include <std_msgs/Empty.h>
 #include <std_msgs/Bool.h>
@@ -17,8 +23,6 @@ static const std::string ACTIVATE_SERVICE_NAME = "activate";          // service
 static const std::string DEACTIVATE_SERVICE_NAME = "deactivate";      // service, deactivate robot
 static const std::string TOGGLEACT_SERVICE_NAME = "toggle_activate";  // service, toggle robot activation
 static const std::string BUMPER_SERVICE_NAME = "bumper_trigger";      // exposed as feature for robot viz and such
-// number parameters
-static const int ROBOTSTATE_TOPIC_QUEUESIZE = 10;
 // convention
 static const double DEG_TO_RAD = 3.1415/180.0;          //[rad/deg]
 static const double ROTATE_CCW = 1.0;                   // counterclockwise (positive angular.z)
@@ -30,119 +34,158 @@ static const double DIAMETER = 0.3485;                  //[m] (according to spec
 static const double HEIGHT = 0.1;                       //[m] (according to specs)
 static const double BUMPER_ANGLE = 180.0*DEG_TO_RAD;    //[deg] total angle interval (symmetrical) for bumper
 
-
+/** \class Robot
+ * \brief abstract class which implements basic robot behaviour.
+ */
 class Robot : public MovingObject
 {
     public:
-        /*
-         * Constructor
-         * botType: std::string with type of robot ("ground" or "obstacle")
+        /**
+         * \brief Robot constructor.
+         *
+         * \param n : node handle.
+         * \param botType : type of robot ("ground" or "obstacle").
+         * \param r_id : robot ID.
+         * \param initial_pos : initial XYZ position.
+         * \param initial_yaw : initial heading.
+         * \param model_option : characteristic of object (used to get the marker model).
          */
         Robot(ros::NodeHandle& n, std::string botType, int r_id, tf::Vector3 initial_pos, double initial_yaw, std::string model_option);
+        
+        /**
+         * \brief Robot destructor.
+         */
         ~Robot();
 
+        /**
+         * \brief Accessor for current position.
+         *
+         * \return position.
+         */
         /*
          * Check if current robot is colliding with another robot and react accordingly
          */
         virtual void checkRobotCollision(tf::Vector3 pos) =0;
 
-        /*
-         * Check if quad is touching topswitch and react accordingly
+        /**
+         * \brief Check if quad is touching topswitch and react accordingly.
+         *
+         * \param pos : XYZ position of quad.
+         * \param diameter : interaction diameter for quad.
          */
         virtual void checkTopInteraction(tf::Vector3 pos, double diameter) =0;
 
-        /*
-         * Update robot; called every spinOnce()
+        /**
+         * \brief Update robot; called every spinOnce().
          */
         virtual void update();
 
-        /*
-         * ROS spin. Called only once (by node); contains ROS while loop
+        /**
+         * \brief ROS spin. Called only once (by node); contains ROS while loop.
          */
         virtual void spin() =0;
 
-        /*
-         * Robot type accessor
+        /**
+         * \brief Robot type accessor.
+         *
+         * \return robot type.
          */
         std::string getRobotType() const;
     
     protected:
-        double loop_hz_;
-        bool is_running_slowly_;
+        std_msgs::String robotState_msg_; /**< current robot state message */
 
-        /* Current robot state message (String) */
-        std_msgs::String robotState_msg_;
-
-        /* Robot type */
-        std::string robotType_;
-
-        /* Robot id */
-        int r_id_;
+        std::string robotType_; /**< robot type */
+        int r_id_; /**< robot id */
 
         /*===========================
          * Update
          *===========================*/
-        /*
-         * Update ground robot message based on current state
+        /**
+         * \brief Update ground robot message based on current state.
          */
         virtual void updateState() =0;
 
-        /*
-         * ROS spin once, called on every loop
+        /**
+         * \brief ROS spin once, called on every loop.
          */
         virtual void spinOnce() =0;
 
-        /*
-         * Publish a specific CmdVel message (for testing purposes)
+        /**
+         * \brief Publish a specific CmdVel message (for testing purposes).
+         *
+         * \param cmdVel_msg : message.
          */
         void publishCmdVel(geometry_msgs::Twist cmdVel_msg);
 
-        /*
-         * Publish robot state message (String)
+        /**
+         * \brief Publish current robot state message.
          */
         void publishRobotState();
 
         /*===========================
          * Callbacks
          *===========================*/
-        /*
-         * Callback class method for robot activation service
+        /**
+         * \brief Callback class method for robot activation service.
+         *
+         * \param request : service request.
+         * \param response : service response (empty).
+         *
+         * \return success.
          */
         bool activateCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
 
-        /*
-         * Callback class method for robot deactivation service
+        /**
+         * \brief Callback class method for robot deactivation service.
+         *
+         * \param request : service request.
+         * \param response : service response (empty).
+         *
+         * \return success.
          */
         bool deactivateCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
 
-        /*
-         * Callback class method for robot toggle activate service
+        /**
+         * \brief Callback class method for robot toggle activate service.
+         *
+         * \param request : service request.
+         * \param response : service response (empty).
+         *
+         * \return success.
          */
         bool toglActivateCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
 
         /*===========================
          * Global state
          *===========================*/
-        /*
-         * Activate global robot state
+        /**
+         * \brief Activate global robot state.
          */
         virtual void activateRobot();
 
-        /*
-         * Deactivate global robot state
+        /**
+         * \brief Deactivate global robot state.
          */
         virtual void deactivateRobot();
 
         /*===========================
          * Other utilities
          *===========================*/
-        /*
-         * Get CmdVel message (Twist) from linear (x) velocity and angular (z) velocity
+        /**
+         * \brief Get CmdVel message (Twist).
+         *
+         * \param lin_x : linear (x) velocity.
+         * \param ang_z : angular (z) velocity.
+         *
+         * \return twist message.
          */
         geometry_msgs::Twist getCmdVelMsg(float lin_x, float ang_z);
 
-        /*
-         * Wrapper for ROS_INFO_STREAM, includes robotType_ string and robot ID in message
+        /**
+         * \brief Wrapper for ROS_INFO_STREAM, includes robotType_ string and robot ID in message.
+         *
+         * \param message : message to include.
          */
         void ROS_INFO_STREAM_ROBOT(std::string message);
 
@@ -150,21 +193,22 @@ class Robot : public MovingObject
         /*===========================
          * Publishers
          *===========================*/
-        /* Robot state publisher */
-        ros::Publisher robotState_pub_;
+        ros::Publisher robotState_pub_; /**< robot state publisher */
 
         /*===========================
          * Services
          *===========================*/
-        /* Robot activation service  */
-        ros::ServiceServer activate_srv_;
-        /* Robot deactivation service */
-        ros::ServiceServer deactivate_srv_;
-        /* Robot toggle activate service */
-        ros::ServiceServer toglActivate_srv_;
+        ros::ServiceServer activate_srv_; /**< robot activation service */
+        ros::ServiceServer deactivate_srv_; /**< robot deactivation service */
+        ros::ServiceServer toglActivate_srv_; /**< robot toggle activate service */
 
-        /*
-         * Get namespace from (robotType_ + r_id_)
+        /**
+         * \brief Get namespace.
+         *
+         * \param robotType : type of robot ("ground" or "obstacle").
+         * \param robotId : id of robot.
+         *
+         * \return robot namespace.
          */
         std::string getRobotNamespace(std::string robotType, int robotId);
 };

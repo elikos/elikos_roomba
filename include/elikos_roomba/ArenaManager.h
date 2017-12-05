@@ -1,10 +1,15 @@
 #ifndef ARENA_MANAGER_H
 #define ARENA_MANAGER_H
 
+/**
+ * \file ArenaManager.h
+ * \brief NOT WORKING
+ * \author christophebedard
+ */
+
 #include "elikos_roomba/ServiceRedirect.h"        // use topic names, service names, and other values
 #include "elikos_roomba/robot_viz.h"
 #include <tf/transform_listener.h>
-
 
 class ArenaManager
 {

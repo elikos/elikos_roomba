@@ -1,6 +1,15 @@
+/**
+ * \file ServiceRedirect_node.cpp
+ * \brief ServiceRedirect node
+ * \author christophebedard
+ */
+
 #include <ros/ros.h>
 #include "elikos_roomba/ServiceRedirect.h"
 
+/**
+ * \brief main.
+ */
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "serviceredirect");

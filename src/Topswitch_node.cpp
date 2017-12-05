@@ -11,9 +11,12 @@
 static const std::string TOPSWITCHSTATE_TOPIC_NAME = "topswitch_state";
 static const std::string TOPSWITCH_SERVICE_NAME = "topswitch_trigger";
 
-bool isTopSwitchActivated = false;
-bool wasTopSwitchActivated = false;
+bool isTopSwitchActivated = false; /**< current topswitch state */
+bool wasTopSwitchActivated = false; /**< previous topswitch state */
 
+/**
+ * \brief main.
+ */
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "topswitch");

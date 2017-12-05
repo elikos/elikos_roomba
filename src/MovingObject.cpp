@@ -1,3 +1,9 @@
+/**
+ * \file MovingObject.cpp
+ * \brief MovingObject class implementation
+ * \author christophebedard
+ */
+
 #include "elikos_roomba/MovingObject.h"
 
 MovingObject::MovingObject(ros::NodeHandle& n, std::string nspace, tf::Vector3 initial_pos, double initial_yaw, std::string model_option)
@@ -6,9 +12,9 @@ MovingObject::MovingObject(ros::NodeHandle& n, std::string nspace, tf::Vector3 i
       model_option_(model_option)
 {
     // setup publishers
-    cmdVel_pub_ = n.advertise<geometry_msgs::Twist>(ns_ + "/" + CMDVEL_TOPIC_NAME, CMDVEL_TOPIC_QUEUESIZE);
-    pose_pub_ = n.advertise<geometry_msgs::PoseStamped>(ns_ + "/" + ROBOTPOSE_TOPIC_NAME, POSE_TOPIC_QUEUESIZE);
-    marker_pub_ = n.advertise<visualization_msgs::Marker>(ns_ + "/" + MARKER_TOPIC_NAME, MARKER_TOPIC_QUEUESIZE);
+    cmdVel_pub_ = n.advertise<geometry_msgs::Twist>(ns_ + "/" + CMDVEL_TOPIC_NAME, 30);
+    pose_pub_ = n.advertise<geometry_msgs::PoseStamped>(ns_ + "/" + ROBOTPOSE_TOPIC_NAME, 30);
+    marker_pub_ = n.advertise<visualization_msgs::Marker>(ns_ + "/" + MARKER_TOPIC_NAME, 10);
 
     // setup services
     reset_srv_ = n.advertiseService(ns_ + "/" + RESET_SERVICE_NAME, &MovingObject::resetCallback, this);
@@ -162,9 +168,9 @@ void MovingObject::updatePosition() {
     // check if robot is active
     if (isActive_) {
         // time difference
-        ros::Time time_now_ = ros::Time::now();
-        time_diff_ = time_now_ - time_last_;
-        double timeDiffSecs = time_diff_.toSec();
+        ros::Time time_now = ros::Time::now();
+        ros::Duration time_diff = time_now - time_last_;
+        double timeDiffSecs = time_diff.toSec();
 
         double linVel = cmdVel_msg_.linear.x;
         double angVel = cmdVel_msg_.angular.z;
@@ -172,7 +178,7 @@ void MovingObject::updatePosition() {
         updatePose(timeDiffSecs, linVel, angVel);
         updatePoseMsgs();
 
-        time_last_ = time_now_;
+        time_last_ = time_now;
     }
 
     wasActive_ = isActive_;

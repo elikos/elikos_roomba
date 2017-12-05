@@ -1,3 +1,9 @@
+/**
+ * \file RobotViz.cpp
+ * \brief RobotViz class implementation
+ * \author christophebedard
+ */
+
 #include "elikos_roomba/RobotViz.h"
 
 RobotViz::RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_yaw, int r_id, std::string robotType, std::string robotColor)
@@ -6,8 +12,6 @@ RobotViz::RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_y
       robotType_(robotType),
       robotColor_(robotColor)
 {
-    loop_hz_ = LOOP_RATE;
-
     // setup subscribers
     cmdVel_sub_ = n.subscribe(CMDVEL_TOPIC_NAME, 10, &RobotViz::cmdVelCallback, this);
     robotState_sub_ = n.subscribe(ROBOTSTATE_TOPIC_NAME, 10, &RobotViz::robotStateCallback, this);
@@ -17,7 +21,7 @@ RobotViz::RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_y
     marker_pub_ = n.advertise<visualization_msgs::Marker>(MARKER_TOPIC_NAME, MARKER_TOPIC_QUEUESIZE);
 
     // create robot tf name with id and type
-    tf_robot_ = catStringInt(robotType_ + TF_ROBOT_PREFIX, r_id_);
+    tf_robot_ = robotType_ + TF_ROBOT_PREFIX + std::to_string(r_id_);
 
     // initial state
     isActive_ = false;
@@ -55,9 +59,9 @@ void RobotViz::cmdVelCallback(const geometry_msgs::Twist::ConstPtr& msg) {
     // check if robot is active (and time_last_ reset by robotStateCallback)
     if (isActive_) {
         // time difference
-        ros::Time time_now_ = ros::Time::now();
-        time_diff_ = time_now_ - time_last_;
-        double timeDiffSecs = time_diff_.toSec();
+        ros::Time time_now = ros::Time::now();
+        ros::Duration time_diff = time_now - time_last_;
+        double timeDiffSecs = time_diff.toSec();
 
         double linVel = msg->linear.x;
         double angVel = msg->angular.z;
@@ -65,7 +69,7 @@ void RobotViz::cmdVelCallback(const geometry_msgs::Twist::ConstPtr& msg) {
         updatePose(timeDiffSecs, linVel, angVel);
         updatePoseMsgs();
 
-        time_last_ = time_now_;
+        time_last_ = time_now;
     }
 }
 
@@ -128,14 +132,13 @@ void RobotViz::spinOnce()
 
 void RobotViz::spin()
 {
-  ros::Rate rate(loop_hz_);
+  ros::Rate rate(LOOP_RATE);
 
   while (ros::ok())
   {
     spinOnce();
 
-    is_running_slowly_ = !rate.sleep();
-    if (is_running_slowly_)
+    if (!rate.sleep())
     {
       ROS_WARN("[ROBOT VIZ] Loop running slowly.");
     }
@@ -147,7 +150,7 @@ void RobotViz::spin()
  *===========================*/
 
 void RobotViz::createMarkerMsg() {
-    marker_msg_.header.frame_id = catStringInt("/" + robotType_ + "robot", r_id_);
+    marker_msg_.header.frame_id = "/" + robotType_ + "robot" + std::to_string(r_id_);
     //marker_msg.ns = "myns";
     marker_msg_.id = 0;
     marker_msg_.type = visualization_msgs::Marker::MESH_RESOURCE;
@@ -203,14 +206,11 @@ void RobotViz::ROS_INFO_STREAM_ROBOT(std::string message) {
     ROS_INFO_STREAM("[" << "ROBOT VIZ " << robotType_ << "robot" << r_id_ << "] " << message);
 }
 
-std::string RobotViz::catStringInt(std::string strng, int eent) {
-    std::stringstream sstm;
-    sstm << strng << eent;
-    return sstm.str();
-}
-
 // ---------------------------
 
+/**
+ * \brief main.
+ */
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "robotviz");

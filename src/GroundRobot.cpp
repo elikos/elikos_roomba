@@ -1,3 +1,9 @@
+/**
+ * \file GroundRobot.cpp
+ * \brief GroundRobot class implementation
+ * \author christophebedard
+ */
+
 #include "elikos_roomba/GroundRobot.h"
 
 GroundRobot::GroundRobot(ros::NodeHandle& n, int r_id, tf::Vector3 initial_pos, double initial_yaw, std::string color)
@@ -154,7 +160,7 @@ void GroundRobot::noiseCallback(const ros::TimerEvent& event) {
 
 void GroundRobot::noiseTurnCallback(const ros::TimerEvent& event) {
     Robot::ROS_INFO_STREAM_ROBOT("Noise done");
-    forward_noise_ = 0.0f; // set to 0
+    forward_noise_ = 0.0; // set to 0
     timerRestart(noise_tim_, NOISE_DURATION);
 }
 
@@ -282,49 +288,15 @@ void GroundRobot::spinOnce()
 
 void GroundRobot::spin()
 {
-  ros::Rate rate(loop_hz_);
+  ros::Rate rate(LOOP_RATE);
 
   while (ros::ok())
   {
     spinOnce();
 
-    is_running_slowly_ = !rate.sleep();
-    if (is_running_slowly_)
+    if (!rate.sleep())
     {
       ROS_WARN("[GROUND ROBOT] Loop running slowly.");
     }
   }
 }
-
-// ---------------------------
-/*
-int main(int argc, char **argv)
-{
-    ros::init(argc, argv, "groundrobot");
-    ros::NodeHandle n;
-
-    ros::NodeHandle n_p("~");
-    double init_pos_x, init_pos_y, init_pos_z, init_yaw;
-    int robot_id;
-    std::string robot_color;
-    n_p.getParam("init_pos_x", init_pos_x);
-    n_p.getParam("init_pos_y", init_pos_y);
-    n_p.getParam("init_pos_z", init_pos_z);
-    n_p.getParam("init_yaw", init_yaw);
-    n_p.getParam("robot_id", robot_id);
-    n_p.getParam("robot_color", robot_color);
-
-    GroundRobot groundrobot_(n, robot_id, tf::Vector3(init_pos_x, init_pos_y, init_pos_z), init_yaw, robot_color);
-    
-    try
-    {
-        groundrobot_.spin();
-    }
-    catch (std::runtime_error& e)
-    {
-        ROS_FATAL_STREAM("[GROUND ROBOT] Runtime error: " << e.what());
-        return 1;
-    }
-    return 0;
-}
-*/

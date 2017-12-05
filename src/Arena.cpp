@@ -1,6 +1,6 @@
 /**
  * \file Arena.cpp
- * \brief Publishes markers for arena viz (squares and lines).
+ * \brief Publishes markers for arena viz (squares and lines)
  * \author christophebedard
  */
 
@@ -16,10 +16,16 @@ static const double SQUARE_MODEL_OFFSET_X = 0.5;        // Offset to get the "or
 static const double SQUARE_MODEL_OFFSET_Y = 0.5;        // Offset to get the "origin" on the (0,0) corner 
 static const double LINE_WIDTH = 0.1;
 
-visualization_msgs::MarkerArray markerarray_msg;
-ros::Publisher arenasquares_pub;
+visualization_msgs::MarkerArray markerarray_msg; /**< marker array message */
+ros::Publisher markers_pub; /**< markers publisher */
 
-// Create marker msg for green and red lines
+/**
+ * \brief Create marker msg for green and red lines.
+ *
+ * \param dim : arena dimension (length of one side of the square).
+ *
+ * \return vector of marker messages.
+ */
 std::vector<visualization_msgs::Marker> createLineMarkers(int dim) {
     visualization_msgs::Marker green_line, red_line;
 
@@ -67,7 +73,15 @@ std::vector<visualization_msgs::Marker> createLineMarkers(int dim) {
     return lines;
 }
 
-// Create marker msg from (x,y) coords and ID 
+/**
+ * \brief Create marker msg from (x,y) coords and ID .
+ *
+ * \param x : x coordinate.
+ * \param y : y coordinate.
+ * \param id : unique id.
+ *
+ * \return marker message.
+ */
 visualization_msgs::Marker createMarkerMsg(double x, double y, int id) {
     visualization_msgs::Marker msg;
     msg.header.frame_id = TF_MIDDLE_ARENA;
@@ -90,7 +104,11 @@ visualization_msgs::Marker createMarkerMsg(double x, double y, int id) {
     return msg;
 }
 
-// Create one-time marker array
+/**
+ * \brief Create one-time marker array.
+ *
+ * \param dim : arena dimension (length of one side of the square).
+ */
 void createMarkerArray(int dim) {
     std::vector<visualization_msgs::Marker> markers;
 
@@ -111,14 +129,19 @@ void createMarkerArray(int dim) {
     markerarray_msg.markers = markers;
 }
 
-// Publish marker array after updating timestamps 
+/**
+ * \brief Publish marker array after updating timestamps.
+ */
 void publishMarkerArray() {
     for (int i = 0; i < markerarray_msg.markers.size(); ++i) {
         markerarray_msg.markers[i].header.stamp = ros::Time::now();
     }
-    arenasquares_pub.publish(markerarray_msg);
+    markers_pub.publish(markerarray_msg);
 }
 
+/**
+ * \brief main.
+ */
 int main(int argc, char** argv){
     ros::init(argc, argv, NODE_NAME);
     ros::NodeHandle n;
@@ -127,7 +150,7 @@ int main(int argc, char** argv){
     int arena_dimension;
     n_p.getParam("arena_dimension", arena_dimension);
 
-    arenasquares_pub = n.advertise<visualization_msgs::MarkerArray>(ARENA_SQUARES_TOPIC_NAME, 1);
+    markers_pub = n.advertise<visualization_msgs::MarkerArray>(ARENA_SQUARES_TOPIC_NAME, 1);
     
     createMarkerArray(arena_dimension);
 

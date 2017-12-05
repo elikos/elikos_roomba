@@ -1,15 +1,18 @@
+/**
+ * \file Robot.cpp
+ * \brief Robot class implementation
+ * \author christophebedard
+ */
+
 #include "elikos_roomba/Robot.h"
 
 Robot::Robot(ros::NodeHandle& n, std::string botType, int r_id, tf::Vector3 initial_pos, double initial_yaw, std::string model_option)
-    : is_running_slowly_(false),
-      robotType_(botType),
+    : robotType_(botType),
       r_id_(r_id),
       MovingObject(n, getRobotNamespace(botType, r_id), initial_pos, initial_yaw, model_option)
 {
-    loop_hz_ = LOOP_RATE;
-
     // setup publishers
-    robotState_pub_ = n.advertise<std_msgs::String>(ns_ + "/" + ROBOTSTATE_TOPIC_NAME, ROBOTSTATE_TOPIC_QUEUESIZE);
+    robotState_pub_ = n.advertise<std_msgs::String>(ns_ + "/" + ROBOTSTATE_TOPIC_NAME, 10);
 
     // setup services
     activate_srv_ = n.advertiseService(ns_ + "/" + ACTIVATE_SERVICE_NAME, &Robot::activateCallback, this);
@@ -98,24 +101,3 @@ void Robot::update() {
 
     publishRobotState();
 }
-
-/*void Robot::spinOnce()
-{
-  update();
-  ros::spinOnce();
-}
-
-void Robot::spin()
-{
-  ros::Rate rate(loop_hz_);
-  while (ros::ok())
-  {
-    spinOnce();
-
-    is_running_slowly_ = !rate.sleep();
-    if (is_running_slowly_)
-    {
-      ROS_WARN("[ROBOT] Loop running slowly.");
-    }
-  }
-}*/

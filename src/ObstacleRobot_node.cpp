@@ -1,5 +1,14 @@
+/**
+ * \file ObstacleRobot_node.cpp
+ * \brief ObstacleRobot node
+ * \author christophebedard
+ */
+
 #include "elikos_roomba/ObstacleRobot.h"
 
+/**
+ * \brief main.
+ */
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "obstaclerobot");

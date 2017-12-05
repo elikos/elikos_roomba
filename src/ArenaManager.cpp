@@ -1,5 +1,10 @@
-#include "elikos_roomba/ArenaManager.h"
+/**
+ * \file ArenaManager.cpp
+ * \brief NOT WORKING
+ * \author christophebedard
+ */
 
+#include "elikos_roomba/ArenaManager.h"
 
 ArenaManager::ArenaManager(ros::NodeHandle& n, int groundrobotQty, double arenaDimension)
     : n_(n),

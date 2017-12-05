@@ -1,5 +1,14 @@
+/**
+ * \file GroundRobot_node.cpp
+ * \brief GroundRobot node
+ * \author christophebedard
+ */
+
 #include "elikos_roomba/GroundRobot.h"
 
+/**
+ * \brief main.
+ */
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "groundrobot");

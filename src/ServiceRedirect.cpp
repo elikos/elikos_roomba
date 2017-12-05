@@ -1,5 +1,10 @@
-#include "elikos_roomba/ServiceRedirect.h"
+/**
+ * \file ServiceRedirect.cpp
+ * \brief ServiceRedirect class implementation
+ * \author christophebedard
+ */
 
+#include "elikos_roomba/ServiceRedirect.h"
 
 ServiceRedirect::ServiceRedirect(ros::NodeHandle& n)
     : n_(n)
