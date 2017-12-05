@@ -21,8 +21,15 @@ class ObstacleRobot : public Robot
 
         /*
          * Check if current robot is colliding with another robot and react accordingly
+         * --> no collision for obstacle robot right now
          */
-        void checkCollision(tf::Vector3 pos);
+        void checkRobotCollision(tf::Vector3 pos) {}
+
+        /*
+         * Check if quad is touching topswitch and react accordingly
+         * --> no top interaction obstacle robot
+         */
+        void checkTopInteraction(tf::Vector3 pos, double diameter) {}
 
         /*
          * Update robot state; called every spinOnce()

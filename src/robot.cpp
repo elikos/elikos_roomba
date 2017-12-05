@@ -24,6 +24,10 @@ Robot::~Robot() {
   // add other relevant stuff
 }
 
+std::string Robot::getRobotType() const {
+    return robotType_;
+}
+
 /*===========================
  * Other utilities
  *===========================*/

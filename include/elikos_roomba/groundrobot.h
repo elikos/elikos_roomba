@@ -36,7 +36,12 @@ class GroundRobot : public Robot
         /*
          * Check if current robot is colliding with another robot and react accordingly
          */
-        void checkCollision(tf::Vector3 pos);
+        void checkRobotCollision(tf::Vector3 pos);
+
+        /*
+         * Check if quad is touching topswitch and react accordingly
+         */
+        void checkTopInteraction(tf::Vector3 pos, double diameter);
 
         /*
          * Update robot state; called every spinOnce()
@@ -154,6 +159,11 @@ class GroundRobot : public Robot
          * Method for bumper trigger (used by bumperCallback() and bumperTrigCallback())
          */
         void bumperTrig();
+
+        /*
+         * Method for topswitch trigger
+         */
+        void topswitchTrig();
 
         /*
          * Callback class method for timeout timer

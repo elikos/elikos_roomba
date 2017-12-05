@@ -103,24 +103,29 @@ void GroundRobot::bumperCallback(const ca_msgs::Bumper::ConstPtr& msg) {
 }
 
 bool GroundRobot::bumperTrigCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
-    Robot::ROS_INFO_STREAM_ROBOT("Bumper triggered");
     bumperTrig();
     return true;
 }
 
 void GroundRobot::bumperTrig() {
+    Robot::ROS_INFO_STREAM_ROBOT("Bumper triggered");
     // if robot is going forward
     if (isRobotState(FORWARD)) {
         startBumperTurn();
     }
 }
 
-bool GroundRobot::topSwitchCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
-    Robot::ROS_INFO_STREAM_ROBOT("Top switch pressed");
-    // if is going forward
+void GroundRobot::topswitchTrig() {
+    Robot::ROS_INFO_STREAM_ROBOT("Topswitch triggered");
+    // if robot is going forward
     if (isRobotState(FORWARD)) {
         startTopSwitchTurn();
     }
+}
+
+bool GroundRobot::topSwitchCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
+    Robot::ROS_INFO_STREAM_ROBOT("Top switch pressed");
+    topswitchTrig();
     return true;
 }
 
@@ -194,7 +199,20 @@ void GroundRobot::startTimeoutTurn() {
  * Update
  *===========================*/
 
-void GroundRobot::checkCollision(tf::Vector3 pos) {
+void GroundRobot::checkTopInteraction(tf::Vector3 pos, double diameter) {
+    double distanceSquaredWrtMe_xy = pow((pos.getY() - pos_.getY()), 2) + pow((pos.getX() - pos_.getX()), 2);
+    double distanceWrtMe_z = pos.getZ() - pos_.getZ();
+
+    bool isWithinRangeXY = distanceSquaredWrtMe_xy <= pow(DIAMETER/2.0 + diameter/2.0, 2);
+    bool isTouchingZ = distanceWrtMe_z <= HEIGHT;
+
+    //if interaction
+    if (isWithinRangeXY && isTouchingZ) {
+        topswitchTrig();
+    }
+}
+
+void GroundRobot::checkRobotCollision(tf::Vector3 pos) {
     // distance
     double distanceSquaredWrtMe = pow((pos.getY() - pos_.getY()), 2) + pow((pos.getX() - pos_.getX()), 2);
 

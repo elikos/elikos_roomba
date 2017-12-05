@@ -26,7 +26,8 @@ static const double ROTATE_CW = -1.0;                   // clockwise (negative a
 // speeds
 static const double FORWARD_SPEED = 0.33;               //[m/s]
 // physical dimensions
-static const double DIAMETER = 0.3485;                    //[m] (according to specs)
+static const double DIAMETER = 0.3485;                  //[m] (according to specs)
+static const double HEIGHT = 0.1;                       //[m] (according to specs)
 static const double BUMPER_ANGLE = 180.0*DEG_TO_RAD;    //[deg] total angle interval (symmetrical) for bumper
 
 
@@ -43,7 +44,12 @@ class Robot : public MovingObject
         /*
          * Check if current robot is colliding with another robot and react accordingly
          */
-        virtual void checkCollision(tf::Vector3 pos) =0;
+        virtual void checkRobotCollision(tf::Vector3 pos) =0;
+
+        /*
+         * Check if quad is touching topswitch and react accordingly
+         */
+        virtual void checkTopInteraction(tf::Vector3 pos, double diameter) =0;
 
         /*
          * Update robot; called every spinOnce()
@@ -54,6 +60,11 @@ class Robot : public MovingObject
          * ROS spin. Called only once (by node); contains ROS while loop
          */
         virtual void spin() =0;
+
+        /*
+         * Robot type accessor
+         */
+        std::string getRobotType() const;
     
     protected:
         double loop_hz_;
