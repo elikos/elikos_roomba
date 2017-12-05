@@ -1,4 +1,4 @@
-#include "elikos_roomba/movingobject.h"
+#include "elikos_roomba/MovingObject.h"
 
 MovingObject::MovingObject(ros::NodeHandle& n, std::string nspace, tf::Vector3 initial_pos, double initial_yaw, std::string model_option)
     : n_(n),

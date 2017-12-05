@@ -1,4 +1,4 @@
-#include "elikos_roomba/robot_viz.h"
+#include "elikos_roomba/RobotViz.h"
 
 RobotViz::RobotViz(ros::NodeHandle& n, tf::Vector3 initial_pos, double initial_yaw, int r_id, std::string robotType, std::string robotColor)
     : n_(n),

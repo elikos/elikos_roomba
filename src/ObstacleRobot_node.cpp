@@ -1,4 +1,4 @@
-#include "elikos_roomba/obstaclerobot.h"
+#include "elikos_roomba/ObstacleRobot.h"
 
 int main(int argc, char **argv)
 {

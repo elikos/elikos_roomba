@@ -1,4 +1,4 @@
-#include "elikos_roomba/obstaclerobot.h"
+#include "elikos_roomba/ObstacleRobot.h"
 
 ObstacleRobot::ObstacleRobot(ros::NodeHandle& n, int r_id, tf::Vector3 initial_pos, double initial_yaw, std::string height)
     : Robot(n, OBSTACLEROBOT_TYPE, r_id, initial_pos, initial_yaw, height)

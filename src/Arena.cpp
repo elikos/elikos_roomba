@@ -1,3 +1,9 @@
+/**
+ * \file Arena.cpp
+ * \brief Publishes markers for arena viz (squares and lines).
+ * \author christophebedard
+ */
+
 #include <ros/ros.h>
 #include <visualization_msgs/MarkerArray.h>
 

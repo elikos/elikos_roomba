@@ -8,7 +8,7 @@
 #include <std_srvs/Empty.h>
 #include <string>
 #include <sstream>
-#include "elikos_roomba/movingobject.h"
+#include "elikos_roomba/MovingObject.h"
 
 static const double LOOP_RATE = 10.0;
 // names (topics and services)

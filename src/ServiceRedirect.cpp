@@ -1,4 +1,4 @@
-#include "elikos_roomba/service_redirect.h"
+#include "elikos_roomba/ServiceRedirect.h"
 
 
 ServiceRedirect::ServiceRedirect(ros::NodeHandle& n)

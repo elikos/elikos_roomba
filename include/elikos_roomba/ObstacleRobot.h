@@ -2,7 +2,7 @@
 #define OBSTACLEROBOT_H
 
 #include <ros/ros.h>
-#include "elikos_roomba/robot.h"
+#include "elikos_roomba/Robot.h"
 
 // names
 static const std::string OBSTACLEROBOT_TYPE = "obstacle";

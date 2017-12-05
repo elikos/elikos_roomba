@@ -1,7 +1,7 @@
 #ifndef ARENA_MANAGER_H
 #define ARENA_MANAGER_H
 
-#include "elikos_roomba/service_redirect.h"        // use topic names, service names, and other values
+#include "elikos_roomba/ServiceRedirect.h"        // use topic names, service names, and other values
 #include "elikos_roomba/robot_viz.h"
 #include <tf/transform_listener.h>
 

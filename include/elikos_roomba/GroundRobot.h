@@ -3,7 +3,7 @@
 
 #include <ros/ros.h>
 #include <ros/timer.h>
-#include "elikos_roomba/robot.h"
+#include "elikos_roomba/Robot.h"
 #include "ca_msgs/Bumper.h"
 
 // names

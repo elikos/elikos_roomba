@@ -1,4 +1,4 @@
-#include "elikos_roomba/robot.h"
+#include "elikos_roomba/Robot.h"
 
 Robot::Robot(ros::NodeHandle& n, std::string botType, int r_id, tf::Vector3 initial_pos, double initial_yaw, std::string model_option)
     : is_running_slowly_(false),

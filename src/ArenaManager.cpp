@@ -1,4 +1,4 @@
-#include "elikos_roomba/arenamanager.h"
+#include "elikos_roomba/ArenaManager.h"
 
 
 ArenaManager::ArenaManager(ros::NodeHandle& n, int groundrobotQty, double arenaDimension)

@@ -1,4 +1,4 @@
-#include "elikos_roomba/groundrobot.h"
+#include "elikos_roomba/GroundRobot.h"
 
 GroundRobot::GroundRobot(ros::NodeHandle& n, int r_id, tf::Vector3 initial_pos, double initial_yaw, std::string color)
     : Robot(n, GROUNDROBOT_TYPE, r_id, initial_pos, initial_yaw, color)

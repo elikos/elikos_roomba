@@ -1,4 +1,4 @@
-#include "elikos_roomba/groundrobot.h"
+#include "elikos_roomba/GroundRobot.h"
 
 int main(int argc, char **argv)
 {

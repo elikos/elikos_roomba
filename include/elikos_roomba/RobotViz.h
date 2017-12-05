@@ -1,7 +1,7 @@
 #ifndef ROBOT_VIZ_H
 #define ROBOT_VIZ_H
 
-#include "elikos_roomba/robot.h"        // use topic names, service names, and other values
+#include "elikos_roomba/Robot.h"        // use topic names, service names, and other values
 #include <tf/transform_broadcaster.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <visualization_msgs/Marker.h>

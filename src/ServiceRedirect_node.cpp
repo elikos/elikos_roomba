@@ -1,5 +1,5 @@
 #include <ros/ros.h>
-#include "elikos_roomba/service_redirect.h"
+#include "elikos_roomba/ServiceRedirect.h"
 
 int main(int argc, char **argv)
 {

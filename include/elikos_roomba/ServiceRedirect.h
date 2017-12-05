@@ -1,7 +1,7 @@
 #ifndef SERVICE_REDIRECT_H
 #define SERVICE_REDIRECT_H
 
-#include "elikos_roomba/robot.h"        // use topic names, service names, and other values
+#include "elikos_roomba/Robot.h"        // use topic names, service names, and other values
 
 // names
 static const std::string GROUNDROBOT_NAMESPACE_PREFIX = "groundrobot";      // ground robot namespace prefix (only missing robot id)

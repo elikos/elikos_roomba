@@ -133,16 +133,16 @@ include_directories(
 
 ## Declare a C++ library
 add_library(${PROJECT_NAME}_lib
-  src/groundrobot.cpp
-  include/elikos_roomba/groundrobot.h
-  src/obstaclerobot.cpp
-  include/elikos_roomba/obstaclerobot.h
-  src/robot.cpp
-  include/elikos_roomba/robot.h
-  src/movingobject.cpp
-  include/elikos_roomba/movingobject.h
-  src/service_redirect.cpp
-  include/elikos_roomba/service_redirect.h
+  src/GroundRobot.cpp
+  include/elikos_roomba/GroundRobot.h
+  src/ObstacleRobot.cpp
+  include/elikos_roomba/ObstacleRobot.h
+  src/Robot.cpp
+  include/elikos_roomba/Robot.h
+  src/MovingObject.cpp
+  include/elikos_roomba/MovingObject.h
+  src/ServiceRedirect.cpp
+  include/elikos_roomba/ServiceRedirect.h
   ${catkin_LIBRARIES}
 )
 
@@ -157,19 +157,19 @@ add_library(${PROJECT_NAME}_lib
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(groundrobot_node src/groundrobot_node.cpp src/groundrobot.cpp src/robot.cpp src/movingobject.cpp)
+add_executable(groundrobot_node src/GroundRobot_node.cpp src/GroundRobot.cpp src/Robot.cpp src/MovingObject.cpp)
 add_dependencies(groundrobot_node ca_msgs_generate_messages_cpp)
-add_executable(obstaclerobot_node src/obstaclerobot_node.cpp src/obstaclerobot.cpp src/robot.cpp src/movingobject.cpp)
-add_executable(robotviz_node src/robot_viz.cpp)
-add_executable(serviceredirect_node src/service_redirect_node.cpp src/service_redirect.cpp)
-#add_executable(arenamanager_node src/arenamanager.cpp)
-add_executable(arena_node src/arena.cpp)
+add_executable(obstaclerobot_node src/ObstacleRobot_node.cpp src/ObstacleRobot.cpp src/Robot.cpp src/MovingObject.cpp)
+add_executable(robotviz_node src/RobotViz.cpp)
+add_executable(serviceredirect_node src/ServiceRedirect_node.cpp src/ServiceRedirect.cpp)
+#add_executable(arenamanager_node src/ArenaManager.cpp)
+add_executable(arena_node src/Arena.cpp)
 
 # Add topswitch node with wiringPi library if RPi
 # For Raspberry Pis, use:
 #   catkin_make -DRPI=TRUE
 if(RPI)
-  add_executable(topswitch_node src/topswitch_node.cpp)
+  add_executable(topswitch_node src/Topswitch_node.cpp)
   target_link_libraries(topswitch_node wiringPi
       ${catkin_LIBRARIES}
       ${wiringPi_LIBRARIES}
