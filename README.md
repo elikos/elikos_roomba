@@ -286,6 +286,13 @@ Mostly because Christophe is dumb and often forgets.
 
 -----
 
+## Generate documentation
+
+To generate documentation with doxygen (because why not; sometimes a readme isn't enough!)
+
+````
+doxygen Doxyfile
+```` 
 
 ## Robot behaviour
 
