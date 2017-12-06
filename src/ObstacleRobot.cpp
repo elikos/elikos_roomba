@@ -9,15 +9,11 @@
 ObstacleRobot::ObstacleRobot(ros::NodeHandle& n, int r_id, tf::Vector3 initial_pos, double initial_yaw, std::string height)
     : Robot(n, OBSTACLEROBOT_TYPE, r_id, initial_pos, initial_yaw, height)
 {
-    // initial state
+    // set initial state
     changeRobotStateTo(INACTIVE);
-
-    //ROS_INFO_STREAM_ROBOT("Parent initialization done");
 }
 
 ObstacleRobot::~ObstacleRobot() {
-    Robot::ROS_INFO_STREAM_ROBOT("Destruct obstacle robot sequence initiated.");
-    // add other relevant stuff
 }
 
 /*===========================
@@ -38,13 +34,11 @@ bool ObstacleRobot::isRobotState(ObstacleRobotState cmpRobotState) {
  *===========================*/
 
 void ObstacleRobot::activateRobot() {
-    //ROS_INFO_STREAM_ROBOT("Parent robot activated");
     changeRobotStateTo(CIRCULAR);
     Robot::activateRobot();
 }
 
 void ObstacleRobot::deactivateRobot() {
-    //ROS_INFO_STREAM_ROBOT("Parent robot deactivated");
     changeRobotStateTo(INACTIVE);
     Robot::deactivateRobot();
 }
@@ -79,28 +73,23 @@ void ObstacleRobot::updateState() {
 }
 
 void ObstacleRobot::update() {
-    //Robot::ROS_INFO_STREAM_ROBOT("update");
     updateState();
     Robot::update();
 }
 
-void ObstacleRobot::spinOnce()
-{
-  ObstacleRobot::update();
-  ros::spinOnce();
+void ObstacleRobot::spinOnce() {
+    ObstacleRobot::update();
+    ros::spinOnce();
 }
 
-void ObstacleRobot::spin()
-{
-  ros::Rate rate(LOOP_RATE);
+void ObstacleRobot::spin() {
+    ros::Rate rate(LOOP_RATE);
+    
+    while (ros::ok()) {
+        spinOnce();
 
-  while (ros::ok())
-  {
-    spinOnce();
-
-    if (!rate.sleep())
-    {
-      ROS_WARN("[OBSTACLE ROBOT] Loop running slowly.");
+        if (!rate.sleep()) {
+            ROS_WARN("[OBSTACLE ROBOT] Loop running slowly.");
+        }
     }
-  }
 }

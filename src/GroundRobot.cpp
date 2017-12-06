@@ -24,19 +24,15 @@ GroundRobot::GroundRobot(ros::NodeHandle& n, int r_id, tf::Vector3 initial_pos, 
     topSwitchTurn_tim_ = n.createTimer(ros::Duration(TOPSWITCH_TURN_DURATION), &GroundRobot::topSwitchTurnTimCallback, this, true, false);
     timeoutTurn_tim_  = n.createTimer(ros::Duration(TIMEOUT_TURN_DURATION), &GroundRobot::timeoutTurnTimCallback, this, true, false);
 
-    // initial state
+    // set initial state
     changeRobotStateTo(INACTIVE);
     forward_noise_ = 0.0;
-
-    //ROS_INFO_STREAM_ROBOT("Parent initialization done");
 
     // seed rand()
     std::srand(ros::WallTime::now().toNSec());
 }
 
 GroundRobot::~GroundRobot() {
-    Robot::ROS_INFO_STREAM_ROBOT("Destruct ground robot sequence initiated");
-    // add other relevant stuff
 }
 
 /*===========================
@@ -57,7 +53,6 @@ bool GroundRobot::isRobotState(GroundRobotState cmpRobotState) {
  *===========================*/
 
 void GroundRobot::activateRobot() {
-    //ROS_INFO_STREAM_ROBOT("Parent robot activated");
     changeRobotStateTo(FORWARD);
     // reactivate timers (timeout and noise)
     timerRestart(timeout_tim_, TIMEOUT_DURATION);
@@ -66,7 +61,6 @@ void GroundRobot::activateRobot() {
 }
 
 void GroundRobot::deactivateRobot() {
-    //ROS_INFO_STREAM_ROBOT("Parent robot deactivated");
     changeRobotStateTo(INACTIVE);
     // deactivate timers (all)
     timeout_tim_.stop();
@@ -136,20 +130,20 @@ bool GroundRobot::topSwitchCallback(std_srvs::Empty::Request& request, std_srvs:
 }
 
 void GroundRobot::timeoutCallback(const ros::TimerEvent& event) {
-    Robot::ROS_INFO_STREAM_ROBOT("20 seconds timeout");
+    //Robot::ROS_INFO_STREAM_ROBOT("20 seconds timeout");
     startTimeoutTurn();
     timerRestart(timeout_tim_, TIMEOUT_DURATION);
 }
 
 void GroundRobot::noiseCallback(const ros::TimerEvent& event) {
-    Robot::ROS_INFO_STREAM_ROBOT("5 seconds noise timeout");
+    //Robot::ROS_INFO_STREAM_ROBOT("5 seconds noise timeout");
     // if robot is going forward
     if (isRobotState(FORWARD)) {
         // start to turn (as noise)
         double randAngle = getRandomNoiseAngle();
         std::ostringstream strs;
         strs << (randAngle/DEG_TO_RAD);
-        Robot::ROS_INFO_STREAM_ROBOT("Starting to add noise (" + strs.str() + " degrees)");
+        //Robot::ROS_INFO_STREAM_ROBOT("Starting to add noise (" + strs.str() + " degrees)");
         forward_noise_ = NOISE_TURN_SPEED;
         timerRestart(noiseTurn_tim_, getTurnDurationFromAngleAndSpeed(randAngle,NOISE_TURN_SPEED));;
     }
@@ -159,23 +153,23 @@ void GroundRobot::noiseCallback(const ros::TimerEvent& event) {
 }
 
 void GroundRobot::noiseTurnCallback(const ros::TimerEvent& event) {
-    Robot::ROS_INFO_STREAM_ROBOT("Noise done");
+    //Robot::ROS_INFO_STREAM_ROBOT("Noise done");
     forward_noise_ = 0.0; // set to 0
     timerRestart(noise_tim_, NOISE_DURATION);
 }
 
 void GroundRobot::bumperTurnTimCallback(const ros::TimerEvent& event) {
-    Robot::ROS_INFO_STREAM_ROBOT("180 degrees turn (bumper) done");
+    //Robot::ROS_INFO_STREAM_ROBOT("180 degrees turn (bumper) done");
     changeRobotStateTo(FORWARD);
 }
 
 void GroundRobot::topSwitchTurnTimCallback(const ros::TimerEvent& event) {
-    Robot::ROS_INFO_STREAM_ROBOT("45 degrees turn (top switch) done");
+    //Robot::ROS_INFO_STREAM_ROBOT("45 degrees turn (top switch) done");
     changeRobotStateTo(FORWARD);
 }
 
 void GroundRobot::timeoutTurnTimCallback(const ros::TimerEvent& event) {
-    Robot::ROS_INFO_STREAM_ROBOT("180 degrees turn (timeout) done");
+    //Robot::ROS_INFO_STREAM_ROBOT("180 degrees turn (timeout) done");
     changeRobotStateTo(FORWARD);
 }
 
@@ -184,19 +178,19 @@ void GroundRobot::timeoutTurnTimCallback(const ros::TimerEvent& event) {
  *===========================*/
 
 void GroundRobot::startBumperTurn() {
-    Robot::ROS_INFO_STREAM_ROBOT("180 degrees turn (bumper) init");
+    //Robot::ROS_INFO_STREAM_ROBOT("180 degrees turn (bumper) init");
     changeRobotStateTo(TURN_BUMPER);
     timerRestart(bumperTurn_tim_, BUMPER_TURN_DURATION);
 }
 
 void GroundRobot::startTopSwitchTurn() {
-    Robot::ROS_INFO_STREAM_ROBOT("45 degrees turn (top switch) init");
+    //Robot::ROS_INFO_STREAM_ROBOT("45 degrees turn (top switch) init");
     changeRobotStateTo(TURN_TOPSWITCH);
     timerRestart(topSwitchTurn_tim_, TOPSWITCH_TURN_DURATION);
 }
 
 void GroundRobot::startTimeoutTurn() {
-    Robot::ROS_INFO_STREAM_ROBOT("180 degrees turn (timeout) init");
+    //Robot::ROS_INFO_STREAM_ROBOT("180 degrees turn (timeout) init");
     changeRobotStateTo(TURN_TIMEOUT);
     timerRestart(timeoutTurn_tim_, TIMEOUT_TURN_DURATION);
 }
@@ -274,29 +268,23 @@ void GroundRobot::updateState() {
 }
 
 void GroundRobot::update() {
-    //Robot::ROS_INFO_STREAM_ROBOT("update");
     updateState();
-
     Robot::update();
 }
 
-void GroundRobot::spinOnce()
-{
-  GroundRobot::update();
-  ros::spinOnce();
+void GroundRobot::spinOnce() {
+    GroundRobot::update();
+    ros::spinOnce();
 }
 
-void GroundRobot::spin()
-{
-  ros::Rate rate(LOOP_RATE);
-
-  while (ros::ok())
-  {
-    spinOnce();
-
-    if (!rate.sleep())
-    {
-      ROS_WARN("[GROUND ROBOT] Loop running slowly.");
+void GroundRobot::spin() {
+    ros::Rate rate(LOOP_RATE);
+    
+    while (ros::ok()) {
+        spinOnce();
+        
+        if (!rate.sleep()) {
+            ROS_WARN("[GROUND ROBOT] Loop running slowly.");
+        }
     }
-  }
 }

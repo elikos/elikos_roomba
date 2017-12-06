@@ -18,13 +18,9 @@ Robot::Robot(ros::NodeHandle& n, std::string botType, int r_id, tf::Vector3 init
     activate_srv_ = n.advertiseService(ns_ + "/" + ACTIVATE_SERVICE_NAME, &Robot::activateCallback, this);
     deactivate_srv_ = n.advertiseService(ns_ + "/" + DEACTIVATE_SERVICE_NAME, &Robot::deactivateCallback, this);
     toglActivate_srv_ = n.advertiseService(ns_ + "/" + TOGGLEACT_SERVICE_NAME, &Robot::toglActivateCallback, this);
-
-    ROS_INFO_STREAM_ROBOT("Robot initialization done (inactive)");
 }
 
 Robot::~Robot() {
-  ROS_INFO_STREAM_ROBOT("Robot base destruct robot sequence initiated");
-  // add other relevant stuff
 }
 
 std::string Robot::getRobotType() const {
@@ -48,12 +44,10 @@ std::string Robot::getRobotNamespace(std::string robotType, int robotId) {
  *===========================*/
 
 void Robot::activateRobot() {
-    ROS_INFO_STREAM_ROBOT("Robot activated");
     isActive_ = true;
 }
 
 void Robot::deactivateRobot() {
-    ROS_INFO_STREAM_ROBOT("Robot deactivated");
     isActive_ = false;
 }
 
