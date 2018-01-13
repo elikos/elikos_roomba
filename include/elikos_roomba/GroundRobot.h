@@ -59,7 +59,7 @@ class GroundRobot : public Robot
          *
          * \param pos : XYZ position of other robot.
          */
-        void checkRobotCollision(tf::Vector3 pos);
+        virtual void checkRobotCollision(tf::Vector3 pos);
 
         /**
          * \brief Check if quad is touching topswitch and react accordingly.
@@ -67,22 +67,35 @@ class GroundRobot : public Robot
          * \param pos : XYZ position of quad.
          * \param diameter : diameter to consider for interaction.
          */
-        void checkTopInteraction(tf::Vector3 pos, double diameter);
+        virtual void checkTopInteraction(tf::Vector3 pos, double diameter);
 
         /**
          * \brief Update robot state; called every spinOnce().
          */
-        void update();
+        virtual void update();
 
         /**
          * \brief ROS spin. Called only once (by node); contains ROS while loop.
          */
-        void spin();
+        virtual void spin();
 
         /**
          * \brief ROS spin once, called on every loop.
          */
         void spinOnce();
+
+        /*===========================
+         * Global state
+         *===========================*/
+        /**
+         * \brief Activate global robot state.
+         */
+        virtual void activateRobot();
+
+        /**
+         * \brief Deactivate global robot state.
+         */
+        virtual void deactivateRobot();
 
     protected:
         /**
@@ -104,19 +117,6 @@ class GroundRobot : public Robot
          * \brief Update ground robot cmd_vel message based on current state.
          */
         void updateState();
-
-        /*===========================
-         * Global state
-         *===========================*/
-        /**
-         * \brief Activate global robot state.
-         */
-        void activateRobot();
-
-        /**
-         * \brief Deactivate global robot state.
-         */
-        void deactivateRobot();
 
         /*===========================
          * Ground robot state changes

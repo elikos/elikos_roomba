@@ -45,28 +45,41 @@ class ObstacleRobot : public Robot
          * \brief Check if current robot is colliding with another robot and react accordingly.
          * --> no collision for obstacle robot right now
          */
-        void checkRobotCollision(tf::Vector3 pos) {}
+        virtual void checkRobotCollision(tf::Vector3 pos) {}
 
         /**
          * \brief Check if quad is touching topswitch and react accordingly.
          * --> no top interaction obstacle robot
          */
-        void checkTopInteraction(tf::Vector3 pos, double diameter) {}
+        virtual void checkTopInteraction(tf::Vector3 pos, double diameter) {}
 
         /**
          * \brief Update robot state; called every spinOnce().
          */
-        void update();
+        virtual void update();
 
         /**
          * \brief ROS spin. Called only once (by node); contains ROS while loop.
          */
-        void spin();
+        virtual void spin();
 
         /**
          * \brief ROS spin once, called on every loop.
          */
         void spinOnce();
+
+        /*===========================
+         * Global state
+         *===========================*/
+        /**
+         * \brief Activate global robot state.
+         */
+        virtual void activateRobot();
+
+        /**
+         * \brief Deactivate global robot state.
+         */
+        virtual void deactivateRobot();
 
     protected:
         /**
@@ -85,19 +98,6 @@ class ObstacleRobot : public Robot
          * \brief Update obstacle robot cmd_vel message based on current state.
          */
         void updateState();
-
-        /*===========================
-         * Global state
-         *===========================*/
-        /**
-         * \brief Activate global robot state.
-         */
-        void activateRobot();
-
-        /**
-         * \brief Deactivate global robot state.
-         */
-        void deactivateRobot();
 
         /*===========================
          * Obstacle robot state changes

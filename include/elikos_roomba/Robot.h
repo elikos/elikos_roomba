@@ -91,6 +91,19 @@ class Robot : public MovingObject
          * \return robot type.
          */
         std::string getRobotType() const;
+
+        /*===========================
+         * Global state
+         *===========================*/
+        /**
+         * \brief Activate global robot state.
+         */
+        virtual void activateRobot();
+
+        /**
+         * \brief Deactivate global robot state.
+         */
+        virtual void deactivateRobot();
     
     protected:
         std_msgs::String robotState_msg_; /**< current robot state message */
@@ -155,19 +168,6 @@ class Robot : public MovingObject
          * \return success.
          */
         bool toglActivateCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
-
-        /*===========================
-         * Global state
-         *===========================*/
-        /**
-         * \brief Activate global robot state.
-         */
-        virtual void activateRobot();
-
-        /**
-         * \brief Deactivate global robot state.
-         */
-        virtual void deactivateRobot();
 
         /*===========================
          * Other utilities

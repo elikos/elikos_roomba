@@ -77,6 +77,20 @@ class MovingObject
          * \return namespace.
          */
         std::string getNamespace() const;
+
+        /**
+         * \brief Accessor for isActive_.
+         *
+         * \return isActive_.
+         */
+        bool isActive() const;
+
+        /**
+         * \brief Operator== implementation for comparing objects (using namespace).
+         *
+         * \return result.
+         */
+        bool operator==(const MovingObject& rhs) const;
     
     protected:
         ros::NodeHandle& n_; /**< node handle */

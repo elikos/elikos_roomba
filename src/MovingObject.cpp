@@ -45,6 +45,14 @@ MovingObject::MovingObject(ros::NodeHandle& n, std::string nspace, tf::Vector3 i
 MovingObject::~MovingObject() {
 }
 
+bool MovingObject::isActive() const {
+    return isActive_;
+}
+
+bool MovingObject::operator==(const MovingObject& rhs) const {
+    return getNamespace() == rhs.getNamespace();
+}
+
 /*===========================
  * Other utilities
  *===========================*/
