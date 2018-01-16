@@ -6,6 +6,4 @@
     <node name="arena_node" pkg="elikos_roomba" type="arena_node" output="screen">
         <param name="arena_dimension" value="$(arg arena_dimension)" />
     </node>
-
-    <node pkg="rviz" type="rviz" name="rviz_node" />
 </launch>
