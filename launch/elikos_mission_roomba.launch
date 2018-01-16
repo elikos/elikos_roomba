@@ -3,7 +3,9 @@ Launch file for elikos_projet_introductif
 See instructions
 -->
 <launch>
-    <node pkg="tf" type="static_transform_publisher" name="elikos_arena_origin" args="0.0 0.0 0.0 0.0 0.0 0.0 world elikos_arena_origin 100"/>
+    <include file="$(find elikos_roomba)/launch/arena.launch">
+        <arg name="arena_dimension" value="5" />
+    </include>
     
     <!-- First robot: target robot (piloted via keyboard) -->
     <!-- Ground robot behaviour -->
@@ -19,9 +21,11 @@ See instructions
     <!-- Second robot: roomba bot (tracks target robot) -->
     <group ns="groundrobot2">
         <!-- ================================================ -->
-        <!-- Roomba tracking node; modify this to use your own node! -->
+        <!-- Roomba tracking node! Modify this to use your own node! -->
         <!-- ================================================ -->
-        <node name="roombabot_node" pkg="elikos_roomba" type="roombabot_node" output="screen" />
+        <node name="roombabot_node" pkg="elikos_roomba" type="roombabot_node" output="screen">
+            <param name="target_id" value="1" />
+        </node>
 
         <!-- Publish constant "ACTIVE" state -->
         <node pkg="rostopic" type="rostopic" name="gr2state" args="pub -r 10 state std_msgs/String ACTIVE"/>
