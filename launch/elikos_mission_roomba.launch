@@ -45,5 +45,5 @@ See instructions
     <node pkg="rosservice" type="rosservice" name="gr1activate" args="call --wait /groundrobot1/activate"/>
 
     <!-- Launch rviz -->
-    <node pkg="rviz" type="rviz" name="rviz_node" args="-d $(find elikos_roomba)/config/robot_viz.rviz" />
+    <node pkg="rviz" type="rviz" name="rviz_node" args="-d $(find elikos_roomba)/config/elikos_mission_roomba.rviz" />
 </launch>

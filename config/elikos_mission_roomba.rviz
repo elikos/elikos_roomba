@@ -5,8 +5,6 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /Status1
-        - /Grid1
       Splitter Ratio: 0.5
     Tree Height: 719
   - Class: rviz/Selection
@@ -35,7 +33,7 @@ Visualization Manager:
       Cell Size: 1
       Class: rviz/Grid
       Color: 160; 160; 164
-      Enabled: true
+      Enabled: false
       Line Style:
         Line Width: 0.0299999993
         Value: Lines
@@ -48,7 +46,7 @@ Visualization Manager:
       Plane: XY
       Plane Cell Count: 5
       Reference Frame: <Fixed Frame>
-      Value: true
+      Value: false
     - Class: rviz/TF
       Enabled: true
       Frame Timeout: 15
@@ -59,8 +57,6 @@ Visualization Manager:
         groundrobot1:
           Value: true
         groundrobot2:
-          Value: true
-        obstaclerobot1:
           Value: true
         world:
           Value: true
@@ -76,55 +72,8 @@ Visualization Manager:
               {}
             groundrobot2:
               {}
-            obstaclerobot1:
-              {}
       Update Interval: 0
       Value: true
-    - Alpha: 1
-      Axes Length: 0.200000003
-      Axes Radius: 0.00999999978
-      Class: rviz/Pose
-      Color: 255; 25; 0
-      Enabled: false
-      Head Length: 0.300000012
-      Head Radius: 0.100000001
-      Name: Pose
-      Shaft Length: 1
-      Shaft Radius: 0.0500000007
-      Shape: Axes
-      Topic: /groundrobot1/pose
-      Unreliable: false
-      Value: false
-    - Alpha: 1
-      Axes Length: 0.200000003
-      Axes Radius: 0.00999999978
-      Class: rviz/Pose
-      Color: 255; 25; 0
-      Enabled: false
-      Head Length: 0.300000012
-      Head Radius: 0.100000001
-      Name: Pose
-      Shaft Length: 1
-      Shaft Radius: 0.0500000007
-      Shape: Axes
-      Topic: /groundrobot2/pose
-      Unreliable: false
-      Value: false
-    - Alpha: 1
-      Axes Length: 0.200000003
-      Axes Radius: 0.00999999978
-      Class: rviz/Pose
-      Color: 255; 25; 0
-      Enabled: false
-      Head Length: 0.300000012
-      Head Radius: 0.100000001
-      Name: Pose
-      Shaft Length: 1
-      Shaft Radius: 0.0500000007
-      Shape: Axes
-      Topic: /obstaclerobot1/pose
-      Unreliable: false
-      Value: false
     - Class: rviz/Marker
       Enabled: true
       Marker Topic: /groundrobot1/marker
@@ -141,10 +90,10 @@ Visualization Manager:
         "": true
       Queue Size: 100
       Value: true
-    - Class: rviz/Marker
+    - Class: rviz/MarkerArray
       Enabled: true
-      Marker Topic: /obstaclerobot1/marker
-      Name: Marker
+      Marker Topic: /markers/arena
+      Name: MarkerArray
       Namespaces:
         "": true
       Queue Size: 100
@@ -152,6 +101,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
+    Default Light: true
     Fixed Frame: elikos_arena_origin
     Frame Rate: 30
   Name: root
@@ -173,7 +123,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 10.7847805
+      Distance: 7.9714241
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
@@ -185,6 +135,7 @@ Visualization Manager:
         Z: 0
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
+      Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
       Pitch: 0.719797134
@@ -208,5 +159,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 1438
-  X: 480
+  X: 479
   Y: 0
