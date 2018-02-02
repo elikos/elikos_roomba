@@ -7,7 +7,7 @@ See instructions
         <arg name="arena_dimension" value="5" />
     </include>
     
-    <!-- First robot: target robot (piloted via keyboard) -->
+    <!-- First robot: target robot -->
     <!-- Ground robot behaviour -->
     <node name="groundrobot_node" pkg="elikos_roomba" type="groundrobot_node" output="screen">
         <param name="robot_id" value="1" />
