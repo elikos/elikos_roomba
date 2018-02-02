@@ -41,7 +41,7 @@ See instructions
         <node pkg="rostopic" type="rostopic" name="gr2state" args="pub -r 10 state std_msgs/String ACTIVE"/>
         <!-- Visualisation node -->
         <node name="robotviz2_node" pkg="elikos_roomba" type="robotviz_node" output="screen">
-            <param name="init_pos_x" value="1.0" />
+            <param name="init_pos_x" value="0.0" />
             <param name="init_pos_y" value="0.0" />
             <param name="init_pos_z" value="0.0" />
             <param name="init_yaw" value="0.0" />
