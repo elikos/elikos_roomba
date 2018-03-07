@@ -20,10 +20,9 @@ It also has a node to manage the ground robot's top switch and call a service wh
 
 ## Prerequisites
 
-1. Raspberry Pi with [Ubuntu MATE 16.04](https://ubuntu-mate.org/raspberry-pi/)
+1. Raspberry Pi with a RPi-compatible Ubuntu flavour (Ubuntu MATE and Xubuntu 16.04 have been tested; for more, see [here](https://ubuntu-pi-flavour-maker.org/download/)
 
 2. Install [ROS kinetic (Ubuntu/armhf)](http://wiki.ros.org/kinetic/Installation/Ubuntu) (*-desktop*)
-
 
 3. Install [WiringPi (library)](http://wiringpi.com/download-and-install/)
    ````
