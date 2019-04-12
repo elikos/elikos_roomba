@@ -84,6 +84,20 @@ It also has a node to manage the ground robot's top switch and call a service wh
 
 6. Do stuff
 
+   If you want to control a roomba with a joystick/controller:
+   1. Add your user to the dialout group (you can't access USB peripherals otherwise)
+      ````
+      sudo usermod -a -G dialout $USER
+      ````
+      then logout and login again
+
+   2. Install [`joy`](http://wiki.ros.org/joy) and [`joy_teleop`](http://wiki.ros.org/joy_teleop)
+      ````
+      sudo apt-get install ros-kinetic-joy ros-kinetic-joy-teleop
+      ````
+
+   3. If you want to use a keyboard instead, use [`key_teleop`](http://wiki.ros.org/key_teleop)
+
 7. Create a pull request
 
 
@@ -239,18 +253,7 @@ Mostly because Christophe is dumb and often forgets.
 
 * Error on `roslaunch` of either `ca_driver` or `ca_tools joy_teleop`
 
-   1. Make sure your your user is in the dialout group (couldn't access USB peripherals otherwise)  
-      ````
-      sudo usermod -a -G dialout $USER
-      ````  
-      then logout and login again
-
-   2. Make sure [`joy`](http://wiki.ros.org/joy) is installed  
-      ````
-      sudo apt-get install ros-kinetic-joy
-      ````
-
-   3. Serial error, with a message like  
+   1. Serial error, with a message like  
       ````
       [create::Serial] failed to receive data from Create. Check if robot is powered!
       ````  
